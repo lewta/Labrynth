@@ -246,7 +246,17 @@ Comprehensive test suite covering:
 
 ## License
 
-[Add your license information here]
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+### MIT License Summary
+
+- ✅ **Commercial use** - Use this software for commercial purposes
+- ✅ **Modification** - Modify the source code
+- ✅ **Distribution** - Distribute copies of the software
+- ✅ **Private use** - Use the software for private purposes
+- ❗ **License and copyright notice** - Include the license and copyright notice with the software
+- ❌ **Liability** - The software is provided "as is" without warranty
+- ❌ **Warranty** - No warranty is provided with the software
 
 ## Support
 
