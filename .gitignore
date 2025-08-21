@@ -1,0 +1,5 @@
+#
+
+# Removed the kiro directory for now
+.kiro/
+.vscode/

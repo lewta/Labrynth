@@ -1,0 +1,67 @@
+services:
+  labrynth-game:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: labrynth:latest
+    container_name: labrynth-game
+    
+    # Interactive mode for CLI game
+    stdin_open: true
+    tty: true
+    
+    # Volume mounts for data persistence
+    volumes:
+      - ./saves:/app/saves
+      - ./logs:/app/logs
+      - ./config:/app/config:ro  # Read-only config mount
+    
+    # Environment variables for game configuration
+    environment:
+      - GAME_DEBUG=false
+      - GAME_LOG_LEVEL=INFO
+      - GAME_SAVE_DIR=/app/saves
+      - GAME_LOG_DIR=/app/logs
+      - GAME_CONFIG_DIR=/app/config
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Resource limits (optional)
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+          cpus: '0.25'
+
+# Optional: Create named volumes for better data management
+volumes:
+  game-saves:
+    driver: local
+  game-logs:
+    driver: local
+
+# Alternative service configuration using named volumes
+# Uncomment this section and comment the above service if you prefer named volumes
+#  labrynth-game-volumes:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    image: labrynth:latest
+#    container_name: labrynth-game-volumes
+#    stdin_open: true
+#    tty: true
+#    volumes:
+#      - game-saves:/app/saves
+#      - game-logs:/app/logs
+#      - ./config:/app/config:ro
+#    environment:
+#      - GAME_DEBUG=false
+#      - GAME_LOG_LEVEL=INFO
+#      - GAME_SAVE_DIR=/app/saves
+#      - GAME_LOG_DIR=/app/logs
+#      - GAME_CONFIG_DIR=/app/config
+#    restart: unless-stopped

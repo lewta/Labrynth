@@ -1,0 +1,81 @@
+{
+  "memory_challenges": {
+    "sequence": {
+      "symbols": {
+        "letters": ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"],
+        "numbers": ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
+        "symbols": ["*", "#", "@", "%", "&", "+", "=", "~", "!", "?"],
+        "colors": ["Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Pink", "Cyan", "Brown", "White"]
+      },
+      "difficulty_settings": {
+        "1": {"length": 3, "show_time": 3.0, "success_threshold": 95},
+        "2": {"length": 4, "show_time": 3.5, "success_threshold": 90},
+        "3": {"length": 5, "show_time": 4.0, "success_threshold": 85},
+        "4": {"length": 6, "show_time": 4.5, "success_threshold": 80},
+        "5": {"length": 7, "show_time": 5.0, "success_threshold": 75},
+        "6": {"length": 8, "show_time": 5.5, "success_threshold": 70},
+        "7": {"length": 9, "show_time": 6.0, "success_threshold": 70},
+        "8": {"length": 10, "show_time": 6.5, "success_threshold": 65},
+        "9": {"length": 11, "show_time": 7.0, "success_threshold": 65},
+        "10": {"length": 12, "show_time": 7.5, "success_threshold": 60}
+      }
+    },
+    "pattern": {
+      "grid_sizes": {
+        "easy": 3,
+        "medium": 4,
+        "hard": 5
+      },
+      "symbols": ["*", "#", "@", "%", "&", "+", "=", "~", "!", "?", "^", "$"],
+      "difficulty_settings": {
+        "1": {"grid_size": 3, "num_symbols": 3, "show_time": 4.0, "success_threshold": 95},
+        "2": {"grid_size": 3, "num_symbols": 4, "show_time": 4.5, "success_threshold": 90},
+        "3": {"grid_size": 3, "num_symbols": 5, "show_time": 5.0, "success_threshold": 85},
+        "4": {"grid_size": 4, "num_symbols": 5, "show_time": 5.5, "success_threshold": 80},
+        "5": {"grid_size": 4, "num_symbols": 6, "show_time": 6.0, "success_threshold": 75},
+        "6": {"grid_size": 4, "num_symbols": 7, "show_time": 6.5, "success_threshold": 70},
+        "7": {"grid_size": 4, "num_symbols": 8, "show_time": 7.0, "success_threshold": 70},
+        "8": {"grid_size": 5, "num_symbols": 8, "show_time": 7.5, "success_threshold": 65},
+        "9": {"grid_size": 5, "num_symbols": 9, "show_time": 8.0, "success_threshold": 65},
+        "10": {"grid_size": 5, "num_symbols": 10, "show_time": 8.5, "success_threshold": 60}
+      }
+    },
+    "scenarios": [
+      {
+        "type": "ancient_runes",
+        "description": "Ancient runes glow briefly on the wall before fading. You must remember their positions.",
+        "theme": "magical"
+      },
+      {
+        "type": "star_constellation",
+        "description": "A constellation of stars appears in the chamber ceiling. Memorize the pattern before the lights dim.",
+        "theme": "celestial"
+      },
+      {
+        "type": "crystal_sequence",
+        "description": "Crystals around the room light up in a specific sequence. Remember the order to proceed.",
+        "theme": "elemental"
+      },
+      {
+        "type": "symbol_code",
+        "description": "A coded message appears briefly. You must memorize it to unlock the next chamber.",
+        "theme": "cipher"
+      },
+      {
+        "type": "guardian_pattern",
+        "description": "The chamber guardian shows you a pattern that must be replicated to prove your worth.",
+        "theme": "trial"
+      }
+    ]
+  },
+  "memory_rewards": [
+    {"name": "Memory Crystal", "description": "A crystal that enhances memory and recall", "value": 40},
+    {"name": "Mind Enhancer", "description": "A device that sharpens mental focus", "value": 45},
+    {"name": "Recall Potion", "description": "A potion that improves memory retention", "value": 35},
+    {"name": "Focus Amulet", "description": "An amulet that aids concentration", "value": 50},
+    {"name": "Concentration Ring", "description": "A ring that helps maintain focus", "value": 40},
+    {"name": "Mental Clarity Gem", "description": "A gem that clears mental fog", "value": 55},
+    {"name": "Wisdom Stone", "description": "A stone that enhances wisdom and memory", "value": 60},
+    {"name": "Thought Amplifier", "description": "A device that amplifies mental abilities", "value": 65}
+  ]
+}

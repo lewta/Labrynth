@@ -1,0 +1,73 @@
+{
+  "labyrinth_randomization": {
+    "enabled": false,
+    "chamber_count": 13,
+    "layout": "hybrid",
+    "connectivity": 0.3,
+    "ensure_solvable": true,
+    "min_path_length": 5,
+    "max_dead_ends": 3,
+    "seed": null
+  },
+  "challenge_randomization": {
+    "enabled": true,
+    "level": "moderate",
+    "challenge_variety": true,
+    "difficulty_variance": 1,
+    "seed": null
+  },
+  "presets": {
+    "easy": {
+      "labyrinth_randomization": {
+        "enabled": true,
+        "chamber_count": 8,
+        "layout": "linear",
+        "connectivity": 0.2,
+        "min_path_length": 4
+      },
+      "challenge_randomization": {
+        "level": "light",
+        "difficulty_variance": 1
+      }
+    },
+    "normal": {
+      "labyrinth_randomization": {
+        "enabled": true,
+        "chamber_count": 13,
+        "layout": "hybrid",
+        "connectivity": 0.3,
+        "min_path_length": 5
+      },
+      "challenge_randomization": {
+        "level": "moderate",
+        "difficulty_variance": 1
+      }
+    },
+    "hard": {
+      "labyrinth_randomization": {
+        "enabled": true,
+        "chamber_count": 18,
+        "layout": "random",
+        "connectivity": 0.4,
+        "min_path_length": 7
+      },
+      "challenge_randomization": {
+        "level": "heavy",
+        "difficulty_variance": 2
+      }
+    },
+    "nightmare": {
+      "labyrinth_randomization": {
+        "enabled": true,
+        "chamber_count": 25,
+        "layout": "grid",
+        "connectivity": 0.5,
+        "min_path_length": 10
+      },
+      "challenge_randomization": {
+        "level": "heavy",
+        "difficulty_variance": 3
+      }
+    }
+  }
+}

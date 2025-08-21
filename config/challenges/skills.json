@@ -1,0 +1,178 @@
+{
+  "skill_challenges": {
+    "strength": [
+      {
+        "difficulty": 1,
+        "scenario": "A small boulder blocks a narrow passage. You need to move it aside.",
+        "action": "push",
+        "success_message": "You easily push the boulder out of the way!",
+        "failure_message": "The boulder is heavier than it looks and won't budge."
+      },
+      {
+        "difficulty": 3,
+        "scenario": "Heavy iron bars block a doorway. You must bend them to pass.",
+        "action": "bend",
+        "success_message": "With great effort, you bend the bars enough to squeeze through!",
+        "failure_message": "The iron bars are too strong for you to bend."
+      },
+      {
+        "difficulty": 5,
+        "scenario": "A massive stone door is stuck shut and requires great force to open.",
+        "action": "force",
+        "success_message": "You strain against the door and it slowly grinds open!",
+        "failure_message": "Despite your best efforts, the door remains sealed."
+      },
+      {
+        "difficulty": 7,
+        "scenario": "Ancient chains bind a treasure chest. You need to break them.",
+        "action": "break",
+        "success_message": "The chains snap under your powerful grip!",
+        "failure_message": "The ancient chains are too strong to break with bare hands."
+      },
+      {
+        "difficulty": 9,
+        "scenario": "A deep pit requires you to climb up using only your grip strength.",
+        "action": "climb",
+        "success_message": "Your powerful grip carries you up the sheer wall!",
+        "failure_message": "Your grip fails and you slide back down the pit wall."
+      }
+    ],
+    "intelligence": [
+      {
+        "difficulty": 2,
+        "scenario": "Simple symbols cover the wall. You must decipher their basic meaning.",
+        "action": "decipher",
+        "success_message": "The symbols reveal a simple message about safe passage!",
+        "failure_message": "The symbols remain meaningless to you."
+      },
+      {
+        "difficulty": 4,
+        "scenario": "A mechanical puzzle with gears and levers blocks your way forward.",
+        "action": "solve",
+        "success_message": "You understand the mechanism and activate it correctly!",
+        "failure_message": "The complex mechanism confuses you."
+      },
+      {
+        "difficulty": 6,
+        "scenario": "Ancient runes glow with power. You need to understand their pattern.",
+        "action": "analyze",
+        "success_message": "You recognize the runic pattern and activate its power!",
+        "failure_message": "The runic pattern is too complex for you to understand."
+      },
+      {
+        "difficulty": 8,
+        "scenario": "A riddle is carved in stone, written in an ancient language.",
+        "action": "translate",
+        "success_message": "Your knowledge of ancient languages reveals the riddle's answer!",
+        "failure_message": "The ancient language is beyond your understanding."
+      },
+      {
+        "difficulty": 10,
+        "scenario": "Multiple levers control a complex mechanism. You must determine the correct sequence.",
+        "action": "calculate",
+        "success_message": "You calculate the perfect sequence and the mechanism activates!",
+        "failure_message": "The mathematical complexity overwhelms you."
+      }
+    ],
+    "dexterity": [
+      {
+        "difficulty": 2,
+        "scenario": "A few pressure plates cover part of the floor. You must step carefully.",
+        "action": "sneak",
+        "success_message": "You carefully avoid the pressure plates!",
+        "failure_message": "You accidentally trigger a pressure plate!"
+      },
+      {
+        "difficulty": 4,
+        "scenario": "A narrow ledge spans a small gap. You need good balance.",
+        "action": "balance",
+        "success_message": "You gracefully cross the narrow ledge!",
+        "failure_message": "You lose your balance and stumble."
+      },
+      {
+        "difficulty": 6,
+        "scenario": "Spinning blades block the passage. You must time your movement precisely.",
+        "action": "dodge",
+        "success_message": "You slip through the spinning blades with perfect timing!",
+        "failure_message": "The spinning blades catch you as you try to pass."
+      },
+      {
+        "difficulty": 8,
+        "scenario": "A complex lock requires delicate manipulation to open.",
+        "action": "pick",
+        "success_message": "Your nimble fingers work the lock mechanism perfectly!",
+        "failure_message": "The delicate lock mechanism is too complex for your fingers."
+      },
+      {
+        "difficulty": 10,
+        "scenario": "Swinging pendulums guard the exit. You need to slip through at the perfect moment.",
+        "action": "time",
+        "success_message": "You time your movement perfectly and slip through unharmed!",
+        "failure_message": "The pendulums knock you back as you try to pass."
+      }
+    ],
+    "luck": [
+      {
+        "difficulty": 1,
+        "scenario": "Two identical doors stand before you. One leads forward, one leads back.",
+        "action": "choose",
+        "success_message": "Fortune smiles upon you - you chose the correct door!",
+        "failure_message": "Bad luck - you chose the wrong door and must backtrack."
+      },
+      {
+        "difficulty": 3,
+        "scenario": "A magical wheel spins with various symbols. You must choose when to stop it.",
+        "action": "gamble",
+        "success_message": "The wheel stops on a favorable symbol!",
+        "failure_message": "The wheel stops on an unlucky symbol."
+      },
+      {
+        "difficulty": 5,
+        "scenario": "Ancient dice lie on a pedestal. The gods will judge your fortune.",
+        "action": "roll",
+        "success_message": "The dice show a blessed combination!",
+        "failure_message": "The dice show an cursed result."
+      },
+      {
+        "difficulty": 7,
+        "scenario": "A shimmering portal flickers unstably. You must time your entry perfectly.",
+        "action": "risk",
+        "success_message": "You enter the portal at just the right moment!",
+        "failure_message": "The portal destabilizes as you enter, causing harm."
+      },
+      {
+        "difficulty": 9,
+        "scenario": "Five treasure chests sit before you, but only one contains what you need.",
+        "action": "hope",
+        "success_message": "Against all odds, you choose the correct chest!",
+        "failure_message": "Your choice leads to disappointment and danger."
+      }
+    ]
+  },
+  "skill_rewards": {
+    "strength": [
+      {"name": "Power Gauntlets", "description": "Gauntlets that enhance physical strength", "value": 50},
+      {"name": "Strength Potion", "description": "A potion that temporarily boosts strength", "value": 30},
+      {"name": "Mighty Belt", "description": "A belt that increases carrying capacity", "value": 40},
+      {"name": "Iron Ring", "description": "A ring that provides protection in combat", "value": 35}
+    ],
+    "intelligence": [
+      {"name": "Wisdom Scroll", "description": "A scroll containing ancient knowledge", "value": 45},
+      {"name": "Knowledge Crystal", "description": "A crystal that enhances mental clarity", "value": 55},
+      {"name": "Scholar's Tome", "description": "A book filled with useful information", "value": 40},
+      {"name": "Mind Gem", "description": "A gem that sharpens intellectual abilities", "value": 50}
+    ],
+    "dexterity": [
+      {"name": "Agility Boots", "description": "Boots that enhance speed and balance", "value": 45},
+      {"name": "Swift Cloak", "description": "A cloak that improves stealth and movement", "value": 40},
+      {"name": "Nimble Ring", "description": "A ring that increases hand-eye coordination", "value": 35},
+      {"name": "Grace Amulet", "description": "An amulet that provides perfect balance", "value": 50}
+    ],
+    "luck": [
+      {"name": "Fortune Coin", "description": "A coin that brings good luck", "value": 60},
+      {"name": "Lucky Charm", "description": "A charm that improves fortune", "value": 45},
+      {"name": "Fate Stone", "description": "A stone that influences destiny", "value": 55},
+      {"name": "Blessed Token", "description": "A token blessed by fortune", "value": 40}
+    ]
+  }
+}

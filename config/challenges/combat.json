@@ -1,0 +1,145 @@
+{
+  "enemies": {
+    "easy": [
+      {
+        "difficulty": 1,
+        "name": "Weak Goblin",
+        "health": 20,
+        "attack": 5,
+        "defense": 1,
+        "description": "A small, cowardly goblin with rusty weapons",
+        "victory_message": "The goblin flees in terror!",
+        "loot": ["Rusty Dagger", "Goblin Ear", "Copper Coin"]
+      },
+      {
+        "difficulty": 2,
+        "name": "Cave Rat",
+        "health": 25,
+        "attack": 6,
+        "defense": 1,
+        "description": "A large, aggressive rat with glowing red eyes",
+        "victory_message": "The rat squeaks and scurries away defeated!",
+        "loot": ["Rat Tail", "Sharp Teeth", "Disease Antidote"]
+      },
+      {
+        "difficulty": 3,
+        "name": "Skeleton Warrior",
+        "health": 35,
+        "attack": 8,
+        "defense": 2,
+        "description": "An animated skeleton wielding ancient weapons",
+        "victory_message": "The skeleton crumbles to dust!",
+        "loot": ["Bone Sword", "Ancient Coin", "Calcium Powder"]
+      }
+    ],
+    "medium": [
+      {
+        "difficulty": 4,
+        "name": "Orc Raider",
+        "health": 45,
+        "attack": 10,
+        "defense": 3,
+        "description": "A brutish orc warrior with scarred armor",
+        "victory_message": "The orc roars in defeat and retreats!",
+        "loot": ["Iron Axe", "Orc Hide", "Battle Trophy"]
+      },
+      {
+        "difficulty": 5,
+        "name": "Shadow Beast",
+        "health": 55,
+        "attack": 12,
+        "defense": 4,
+        "description": "A creature of living darkness with glowing eyes",
+        "victory_message": "The shadow dissipates into nothingness!",
+        "loot": ["Shadow Essence", "Dark Crystal", "Void Stone"]
+      },
+      {
+        "difficulty": 6,
+        "name": "Stone Golem",
+        "health": 70,
+        "attack": 14,
+        "defense": 6,
+        "description": "A massive construct of animated stone and magic",
+        "victory_message": "The golem's magic fades and it becomes lifeless stone!",
+        "loot": ["Golem Core", "Stone Fist", "Earth Crystal"]
+      }
+    ],
+    "hard": [
+      {
+        "difficulty": 7,
+        "name": "Fire Elemental",
+        "health": 65,
+        "attack": 18,
+        "defense": 3,
+        "description": "A being of pure flame that radiates intense heat",
+        "victory_message": "The flames die down to mere embers!",
+        "loot": ["Fire Gem", "Flame Essence", "Heat Stone"]
+      },
+      {
+        "difficulty": 8,
+        "name": "Dark Knight",
+        "health": 85,
+        "attack": 16,
+        "defense": 8,
+        "description": "A fallen paladin in blackened armor, wielding cursed weapons",
+        "victory_message": "The dark knight's curse is broken and he finds peace!",
+        "loot": ["Cursed Blade", "Dark Armor Piece", "Redemption Stone"]
+      },
+      {
+        "difficulty": 9,
+        "name": "Ancient Dragon",
+        "health": 120,
+        "attack": 22,
+        "defense": 10,
+        "description": "A massive, ancient dragon with scales like armor and breath like fire",
+        "victory_message": "The mighty dragon acknowledges your strength and yields!",
+        "loot": ["Dragon Scale", "Dragon Tooth", "Hoard Treasure"]
+      },
+      {
+        "difficulty": 10,
+        "name": "Demon Lord",
+        "health": 150,
+        "attack": 25,
+        "defense": 12,
+        "description": "A powerful demon from the depths of the underworld",
+        "victory_message": "The demon lord is banished back to the abyss!",
+        "loot": ["Demon Horn", "Infernal Weapon", "Soul Crystal"]
+      }
+    ],
+    "boss": [
+      {
+        "difficulty": 10,
+        "name": "Labyrinth Guardian",
+        "health": 200,
+        "attack": 20,
+        "defense": 15,
+        "description": "The ancient guardian of the labyrinth's deepest secrets",
+        "victory_message": "The guardian bows in respect and grants you passage!",
+        "loot": ["Guardian's Key", "Ancient Relic", "Master's Crown"]
+      }
+    ]
+  },
+  "combat_scenarios": [
+    {
+      "type": "ambush",
+      "description": "You hear a rustling in the shadows. Suddenly, {enemy_name} leaps out to attack!",
+      "initiative_bonus": -2
+    },
+    {
+      "type": "guard",
+      "description": "{enemy_name} stands guard, blocking your path forward.",
+      "initiative_bonus": 0
+    },
+    {
+      "type": "territorial",
+      "description": "You've entered {enemy_name}'s territory. It prepares to defend its domain!",
+      "initiative_bonus": 1
+    },
+    {
+      "type": "treasure_guardian",
+      "description": "{enemy_name} protects a valuable treasure. It won't let you pass without a fight!",
+      "initiative_bonus": 0,
+      "extra_loot": true
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "game_state": {
+    "current_chamber": 1,
+    "player_health": 100,
+    "inventory_items": [],
+    "completed_chambers": [],
+    "visited_chambers": [],
+    "discovered_connections": {},
+    "game_time": 0,
+    "player_stats": {
+      "strength": 10,
+      "intelligence": 10,
+      "dexterity": 10,
+      "luck": 10
+    }
+  },
+  "metadata": {
+    "save_time": "2025-08-21T19:01:02.789414",
+    "game_version": "1.0",
+    "save_format_version": "1.0"
+  }
+}

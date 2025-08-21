@@ -1,0 +1,30 @@
+{
+  "starting_chamber": 1,
+  "chambers": {
+    "1": {
+      "name": "Entrance Hall",
+      "description": "A dimly lit stone chamber with ancient carvings on the walls. The air is thick with mystery and the scent of ages past.",
+      "connections": {
+        "north": 2
+      },
+      "challenge_type": "riddle"
+    },
+    "2": {
+      "name": "Crystal Cavern",
+      "description": "A sparkling chamber filled with glowing crystals that cast dancing shadows on the walls. The crystals hum with magical energy.",
+      "connections": {
+        "south": 1,
+        "east": 3
+      },
+      "challenge_type": "puzzle"
+    },
+    "3": {
+      "name": "Exit Chamber",
+      "description": "The final chamber with a heavy wooden door leading outside. Sunlight streams through cracks in the door, promising freedom.",
+      "connections": {
+        "west": 2
+      },
+      "challenge_type": "skill"
+    }
+  }
+}

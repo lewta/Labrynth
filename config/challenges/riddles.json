@@ -1,0 +1,186 @@
+{
+  "riddles": {
+    "easy": [
+      {
+        "difficulty": 1,
+        "riddle": "What has keys but no locks, space but no room, and you can enter but not go inside?",
+        "answers": ["keyboard", "computer keyboard"],
+        "hint": "Think about something you use every day with your computer.",
+        "category": "technology"
+      },
+      {
+        "difficulty": 2,
+        "riddle": "The more you take, the more you leave behind. What am I?",
+        "answers": ["footsteps", "steps", "footprints"],
+        "hint": "Think about what you leave behind when you walk.",
+        "category": "movement"
+      },
+      {
+        "difficulty": 3,
+        "riddle": "What has a head, a tail, is brown, and has no legs?",
+        "answers": ["penny", "coin", "a penny"],
+        "hint": "It's something small and round that you might find in your pocket.",
+        "category": "objects"
+      }
+    ],
+    "medium": [
+      {
+        "difficulty": 4,
+        "riddle": "I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?",
+        "answers": ["map", "a map"],
+        "hint": "It's a representation of the world, but not the world itself.",
+        "category": "geography"
+      },
+      {
+        "difficulty": 5,
+        "riddle": "What comes once in a minute, twice in a moment, but never in a thousand years?",
+        "answers": ["the letter m", "letter m", "m"],
+        "hint": "Look at the letters in the words 'minute' and 'moment'.",
+        "category": "wordplay"
+      },
+      {
+        "difficulty": 6,
+        "riddle": "I am always hungry and will die if not fed, but whatever I touch will soon turn red. What am I?",
+        "answers": ["fire", "flame"],
+        "hint": "It's dangerous and consumes everything it touches.",
+        "category": "elements"
+      }
+    ],
+    "hard": [
+      {
+        "difficulty": 7,
+        "riddle": "I speak without a mouth and hear without ears. I have no body, but come alive with wind. What am I?",
+        "answers": ["echo", "an echo"],
+        "hint": "It's a sound that comes back to you.",
+        "category": "sound"
+      },
+      {
+        "difficulty": 8,
+        "riddle": "The person who makes it, sells it. The person who buys it, never uses it. The person who uses it, never knows it. What is it?",
+        "answers": ["coffin", "a coffin", "casket"],
+        "hint": "Think about something used in funerals.",
+        "category": "death"
+      },
+      {
+        "difficulty": 9,
+        "riddle": "I am the beginning of the end, and the end of time and space. I am essential to creation, and I surround every place. What am I?",
+        "answers": ["the letter e", "letter e", "e"],
+        "hint": "It's a letter that appears in many important words.",
+        "category": "wordplay"
+      },
+      {
+        "difficulty": 10,
+        "riddle": "What is so fragile that saying its name breaks it?",
+        "answers": ["silence"],
+        "hint": "Think about something that exists only when nothing is said.",
+        "category": "abstract"
+      }
+    ],
+    "ancient": [
+      {
+        "difficulty": 6,
+        "riddle": "In marble walls as white as milk, lined with skin as soft as silk, within a fountain crystal clear, a golden apple does appear. No doors there are to this stronghold, yet thieves break in and steal the gold. What am I?",
+        "answers": ["egg", "an egg"],
+        "hint": "Think about something with a white shell and golden center.",
+        "category": "food"
+      },
+      {
+        "difficulty": 7,
+        "riddle": "Alive without breath, as cold as death, never thirsty, ever drinking, all in mail never clinking. What am I?",
+        "answers": ["fish", "a fish"],
+        "hint": "It lives in water and has scales like armor.",
+        "category": "animals"
+      },
+      {
+        "difficulty": 8,
+        "riddle": "This thing all things devours: birds, beasts, trees, flowers; gnaws iron, bites steel; grinds hard stones to meal; slays king, ruins town, and beats high mountain down. What am I?",
+        "answers": ["time"],
+        "hint": "It affects everything and everyone, and cannot be stopped.",
+        "category": "abstract"
+      }
+    ],
+    "mathematical": [
+      {
+        "difficulty": 5,
+        "riddle": "I am an odd number. Take away a letter and I become even. What number am I?",
+        "answers": ["seven", "7"],
+        "hint": "Remove the 's' from this number word.",
+        "category": "numbers"
+      },
+      {
+        "difficulty": 6,
+        "riddle": "If two's company and three's a crowd, what are four and five?",
+        "answers": ["nine", "9"],
+        "hint": "Think mathematically, not socially.",
+        "category": "numbers"
+      },
+      {
+        "difficulty": 7,
+        "riddle": "What three positive numbers give the same answer when multiplied and added together?",
+        "answers": ["1, 2, and 3", "1 2 3", "one two three"],
+        "hint": "Try small positive integers.",
+        "category": "numbers"
+      },
+      {
+        "difficulty": 4,
+        "riddle": "I am a three-digit number. My tens digit is five more than my ones digit. My hundreds digit is eight less than my tens digit. What number am I?",
+        "answers": ["194"],
+        "hint": "Work backwards from the relationships between digits.",
+        "category": "numbers"
+      },
+      {
+        "difficulty": 8,
+        "riddle": "If you multiply me by any other number, the answer will always be the same. What number am I?",
+        "answers": ["zero", "0"],
+        "hint": "Think about the properties of multiplication.",
+        "category": "numbers"
+      }
+    ],
+    "nature": [
+      {
+        "difficulty": 3,
+        "riddle": "I have a crown but I'm not a king. I have scales but I'm not a fish. What am I?",
+        "answers": ["pineapple", "a pineapple"],
+        "hint": "It's a tropical fruit with a spiky exterior.",
+        "category": "nature"
+      },
+      {
+        "difficulty": 4,
+        "riddle": "I'm tall when I'm young and short when I'm old. What am I?",
+        "answers": ["candle", "a candle"],
+        "hint": "I get consumed as I provide light.",
+        "category": "nature"
+      },
+      {
+        "difficulty": 5,
+        "riddle": "I have branches but no fruit, trunk but no bark. What am I?",
+        "answers": ["bank", "a bank"],
+        "hint": "Think about financial institutions.",
+        "category": "nature"
+      }
+    ],
+    "mystery": [
+      {
+        "difficulty": 6,
+        "riddle": "The more you have of me, the less you see. What am I?",
+        "answers": ["darkness", "dark"],
+        "hint": "I'm the absence of light.",
+        "category": "mystery"
+      },
+      {
+        "difficulty": 7,
+        "riddle": "I can be cracked, I can be made, I can be told, I can be played. What am I?",
+        "answers": ["joke", "a joke"],
+        "hint": "I'm something that makes people laugh.",
+        "category": "mystery"
+      },
+      {
+        "difficulty": 8,
+        "riddle": "I have no body, but I come alive with wind. I have no voice, but I can whisper, roar, and sing. What am I?",
+        "answers": ["echo", "an echo"],
+        "hint": "I'm a reflection of sound.",
+        "category": "mystery"
+      }
+    ]
+  }
+}

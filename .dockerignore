@@ -1,0 +1,71 @@
+# Git and version control
+.git
+.gitignore
+
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Documentation build
+docs/_build/
+
+# Logs (will be mounted as volumes)
+logs/
+*.log
+
+# Save games (will be mounted as volumes)
+saves/
+
+# Container-related files
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Scripts (not needed in container)
+scripts/
+
+# Specifications and documentation
+.kiro/
+docs/
+README.md
+
+# Temporary files
+.tmp/
+temp/
+*.tmp

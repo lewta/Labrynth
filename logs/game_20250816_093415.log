@@ -1,0 +1,8 @@
+2025-08-16 09:34:15 - labyrinth_game - INFO - Logging initialized - Level: DEBUG
+2025-08-16 09:34:15 - labyrinth_game - INFO - Log file: logs/game_20250816_093415.log
+2025-08-16 09:34:15 - labyrinth_game - INFO - Initializing Labyrinth Adventure Game
+2025-08-16 09:34:15 - labyrinth_game - DEBUG - Arguments: debug=True, verbose=False, config=None, no_colors=False
+2025-08-16 09:34:15 - labyrinth_game - INFO - Game engine initialized successfully
+2025-08-16 09:34:15 - labyrinth_game - INFO - New game mode (default)
+2025-08-16 09:34:15 - labyrinth_game - INFO - Starting new game
+2025-08-16 09:34:15 - labyrinth_game - INFO - User chose to quit before starting

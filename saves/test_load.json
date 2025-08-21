@@ -1,0 +1,32 @@
+{
+  "game_state": {
+    "current_chamber": 1,
+    "player_health": 80,
+    "inventory_items": [
+      {
+        "name": "Test Item",
+        "description": "A test item",
+        "item_type": "misc",
+        "value": 10,
+        "usable": true
+      }
+    ],
+    "completed_chambers": [
+      1
+    ],
+    "visited_chambers": [],
+    "discovered_connections": {},
+    "game_time": 100,
+    "player_stats": {
+      "strength": 10,
+      "intelligence": 10,
+      "dexterity": 10,
+      "luck": 10
+    }
+  },
+  "metadata": {
+    "save_time": "2025-08-21T19:01:02.786979",
+    "game_version": "1.0",
+    "save_format_version": "1.0"
+  }
+}

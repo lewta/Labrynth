@@ -1,0 +1,16 @@
+{
+  "victory": {
+    "flag_content": "UPDATED_FLAG_2024",
+    "flag_prefix": "FLAG{",
+    "flag_suffix": "}",
+    "prize_message": "🎉 Amazing work! Here's your prize: {flag} 🏆"
+  },
+  "game": {
+    "title": "Labyrinth Adventure Game",
+    "version": "1.0"
+  },
+  "display": {
+    "width": 80,
+    "show_map": true
+  }
+}
