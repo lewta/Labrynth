@@ -14,7 +14,7 @@ class TestRiddleHintIntegration:
             difficulty=3,
             riddle_text="What has keys but no locks?",
             answers=["keyboard", "piano"],
-            reward_item=Item("Test Key", "A test key", "key", 10)
+            reward_item=Item("Test Key", "A test key", "key", 10),
         )
 
         display_manager = DisplayManager(use_colors=False)
@@ -38,7 +38,7 @@ class TestRiddleHintIntegration:
             difficulty=3,
             riddle_text="What has keys but no locks?",
             answers=["keyboard", "piano"],
-            reward_item=Item("Test Key", "A test key", "key", 10)
+            reward_item=Item("Test Key", "A test key", "key", 10),
         )
 
         display_manager = DisplayManager(use_colors=False)
@@ -59,7 +59,7 @@ class TestRiddleHintIntegration:
             difficulty=3,
             riddle_text="What has keys but no locks?",
             answers=["keyboard", "piano"],
-            reward_item=Item("Test Key", "A test key", "key", 10)
+            reward_item=Item("Test Key", "A test key", "key", 10),
         )
 
         display_manager = DisplayManager(use_colors=False)
@@ -80,7 +80,7 @@ class TestRiddleHintIntegration:
             difficulty=3,
             riddle_text="What has keys but no locks?",
             answers=["keyboard", "piano"],
-            reward_item=Item("Test Key", "A test key", "key", 10)
+            reward_item=Item("Test Key", "A test key", "key", 10),
         )
 
         display_manager = DisplayManager(use_colors=False)
@@ -106,7 +106,7 @@ class TestRiddleHintIntegration:
             difficulty=3,
             riddle_text="What has keys but no locks?",
             answers=["keyboard", "piano"],
-            reward_item=Item("Test Key", "A test key", "key", 10)
+            reward_item=Item("Test Key", "A test key", "key", 10),
         )
 
         display_manager = DisplayManager(use_colors=False)

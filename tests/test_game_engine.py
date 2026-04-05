@@ -45,19 +45,19 @@ class TestGameEngine:
 
     def test_initialization_with_config(self):
         """Test GameEngine initialization with config file."""
-        with patch.object(WorldManager, 'load_from_file') as mock_load:
+        with patch.object(WorldManager, "load_from_file") as mock_load:
             GameEngine(config_file="test_config.json")
             mock_load.assert_called_once_with("test_config.json")
 
     def test_initialization_config_error(self):
         """Test GameEngine initialization with invalid config."""
-        with patch.object(WorldManager, 'load_from_file', side_effect=Exception("Config error")):
+        with patch.object(WorldManager, "load_from_file", side_effect=Exception("Config error")):
             with pytest.raises(GameException, match="Failed to initialize world"):
                 GameEngine(config_file="invalid_config.json")
 
     def test_start_game(self):
         """Test starting a new game."""
-        with patch.object(self.engine, 'game_loop') as mock_loop:
+        with patch.object(self.engine, "game_loop") as mock_loop:
             self.engine.start_game()
 
             assert self.engine.running
@@ -86,7 +86,7 @@ class TestGameEngine:
             parameters=[],
             raw_input="invalid",
             is_valid=False,
-            error_message="Invalid command"
+            error_message="Invalid command",
         )
 
         self.engine.process_command(invalid_command)
@@ -97,11 +97,7 @@ class TestGameEngine:
     def test_process_command_valid(self):
         """Test processing valid command."""
         valid_command = ParsedCommand(
-            command_type=CommandType.SYSTEM,
-            action="help",
-            parameters=[],
-            raw_input="help",
-            is_valid=True
+            command_type=CommandType.SYSTEM, action="help", parameters=[], raw_input="help", is_valid=True
         )
 
         self.engine.process_command(valid_command)
@@ -113,11 +109,7 @@ class TestGameEngine:
         """Test successful movement command."""
         # Use existing connection from chamber 1 to chamber 2 (north)
         move_command = ParsedCommand(
-            command_type=CommandType.MOVEMENT,
-            action="go",
-            parameters=["north"],
-            raw_input="go north",
-            is_valid=True
+            command_type=CommandType.MOVEMENT, action="go", parameters=["north"], raw_input="go north", is_valid=True
         )
 
         self.engine._handle_movement_command(move_command)
@@ -132,7 +124,7 @@ class TestGameEngine:
             action="go",
             parameters=["south"],  # Chamber 1 only has north exit
             raw_input="go south",
-            is_valid=True
+            is_valid=True,
         )
 
         self.engine._handle_movement_command(move_command)
@@ -143,11 +135,7 @@ class TestGameEngine:
     def test_handle_examination_command_look(self):
         """Test look command."""
         look_command = ParsedCommand(
-            command_type=CommandType.EXAMINATION,
-            action="look",
-            parameters=[],
-            raw_input="look",
-            is_valid=True
+            command_type=CommandType.EXAMINATION, action="look", parameters=[], raw_input="look", is_valid=True
         )
 
         self.engine._handle_examination_command(look_command)
@@ -161,7 +149,7 @@ class TestGameEngine:
             action="examine",
             parameters=["exits"],
             raw_input="examine exits",
-            is_valid=True
+            is_valid=True,
         )
 
         self.engine._handle_examination_command(examine_command)
@@ -172,11 +160,7 @@ class TestGameEngine:
     def test_handle_inventory_command_show(self):
         """Test inventory display command."""
         inventory_command = ParsedCommand(
-            command_type=CommandType.INVENTORY,
-            action="inventory",
-            parameters=[],
-            raw_input="inventory",
-            is_valid=True
+            command_type=CommandType.INVENTORY, action="inventory", parameters=[], raw_input="inventory", is_valid=True
         )
 
         self.engine._handle_inventory_command(inventory_command)
@@ -194,7 +178,7 @@ class TestGameEngine:
             action="use",
             parameters=["Health Potion"],
             raw_input="use Health Potion",
-            is_valid=True
+            is_valid=True,
         )
 
         self.engine._handle_inventory_command(use_command)
@@ -208,7 +192,7 @@ class TestGameEngine:
             action="use",
             parameters=["Nonexistent Item"],
             raw_input="use Nonexistent Item",
-            is_valid=True
+            is_valid=True,
         )
 
         self.engine._handle_inventory_command(use_command)
@@ -226,7 +210,7 @@ class TestGameEngine:
             action="drop",
             parameters=["Test Item"],
             raw_input="drop Test Item",
-            is_valid=True
+            is_valid=True,
         )
 
         self.engine._handle_inventory_command(drop_command)
@@ -246,7 +230,7 @@ class TestGameEngine:
             action="take",
             parameters=["Chamber Item"],
             raw_input="take Chamber Item",
-            is_valid=True
+            is_valid=True,
         )
 
         self.engine._handle_interaction_command(take_command)
@@ -261,7 +245,7 @@ class TestGameEngine:
             action="take",
             parameters=["Nonexistent Item"],
             raw_input="take Nonexistent Item",
-            is_valid=True
+            is_valid=True,
         )
 
         self.engine._handle_interaction_command(take_command)
@@ -271,11 +255,7 @@ class TestGameEngine:
     def test_handle_system_command_help(self):
         """Test help command."""
         help_command = ParsedCommand(
-            command_type=CommandType.SYSTEM,
-            action="help",
-            parameters=[],
-            raw_input="help",
-            is_valid=True
+            command_type=CommandType.SYSTEM, action="help", parameters=[], raw_input="help", is_valid=True
         )
 
         self.engine._handle_system_command(help_command)
@@ -285,11 +265,7 @@ class TestGameEngine:
     def test_handle_system_command_help_specific(self):
         """Test help command with specific command."""
         help_command = ParsedCommand(
-            command_type=CommandType.SYSTEM,
-            action="help",
-            parameters=["go"],
-            raw_input="help go",
-            is_valid=True
+            command_type=CommandType.SYSTEM, action="help", parameters=["go"], raw_input="help go", is_valid=True
         )
 
         self.engine._handle_system_command(help_command)
@@ -299,11 +275,7 @@ class TestGameEngine:
     def test_handle_system_command_status(self):
         """Test status command."""
         status_command = ParsedCommand(
-            command_type=CommandType.SYSTEM,
-            action="status",
-            parameters=[],
-            raw_input="status",
-            is_valid=True
+            command_type=CommandType.SYSTEM, action="status", parameters=[], raw_input="status", is_valid=True
         )
 
         self.engine._handle_system_command(status_command)
@@ -313,11 +285,7 @@ class TestGameEngine:
     def test_handle_system_command_quit(self):
         """Test quit command."""
         quit_command = ParsedCommand(
-            command_type=CommandType.SYSTEM,
-            action="quit",
-            parameters=[],
-            raw_input="quit",
-            is_valid=True
+            command_type=CommandType.SYSTEM, action="quit", parameters=[], raw_input="quit", is_valid=True
         )
 
         # Mock confirmation to return True
@@ -336,7 +304,7 @@ class TestGameEngine:
             action="answer",
             parameters=["test answer"],
             raw_input="answer test answer",
-            is_valid=True
+            is_valid=True,
         )
 
         self.engine._handle_challenge_command(answer_command)
@@ -429,13 +397,13 @@ class TestGameEngine:
 
         stats = self.engine.get_game_statistics()
 
-        assert stats['game_started']
-        assert stats['running']
-        assert stats['current_chamber'] == 1
-        assert stats['commands_processed'] == 10
-        assert stats['challenges_completed'] == 3
-        assert stats['game_time'] >= 49  # Should be around 50 seconds
-        assert stats['player_alive']
+        assert stats["game_started"]
+        assert stats["running"]
+        assert stats["current_chamber"] == 1
+        assert stats["commands_processed"] == 10
+        assert stats["challenges_completed"] == 3
+        assert stats["game_time"] >= 49  # Should be around 50 seconds
+        assert stats["player_alive"]
 
     def test_reset_game(self):
         """Test resetting the game."""
@@ -494,7 +462,9 @@ class TestGameEngine:
         """Test examining unknown target."""
         self.engine._examine_target("unknown_thing")
 
-        self.engine.ui_controller.display_message.assert_called_with("You don't see anything special about 'unknown_thing'.")
+        self.engine.ui_controller.display_message.assert_called_with(
+            "You don't see anything special about 'unknown_thing'."
+        )
 
     def test_display_current_chamber(self):
         """Test displaying current chamber."""
@@ -516,7 +486,7 @@ class TestGameEngine:
 
         self.engine.ui_controller.display_player_status.assert_called_once()
 
-    @patch('time.time')
+    @patch("time.time")
     def test_handle_victory(self, mock_time):
         """Test handling victory condition."""
         mock_time.return_value = 1000
@@ -535,11 +505,11 @@ class TestGameEngine:
         stats = call_args[0][1]
 
         assert victory_flag is True
-        assert stats['commands_used'] == 20
-        assert stats['challenges_completed'] == 5
-        assert stats['time_played'] == 100
+        assert stats["commands_used"] == 20
+        assert stats["challenges_completed"] == 5
+        assert stats["time_played"] == 100
 
-    @patch('time.time')
+    @patch("time.time")
     def test_handle_defeat(self, mock_time):
         """Test handling defeat condition."""
         mock_time.return_value = 1000
@@ -582,7 +552,7 @@ class TestGameEngineIntegration:
             action="go",
             parameters=["nonexistent"],
             raw_input="go nonexistent",
-            is_valid=True
+            is_valid=True,
         )
 
         # Mock UI to avoid output
@@ -604,11 +574,7 @@ class TestGameEngineIntegration:
 
         # Test inventory display
         inventory_command = ParsedCommand(
-            command_type=CommandType.INVENTORY,
-            action="inventory",
-            parameters=[],
-            raw_input="inventory",
-            is_valid=True
+            command_type=CommandType.INVENTORY, action="inventory", parameters=[], raw_input="inventory", is_valid=True
         )
 
         engine._handle_inventory_command(inventory_command)

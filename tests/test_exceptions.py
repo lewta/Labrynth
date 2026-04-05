@@ -265,14 +265,14 @@ class TestExceptionRecovery:
             InventoryException("message"),
             PlayerException("message"),
             ConfigurationException("type", "message"),
-            GameStateException("message")
+            GameStateException("message"),
         ]
 
         for exc in exceptions:
             assert isinstance(exc, GameException)
-            assert hasattr(exc, 'get_recovery_suggestions')
-            assert hasattr(exc, 'can_recover')
-            assert hasattr(exc, 'get_user_friendly_message')
+            assert hasattr(exc, "get_recovery_suggestions")
+            assert hasattr(exc, "can_recover")
+            assert hasattr(exc, "get_user_friendly_message")
 
     def test_all_exceptions_have_suggestions(self):
         """Test that all exceptions provide recovery suggestions."""
@@ -284,7 +284,7 @@ class TestExceptionRecovery:
             InventoryException("message", operation="use"),
             PlayerException("message", is_fatal=True),
             ConfigurationException("type", "message"),
-            GameStateException("message")
+            GameStateException("message"),
         ]
 
         for exc in exceptions:
@@ -302,7 +302,7 @@ class TestExceptionRecovery:
             (InventoryException("msg"), "INVENTORY_ERROR"),
             (PlayerException("msg"), "PLAYER_ERROR"),
             (ConfigurationException("type", "msg"), "CONFIG_ERROR"),
-            (GameStateException("msg"), "STATE_ERROR")
+            (GameStateException("msg"), "STATE_ERROR"),
         ]
 
         for exc, expected_code in test_cases:

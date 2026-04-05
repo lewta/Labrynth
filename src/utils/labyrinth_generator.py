@@ -11,23 +11,25 @@ from src.utils.exceptions import GameException
 
 class LabyrinthLayout(Enum):
     """Different labyrinth layout patterns."""
-    LINEAR = "linear"           # Chambers connected in a line
-    CIRCULAR = "circular"       # Chambers arranged in a circle
-    TREE = "tree"              # Tree-like branching structure
-    GRID = "grid"              # Grid-based layout
-    RANDOM = "random"          # Completely random connections
-    HYBRID = "hybrid"          # Mix of different patterns
+
+    LINEAR = "linear"  # Chambers connected in a line
+    CIRCULAR = "circular"  # Chambers arranged in a circle
+    TREE = "tree"  # Tree-like branching structure
+    GRID = "grid"  # Grid-based layout
+    RANDOM = "random"  # Completely random connections
+    HYBRID = "hybrid"  # Mix of different patterns
 
 
 @dataclass
 class GenerationConfig:
     """Configuration for labyrinth generation."""
+
     chamber_count: int = 13
     layout: LabyrinthLayout = LabyrinthLayout.HYBRID
     connectivity: float = 0.3  # How connected the labyrinth is (0.0 to 1.0)
     ensure_solvable: bool = True
-    min_path_length: int = 5   # Minimum path from start to end
-    max_dead_ends: int = 3     # Maximum number of dead-end chambers
+    min_path_length: int = 5  # Minimum path from start to end
+    max_dead_ends: int = 3  # Maximum number of dead-end chambers
     seed: int | None = None
 
     def __post_init__(self):
@@ -55,12 +57,7 @@ class LabyrinthGenerator:
 
         # Direction mappings for different layouts
         self.directions = ["north", "south", "east", "west"]
-        self.opposite_directions = {
-            "north": "south",
-            "south": "north",
-            "east": "west",
-            "west": "east"
-        }
+        self.opposite_directions = {"north": "south", "south": "north", "east": "west", "west": "east"}
 
     def generate_labyrinth(self) -> dict[str, Any]:
         """Generate a complete labyrinth configuration.
@@ -91,8 +88,8 @@ class LabyrinthGenerator:
                 "layout": self.config.layout.value,
                 "connectivity": self.config.connectivity,
                 "chamber_count": self.config.chamber_count,
-                "seed": self.config.seed
-            }
+                "seed": self.config.seed,
+            },
         }
 
     def _generate_layout(self) -> dict[int, dict[str, int]]:
@@ -161,10 +158,8 @@ class LabyrinthGenerator:
             child = self._random.choice(list(unconnected))
 
             # Choose a random direction for the connection
-            available_directions_parent = [d for d in self.directions
-                                         if d not in connections[parent]]
-            available_directions_child = [d for d in self.directions
-                                        if d not in connections[child]]
+            available_directions_parent = [d for d in self.directions if d not in connections[parent]]
+            available_directions_child = [d for d in self.directions if d not in connections[child]]
 
             if available_directions_parent and available_directions_child:
                 direction = self._random.choice(available_directions_parent)
@@ -245,8 +240,9 @@ class LabyrinthGenerator:
 
         return connections
 
-    def _find_chamber_at_position(self, positions: dict[int, tuple[int, int]],
-                                 target_pos: tuple[int, int]) -> int | None:
+    def _find_chamber_at_position(
+        self, positions: dict[int, tuple[int, int]], target_pos: tuple[int, int]
+    ) -> int | None:
         """Find chamber at a specific grid position."""
         for chamber_id, pos in positions.items():
             if pos == target_pos:
@@ -267,10 +263,8 @@ class LabyrinthGenerator:
             to_chamber = self._random.choice(list(unconnected))
 
             # Find available directions on both chambers
-            available_directions_from = [d for d in self.directions
-                                       if d not in connections[from_chamber]]
-            available_directions_to = [d for d in self.directions
-                                     if d not in connections[to_chamber]]
+            available_directions_from = [d for d in self.directions if d not in connections[from_chamber]]
+            available_directions_to = [d for d in self.directions if d not in connections[to_chamber]]
 
             if available_directions_from and available_directions_to:
                 direction = self._random.choice(available_directions_from)
@@ -307,11 +301,7 @@ class LabyrinthGenerator:
     def _generate_hybrid_layout(self) -> dict[int, dict[str, int]]:
         """Generate a hybrid layout combining different patterns."""
         # Randomly choose a base layout
-        base_layouts = [
-            LabyrinthLayout.LINEAR,
-            LabyrinthLayout.TREE,
-            LabyrinthLayout.GRID
-        ]
+        base_layouts = [LabyrinthLayout.LINEAR, LabyrinthLayout.TREE, LabyrinthLayout.GRID]
 
         base_layout = self._random.choice(base_layouts)
 
@@ -343,9 +333,9 @@ class LabyrinthGenerator:
 
         return connections
 
-    def _find_longest_path(self, connections: dict[int, dict[str, int]],
-                          start: int) -> list[int]:
+    def _find_longest_path(self, connections: dict[int, dict[str, int]], start: int) -> list[int]:
         """Find the longest path from the starting chamber."""
+
         def dfs(current: int, visited: set[int], path: list[int]) -> list[int]:
             visited.add(current)
             path.append(current)
@@ -362,8 +352,9 @@ class LabyrinthGenerator:
 
         return dfs(start, set(), [])
 
-    def _extend_path(self, connections: dict[int, dict[str, int]],
-                    current_path: list[int]) -> dict[int, dict[str, int]]:
+    def _extend_path(
+        self, connections: dict[int, dict[str, int]], current_path: list[int]
+    ) -> dict[int, dict[str, int]]:
         """Extend the path to meet minimum length requirements."""
         while len(current_path) < self.config.min_path_length:
             # Find chambers not in the current path
@@ -376,8 +367,7 @@ class LabyrinthGenerator:
             last_chamber = current_path[-1]
 
             # Find an available direction
-            available_directions = [d for d in self.directions
-                                  if d not in connections[last_chamber]]
+            available_directions = [d for d in self.directions if d not in connections[last_chamber]]
 
             if available_directions:
                 direction = self._random.choice(available_directions)
@@ -387,8 +377,7 @@ class LabyrinthGenerator:
                 new_chamber = self._random.choice(list(available_chambers))
 
                 # Make sure the opposite direction is available on the new chamber
-                available_directions_new = [d for d in self.directions
-                                          if d not in connections[new_chamber]]
+                available_directions_new = [d for d in self.directions if d not in connections[new_chamber]]
 
                 if opposite in available_directions_new:
                     # Create bidirectional connection
@@ -401,8 +390,7 @@ class LabyrinthGenerator:
 
         return connections
 
-    def _get_reachable_chambers(self, connections: dict[int, dict[str, int]],
-                               start: int) -> set[int]:
+    def _get_reachable_chambers(self, connections: dict[int, dict[str, int]], start: int) -> set[int]:
         """Get all chambers reachable from the starting chamber."""
         visited = set()
         queue = [start]
@@ -420,17 +408,16 @@ class LabyrinthGenerator:
 
         return visited
 
-    def _connect_chamber(self, connections: dict[int, dict[str, int]],
-                        chamber_id: int, reachable: set[int]) -> dict[int, dict[str, int]]:
+    def _connect_chamber(
+        self, connections: dict[int, dict[str, int]], chamber_id: int, reachable: set[int]
+    ) -> dict[int, dict[str, int]]:
         """Connect an unreachable chamber to the reachable set."""
         # Find a reachable chamber to connect to
         target_chamber = self._random.choice(list(reachable))
 
         # Find available directions on both chambers
-        available_directions_target = [d for d in self.directions
-                                     if d not in connections[target_chamber]]
-        available_directions_chamber = [d for d in self.directions
-                                      if d not in connections[chamber_id]]
+        available_directions_target = [d for d in self.directions if d not in connections[target_chamber]]
+        available_directions_chamber = [d for d in self.directions if d not in connections[chamber_id]]
 
         if available_directions_target and available_directions_chamber:
             direction = self._random.choice(available_directions_target)
@@ -453,9 +440,7 @@ class LabyrinthGenerator:
         max_possible_connections = self.config.chamber_count * len(self.directions)
         current_connections = sum(len(conns) for conns in connections.values())
 
-        additional_connections = int(
-            (max_possible_connections - current_connections) * self.config.connectivity
-        )
+        additional_connections = int((max_possible_connections - current_connections) * self.config.connectivity)
 
         # Add random connections
         for _ in range(additional_connections):
@@ -471,10 +456,8 @@ class LabyrinthGenerator:
                 continue
 
             # Find available directions
-            available_directions_1 = [d for d in self.directions
-                                    if d not in connections[chamber1]]
-            available_directions_2 = [d for d in self.directions
-                                    if d not in connections[chamber2]]
+            available_directions_1 = [d for d in self.directions if d not in connections[chamber1]]
+            available_directions_2 = [d for d in self.directions if d not in connections[chamber2]]
 
             if available_directions_1 and available_directions_2:
                 direction1 = self._random.choice(available_directions_1)
@@ -519,28 +502,52 @@ class LabyrinthGenerator:
 
         # Chamber name templates
         chamber_names = [
-            "Entrance Hall", "Crystal Cavern", "Shadow Corridor", "Ancient Library",
-            "Guardian's Chamber", "Mystic Sanctum", "Hall of Echoes", "Prism Chamber",
-            "Trial Arena", "Meditation Room", "Treasure Vault", "Throne Room",
-            "Exit Portal"
+            "Entrance Hall",
+            "Crystal Cavern",
+            "Shadow Corridor",
+            "Ancient Library",
+            "Guardian's Chamber",
+            "Mystic Sanctum",
+            "Hall of Echoes",
+            "Prism Chamber",
+            "Trial Arena",
+            "Meditation Room",
+            "Treasure Vault",
+            "Throne Room",
+            "Exit Portal",
         ]
 
         # Description templates
         description_templates = [
             "A {adjective} chamber with {feature}. {atmosphere}",
             "This {adjective} room contains {feature}. {atmosphere}",
-            "A {adjective} space where {feature} dominates the area. {atmosphere}"
+            "A {adjective} space where {feature} dominates the area. {atmosphere}",
         ]
 
         adjectives = [
-            "dimly lit", "sparkling", "mysterious", "ancient", "grand",
-            "serene", "imposing", "ethereal", "shadowy", "luminous"
+            "dimly lit",
+            "sparkling",
+            "mysterious",
+            "ancient",
+            "grand",
+            "serene",
+            "imposing",
+            "ethereal",
+            "shadowy",
+            "luminous",
         ]
 
         features = [
-            "towering stone pillars", "glowing crystals", "ancient murals",
-            "mystical symbols", "ornate carvings", "magical artifacts",
-            "flowing water", "floating orbs", "intricate mosaics", "golden statues"
+            "towering stone pillars",
+            "glowing crystals",
+            "ancient murals",
+            "mystical symbols",
+            "ornate carvings",
+            "magical artifacts",
+            "flowing water",
+            "floating orbs",
+            "intricate mosaics",
+            "golden statues",
         ]
 
         atmospheres = [
@@ -548,7 +555,7 @@ class LabyrinthGenerator:
             "Shadows dance in the flickering light.",
             "An aura of ancient power fills the space.",
             "The atmosphere is thick with mystery.",
-            "Whispers of the past echo through the chamber."
+            "Whispers of the past echo through the chamber.",
         ]
 
         # Challenge types
@@ -566,11 +573,7 @@ class LabyrinthGenerator:
             feature = self._random.choice(features)
             atmosphere = self._random.choice(atmospheres)
 
-            description = template.format(
-                adjective=adjective,
-                feature=feature,
-                atmosphere=atmosphere
-            )
+            description = template.format(adjective=adjective, feature=feature, atmosphere=atmosphere)
 
             # Assign challenge type
             challenge_type = self._random.choice(challenge_types)
@@ -579,7 +582,7 @@ class LabyrinthGenerator:
                 "name": name,
                 "description": description,
                 "connections": connections[chamber_id],
-                "challenge_type": challenge_type
+                "challenge_type": challenge_type,
             }
 
         return chambers
@@ -607,10 +610,9 @@ class LabyrinthGenerator:
         return variants
 
 
-def create_randomized_labyrinth(chamber_count: int = 13,
-                               layout: str = "hybrid",
-                               connectivity: float = 0.3,
-                               seed: int = None) -> dict[str, Any]:
+def create_randomized_labyrinth(
+    chamber_count: int = 13, layout: str = "hybrid", connectivity: float = 0.3, seed: int = None
+) -> dict[str, Any]:
     """Create a randomized labyrinth configuration.
 
     Args:
@@ -623,10 +625,7 @@ def create_randomized_labyrinth(chamber_count: int = 13,
         Labyrinth configuration dictionary
     """
     config = GenerationConfig(
-        chamber_count=chamber_count,
-        layout=LabyrinthLayout(layout.lower()),
-        connectivity=connectivity,
-        seed=seed
+        chamber_count=chamber_count, layout=LabyrinthLayout(layout.lower()), connectivity=connectivity, seed=seed
     )
 
     generator = LabyrinthGenerator(config)

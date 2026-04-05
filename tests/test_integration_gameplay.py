@@ -31,28 +31,28 @@ class TestCompleteGameplayScenarios:
             os.remove(self.save_file)
         os.rmdir(self.temp_dir)
 
-    @patch('builtins.input')
+    @patch("builtins.input")
     def test_complete_game_session_with_riddle_challenges(self, mock_input):
         """Test a complete game session focusing on riddle challenges."""
         # Simulate user inputs for a complete session
         inputs = [
-            'look',           # Initial look around
-            'north',          # Move to chamber with riddle
-            'answer sphinx',  # Attempt riddle with answer in same command
-            'inventory',      # Check inventory after success
-            'south',          # Return to start
-            'east',           # Try different direction
-            'help',           # Get help
-            'status',         # Check status
-            'save mysave',    # Save game with explicit filename
-            'quit'            # Exit game
+            "look",  # Initial look around
+            "north",  # Move to chamber with riddle
+            "answer sphinx",  # Attempt riddle with answer in same command
+            "inventory",  # Check inventory after success
+            "south",  # Return to start
+            "east",  # Try different direction
+            "help",  # Get help
+            "status",  # Check status
+            "save mysave",  # Save game with explicit filename
+            "quit",  # Exit game
         ]
         mock_input.side_effect = inputs
 
         engine = GameEngine()
 
         # Mock save functionality to use our temp file
-        with patch.object(engine.save_load_manager, 'save_game') as mock_save:
+        with patch.object(engine.save_load_manager, "save_game") as mock_save:
             mock_save.return_value = True
 
             # Start the game
@@ -65,16 +65,16 @@ class TestCompleteGameplayScenarios:
             # Verify save was called
             mock_save.assert_called_once()
 
-    @patch('builtins.input')
+    @patch("builtins.input")
     def test_combat_challenge_integration(self, mock_input):
         """Test integration of combat challenges in gameplay."""
         inputs = [
-            'north',          # Move to combat chamber
-            'attack',         # Attack in combat
-            'defend',         # Defend in combat
-            'attack',         # Final attack
-            'inventory',      # Check rewards
-            'quit'
+            "north",  # Move to combat chamber
+            "attack",  # Attack in combat
+            "defend",  # Defend in combat
+            "attack",  # Final attack
+            "inventory",  # Check rewards
+            "quit",
         ]
         mock_input.side_effect = inputs
 
@@ -88,17 +88,17 @@ class TestCompleteGameplayScenarios:
             # Verify player health changed during combat
             assert engine.player_manager.health <= 100
 
-    @patch('builtins.input')
+    @patch("builtins.input")
     def test_puzzle_solving_workflow(self, mock_input):
         """Test complete puzzle solving workflow."""
         inputs = [
-            'east',           # Move to puzzle chamber
-            '1',              # Puzzle step 1
-            '2',              # Puzzle step 2
-            '3',              # Puzzle step 3
-            'solve',          # Attempt to solve
-            'status',         # Check completion status
-            'quit'
+            "east",  # Move to puzzle chamber
+            "1",  # Puzzle step 1
+            "2",  # Puzzle step 2
+            "3",  # Puzzle step 3
+            "solve",  # Attempt to solve
+            "status",  # Check completion status
+            "quit",
         ]
         mock_input.side_effect = inputs
 
@@ -113,11 +113,7 @@ class TestCompleteGameplayScenarios:
         # Create a proper GameState object
         test_item = Item(name="Test Key", description="A test key", item_type="key", value=1)
         game_state = GameState(
-            current_chamber=3,
-            player_health=75,
-            inventory_items=[test_item],
-            completed_chambers={2},
-            game_time=300
+            current_chamber=3, player_health=75, inventory_items=[test_item], completed_chambers={2}, game_time=300
         )
 
         # Save the game
@@ -136,17 +132,17 @@ class TestCompleteGameplayScenarios:
         assert loaded_state.inventory_items[0].name == "Test Key"
         assert 2 in loaded_state.completed_chambers
 
-    @patch('builtins.input')
+    @patch("builtins.input")
     def test_inventory_management_integration(self, mock_input):
         """Test inventory management throughout gameplay."""
         inputs = [
-            'inventory',      # Check initial empty inventory
-            'north',          # Move to get item
-            'take key',       # Take an item (if available)
-            'inventory',      # Check inventory with item
-            'use key',        # Use the item
-            'inventory',      # Check inventory after use
-            'quit'
+            "inventory",  # Check initial empty inventory
+            "north",  # Move to get item
+            "take key",  # Take an item (if available)
+            "inventory",  # Check inventory with item
+            "use key",  # Use the item
+            "inventory",  # Check inventory after use
+            "quit",
         ]
         mock_input.side_effect = inputs
 
@@ -162,7 +158,7 @@ class TestCompleteGameplayScenarios:
     def test_challenge_factory_integration_all_types(self):
         """Test that all challenge types can be created and function properly."""
         factory = ChallengeFactory()
-        challenge_types = ['riddle', 'puzzle', 'combat', 'skill', 'memory']
+        challenge_types = ["riddle", "puzzle", "combat", "skill", "memory"]
 
         for challenge_type in challenge_types:
             challenge = factory.create_challenge(challenge_type, difficulty=1)
@@ -175,13 +171,13 @@ class TestCompleteGameplayScenarios:
 
             # Test response processing (with dummy response)
             result = challenge.process_response("test response")
-            assert hasattr(result, 'success')
-            assert hasattr(result, 'message')
+            assert hasattr(result, "success")
+            assert hasattr(result, "message")
 
-    @patch('builtins.input')
+    @patch("builtins.input")
     def test_win_condition_detection(self, mock_input):
         """Test that win conditions are properly detected."""
-        inputs = ['quit']  # Minimal input to avoid hanging
+        inputs = ["quit"]  # Minimal input to avoid hanging
         mock_input.side_effect = inputs
 
         engine = GameEngine()
@@ -194,15 +190,15 @@ class TestCompleteGameplayScenarios:
         # Check win condition
         assert engine.check_win_condition()
 
-    @patch('builtins.input')
+    @patch("builtins.input")
     def test_error_recovery_during_gameplay(self, mock_input):
         """Test that the game recovers gracefully from errors during gameplay."""
         inputs = [
-            'invalid_command',  # Invalid command
-            'north',           # Valid command
-            'gibberish',       # Another invalid command
-            'help',            # Get help
-            'quit'             # Exit
+            "invalid_command",  # Invalid command
+            "north",  # Valid command
+            "gibberish",  # Another invalid command
+            "help",  # Get help
+            "quit",  # Exit
         ]
         mock_input.side_effect = inputs
 
@@ -225,7 +221,7 @@ class TestChallengeTypeIntegration:
 
     def test_riddle_challenge_in_game_context(self):
         """Test riddle challenge within actual game context."""
-        riddle = self.factory.create_challenge('riddle', difficulty=1)
+        riddle = self.factory.create_challenge("riddle", difficulty=1)
 
         # Place riddle in a chamber
         chamber = self.engine.world_manager.get_chamber(2)
@@ -243,11 +239,11 @@ class TestChallengeTypeIntegration:
             # Test with a potentially correct answer
             correct_result = riddle.process_response("sphinx")
             # Result depends on specific riddle content
-            assert hasattr(correct_result, 'success')
+            assert hasattr(correct_result, "success")
 
     def test_combat_challenge_in_game_context(self):
         """Test combat challenge within actual game context."""
-        combat = self.factory.create_challenge('combat', difficulty=1)
+        combat = self.factory.create_challenge("combat", difficulty=1)
 
         chamber = self.engine.world_manager.get_chamber(3)
         if chamber:
@@ -259,12 +255,12 @@ class TestChallengeTypeIntegration:
 
             # Test combat actions
             attack_result = combat.process_response("attack")
-            assert hasattr(attack_result, 'success')
-            assert hasattr(attack_result, 'damage')
+            assert hasattr(attack_result, "success")
+            assert hasattr(attack_result, "damage")
 
     def test_puzzle_challenge_in_game_context(self):
         """Test puzzle challenge within actual game context."""
-        puzzle = self.factory.create_challenge('puzzle', difficulty=1)
+        puzzle = self.factory.create_challenge("puzzle", difficulty=1)
 
         chamber = self.engine.world_manager.get_chamber(4)
         if chamber:
@@ -276,11 +272,11 @@ class TestChallengeTypeIntegration:
 
             # Test puzzle interaction
             result = puzzle.process_response("1")
-            assert hasattr(result, 'success')
+            assert hasattr(result, "success")
 
     def test_skill_challenge_in_game_context(self):
         """Test skill challenge within actual game context."""
-        skill = self.factory.create_challenge('skill', difficulty=1)
+        skill = self.factory.create_challenge("skill", difficulty=1)
 
         chamber = self.engine.world_manager.get_chamber(5)
         if chamber:
@@ -292,11 +288,11 @@ class TestChallengeTypeIntegration:
 
             # Test skill check
             result = skill.process_response("attempt")
-            assert hasattr(result, 'success')
+            assert hasattr(result, "success")
 
     def test_memory_challenge_in_game_context(self):
         """Test memory challenge within actual game context."""
-        memory = self.factory.create_challenge('memory', difficulty=1)
+        memory = self.factory.create_challenge("memory", difficulty=1)
 
         chamber = self.engine.world_manager.get_chamber(6)
         if chamber:
@@ -308,7 +304,7 @@ class TestChallengeTypeIntegration:
 
             # Test memory response
             result = memory.process_response("sequence")
-            assert hasattr(result, 'success')
+            assert hasattr(result, "success")
 
 
 class TestSaveLoadIntegrationScenarios:
@@ -337,7 +333,7 @@ class TestSaveLoadIntegrationScenarios:
             player_health=85,
             inventory_items=[sword, potion],
             completed_chambers={2, 3, 5},
-            game_time=1200
+            game_time=1200,
         )
 
         # Save the game
@@ -364,20 +360,14 @@ class TestSaveLoadIntegrationScenarios:
 
         # Test different game states
         test_states = [
-            GameState(
-                current_chamber=1,
-                player_health=100,
-                inventory_items=[],
-                completed_chambers=set(),
-                game_time=0
-            ),
+            GameState(current_chamber=1, player_health=100, inventory_items=[], completed_chambers=set(), game_time=0),
             GameState(
                 current_chamber=13,
                 player_health=1,
                 inventory_items=[Item(name="Last Key", description="Final key", item_type="key", value=100)],
                 completed_chambers=set(range(2, 13)),
-                game_time=5000
-            )
+                game_time=5000,
+            ),
         ]
 
         for i, state in enumerate(test_states):
@@ -398,31 +388,28 @@ class TestSaveLoadIntegrationScenarios:
             # Clean up
             os.remove(save_file)
 
-    @patch('builtins.input')
+    @patch("builtins.input")
     def test_save_load_during_active_gameplay(self, mock_input):
         """Test save/load operations during active gameplay."""
         inputs = [
-            'north',          # Move around
-            'save',           # Save game
-            'east',           # Continue playing
-            'load',           # Load game
-            'status',         # Check status
-            'quit'
+            "north",  # Move around
+            "save",  # Save game
+            "east",  # Continue playing
+            "load",  # Load game
+            "status",  # Check status
+            "quit",
         ]
         mock_input.side_effect = inputs
 
         engine = GameEngine()
 
         # Mock save/load operations
-        with patch.object(engine.save_load_manager, 'save_game', return_value=True) as mock_save, \
-             patch.object(engine.save_load_manager, 'load_game') as mock_load:
-
+        with (
+            patch.object(engine.save_load_manager, "save_game", return_value=True) as mock_save,
+            patch.object(engine.save_load_manager, "load_game") as mock_load,
+        ):
             mock_load.return_value = GameState(
-                current_chamber=1,
-                player_health=100,
-                inventory_items=[],
-                completed_chambers=set(),
-                game_time=100
+                current_chamber=1, player_health=100, inventory_items=[], completed_chambers=set(), game_time=100
             )
 
             engine.start_game()

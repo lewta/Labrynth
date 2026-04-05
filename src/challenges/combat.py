@@ -59,8 +59,7 @@ class Enemy:
 class CombatChallenge(Challenge):
     """A turn-based combat challenge with simple attack/defend mechanics."""
 
-    def __init__(self, difficulty: int = 5, enemy_name: str = None,
-                 reward_item: Item = None, **kwargs):
+    def __init__(self, difficulty: int = 5, enemy_name: str = None, reward_item: Item = None, **kwargs):
         """Initialize a combat challenge.
 
         Args:
@@ -69,8 +68,8 @@ class CombatChallenge(Challenge):
             reward_item: Item to give as reward for winning
             **kwargs: Additional arguments
         """
-        name = kwargs.get('name', 'Combat Challenge')
-        description = kwargs.get('description', 'A dangerous enemy blocks your path')
+        name = kwargs.get("name", "Combat Challenge")
+        description = kwargs.get("description", "A dangerous enemy blocks your path")
 
         super().__init__(name, description, difficulty)
 
@@ -105,10 +104,10 @@ class CombatChallenge(Challenge):
                 content_loader = get_content_loader()
                 enemy_data = content_loader.get_enemy(difficulty)
                 return Enemy(
-                    name=enemy_data.get('name', 'Unknown Enemy'),
-                    health=enemy_data.get('health', 50),
-                    attack=enemy_data.get('attack', 10),
-                    defense=enemy_data.get('defense', 2)
+                    name=enemy_data.get("name", "Unknown Enemy"),
+                    health=enemy_data.get("health", 50),
+                    attack=enemy_data.get("attack", 10),
+                    defense=enemy_data.get("defense", 2),
                 )
         except Exception:
             # Fall back to default templates
@@ -125,7 +124,7 @@ class CombatChallenge(Challenge):
             7: {"name": "Fire Elemental", "health": 65, "attack": 18, "defense": 3},
             8: {"name": "Dark Knight", "health": 85, "attack": 16, "defense": 8},
             9: {"name": "Ancient Dragon", "health": 120, "attack": 22, "defense": 10},
-            10: {"name": "Demon Lord", "health": 150, "attack": 25, "defense": 12}
+            10: {"name": "Demon Lord", "health": 150, "attack": 25, "defense": 12},
         }
 
         template = enemy_templates.get(difficulty, enemy_templates[5])
@@ -147,17 +146,19 @@ class CombatChallenge(Challenge):
             return content_loader.get_combat_scenario()
         except Exception:
             # Default scenario
-            return {
-                'type': 'guard',
-                'description': '{enemy_name} blocks your path forward.',
-                'initiative_bonus': 0
-            }
+            return {"type": "guard", "description": "{enemy_name} blocks your path forward.", "initiative_bonus": 0}
 
     def _get_default_reward(self) -> Item:
         """Get a default reward item based on difficulty."""
         reward_names = [
-            "Rusty Sword", "Iron Dagger", "Steel Blade", "Magic Sword",
-            "Enchanted Axe", "Legendary Spear", "Dragon Slayer", "Divine Weapon"
+            "Rusty Sword",
+            "Iron Dagger",
+            "Steel Blade",
+            "Magic Sword",
+            "Enchanted Axe",
+            "Legendary Spear",
+            "Dragon Slayer",
+            "Divine Weapon",
         ]
 
         reward_name = reward_names[min(self.difficulty - 1, len(reward_names) - 1)]
@@ -166,7 +167,7 @@ class CombatChallenge(Challenge):
             name=reward_name,
             description=f"A {reward_name.lower()} taken from a defeated enemy",
             item_type="weapon",
-            value=self.difficulty * 15
+            value=self.difficulty * 15,
         )
 
     def present_challenge(self) -> str:
@@ -176,7 +177,7 @@ class CombatChallenge(Challenge):
             presentation = f"\n=== {self.name} ===\n"
             presentation += f"Difficulty: {self.difficulty}/10\n\n"
             # Use scenario description if available
-            scenario_desc = self.combat_scenario.get('description', '{enemy_name} blocks your path forward.')
+            scenario_desc = self.combat_scenario.get("description", "{enemy_name} blocks your path forward.")
             scenario_text = scenario_desc.format(enemy_name=self.enemy.name)
             presentation += f"{scenario_text}\n"
             presentation += f"Enemy Health: {self.enemy.health}/{self.enemy.max_health}\n\n"
@@ -223,17 +224,15 @@ class CombatChallenge(Challenge):
         action = response.lower().strip()
 
         # Process player action
-        if action in ['attack', 'a']:
+        if action in ["attack", "a"]:
             return self._process_attack(player_stats)
-        elif action in ['defend', 'd']:
+        elif action in ["defend", "d"]:
             return self._process_defend(player_stats)
-        elif action in ['flee', 'f']:
+        elif action in ["flee", "f"]:
             return self._process_flee(player_stats)
         else:
             return ChallengeResult(
-                success=False,
-                message="Invalid action! Use 'attack', 'defend', or 'flee'.",
-                is_intermediate=True
+                success=False, message="Invalid action! Use 'attack', 'defend', or 'flee'.", is_intermediate=True
             )
 
     def _process_attack(self, player_stats: PlayerStats) -> ChallengeResult:
@@ -261,9 +260,7 @@ class CombatChallenge(Challenge):
         if not self.enemy.is_alive():
             self.mark_completed()
             return ChallengeResult(
-                success=True,
-                message=f"Victory! You defeated the {self.enemy.name}!",
-                reward=self.reward_item
+                success=True, message=f"Victory! You defeated the {self.enemy.name}!", reward=self.reward_item
             )
 
         # Enemy attacks back
@@ -276,15 +273,11 @@ class CombatChallenge(Challenge):
             return ChallengeResult(
                 success=False,
                 message=f"Defeat! The {self.enemy.name} has bested you in combat.",
-                damage=25  # Penalty for losing combat
+                damage=25,  # Penalty for losing combat
             )
 
         # Combat continues
-        return ChallengeResult(
-            success=False,
-            message="Combat continues...",
-            is_intermediate=True
-        )
+        return ChallengeResult(success=False, message="Combat continues...", is_intermediate=True)
 
     def _process_defend(self, player_stats: PlayerStats) -> ChallengeResult:
         """Process player defend action.
@@ -307,21 +300,19 @@ class CombatChallenge(Challenge):
         reduced_damage = max(1, enemy_damage - damage_reduction)
         self.player_health -= reduced_damage
 
-        self.combat_log.append(f"{self.enemy.name} attacks but you block some damage! You take {reduced_damage} damage.")
+        self.combat_log.append(
+            f"{self.enemy.name} attacks but you block some damage! You take {reduced_damage} damage."
+        )
 
         # Check if player is defeated
         if self.player_health <= 0:
             return ChallengeResult(
-                success=False,
-                message=f"Defeat! The {self.enemy.name} has overwhelmed your defenses.",
-                damage=25
+                success=False, message=f"Defeat! The {self.enemy.name} has overwhelmed your defenses.", damage=25
             )
 
         # Combat continues
         return ChallengeResult(
-            success=False,
-            message="You successfully defended against the attack!",
-            is_intermediate=True
+            success=False, message="You successfully defended against the attack!", is_intermediate=True
         )
 
     def _process_flee(self, player_stats: PlayerStats) -> ChallengeResult:
@@ -346,7 +337,7 @@ class CombatChallenge(Challenge):
             return ChallengeResult(
                 success=False,
                 message=f"You successfully flee from the {self.enemy.name}! You can try again later.",
-                damage=5  # Small penalty for fleeing
+                damage=5,  # Small penalty for fleeing
             )
         else:
             # Failed flee - enemy gets free attack
@@ -358,13 +349,11 @@ class CombatChallenge(Challenge):
                 return ChallengeResult(
                     success=False,
                     message=f"You failed to escape and the {self.enemy.name} finished you off!",
-                    damage=25
+                    damage=25,
                 )
 
             return ChallengeResult(
-                success=False,
-                message="You failed to flee and took damage! Combat continues.",
-                is_intermediate=True
+                success=False, message="You failed to flee and took damage! Combat continues.", is_intermediate=True
             )
 
     def get_reward(self) -> Item | None:
@@ -399,5 +388,5 @@ class CombatChallenge(Challenge):
             "enemy_health": self.enemy.health,
             "enemy_max_health": self.enemy.max_health,
             "turn_count": self.turn_count,
-            "completed": self.completed
+            "completed": self.completed,
         }

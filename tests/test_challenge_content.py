@@ -18,11 +18,11 @@ class TestChallengeContentLoader:
 
         # Should load without errors
         assert loader._content_cache is not None
-        assert 'riddles' in loader._content_cache
-        assert 'puzzles' in loader._content_cache
-        assert 'combat' in loader._content_cache
-        assert 'skills' in loader._content_cache
-        assert 'memory' in loader._content_cache
+        assert "riddles" in loader._content_cache
+        assert "puzzles" in loader._content_cache
+        assert "combat" in loader._content_cache
+        assert "skills" in loader._content_cache
+        assert "memory" in loader._content_cache
 
     def test_load_content_missing_file(self):
         """Test loading with missing content file."""
@@ -36,7 +36,7 @@ class TestChallengeContentLoader:
         with tempfile.TemporaryDirectory() as temp_dir:
             # Create invalid JSON file
             invalid_file = os.path.join(temp_dir, "riddles.json")
-            with open(invalid_file, 'w') as f:
+            with open(invalid_file, "w") as f:
                 f.write("invalid json content")
 
             with pytest.raises(GameException, match="Invalid JSON in challenge content file"):
@@ -49,18 +49,18 @@ class TestChallengeContentLoader:
         # Get riddle with specific difficulty
         riddle = loader.get_riddle(difficulty=1)
         assert riddle is not None
-        assert 'riddle' in riddle
-        assert 'answers' in riddle
-        assert riddle['difficulty'] == 1
+        assert "riddle" in riddle
+        assert "answers" in riddle
+        assert riddle["difficulty"] == 1
 
     def test_get_riddle_by_category(self):
         """Test getting riddle by category."""
         loader = ChallengeContentLoader()
 
         # Get riddle with specific category
-        riddle = loader.get_riddle(category='wordplay')
+        riddle = loader.get_riddle(category="wordplay")
         assert riddle is not None
-        assert riddle['category'] == 'wordplay'
+        assert riddle["category"] == "wordplay"
 
     def test_get_riddle_random(self):
         """Test getting random riddle."""
@@ -69,9 +69,9 @@ class TestChallengeContentLoader:
         # Get random riddle
         riddle = loader.get_riddle()
         assert riddle is not None
-        assert 'riddle' in riddle
-        assert 'answers' in riddle
-        assert 'difficulty' in riddle
+        assert "riddle" in riddle
+        assert "answers" in riddle
+        assert "difficulty" in riddle
 
     def test_get_puzzle_by_difficulty(self):
         """Test getting puzzle by difficulty level."""
@@ -80,18 +80,18 @@ class TestChallengeContentLoader:
         # Get puzzle with specific difficulty
         puzzle = loader.get_puzzle(difficulty=5)
         assert puzzle is not None
-        assert puzzle['difficulty'] == 5
+        assert puzzle["difficulty"] == 5
 
     def test_get_puzzle_by_type(self):
         """Test getting puzzle by type."""
         loader = ChallengeContentLoader()
 
         # Get sequence puzzle
-        puzzle = loader.get_puzzle(puzzle_type='sequence')
+        puzzle = loader.get_puzzle(puzzle_type="sequence")
         assert puzzle is not None
-        assert puzzle['type'] == 'sequence'
-        assert 'sequence' in puzzle
-        assert 'answer' in puzzle
+        assert puzzle["type"] == "sequence"
+        assert "sequence" in puzzle
+        assert "answer" in puzzle
 
     def test_get_puzzle_random(self):
         """Test getting random puzzle."""
@@ -100,8 +100,8 @@ class TestChallengeContentLoader:
         # Get random puzzle
         puzzle = loader.get_puzzle()
         assert puzzle is not None
-        assert 'type' in puzzle
-        assert 'difficulty' in puzzle
+        assert "type" in puzzle
+        assert "difficulty" in puzzle
 
     def test_get_enemy_by_difficulty(self):
         """Test getting enemy by difficulty level."""
@@ -110,21 +110,21 @@ class TestChallengeContentLoader:
         # Get enemy with specific difficulty
         enemy = loader.get_enemy(difficulty=5)
         assert enemy is not None
-        assert enemy['difficulty'] == 5
-        assert 'name' in enemy
-        assert 'health' in enemy
-        assert 'attack' in enemy
-        assert 'defense' in enemy
+        assert enemy["difficulty"] == 5
+        assert "name" in enemy
+        assert "health" in enemy
+        assert "attack" in enemy
+        assert "defense" in enemy
 
     def test_get_enemy_by_type(self):
         """Test getting enemy by type."""
         loader = ChallengeContentLoader()
 
         # Get easy enemy
-        enemy = loader.get_enemy(enemy_type='easy')
+        enemy = loader.get_enemy(enemy_type="easy")
         assert enemy is not None
-        assert enemy['category'] == 'easy'
-        assert enemy['difficulty'] <= 3
+        assert enemy["category"] == "easy"
+        assert enemy["difficulty"] <= 3
 
     def test_get_enemy_random(self):
         """Test getting random enemy."""
@@ -133,10 +133,10 @@ class TestChallengeContentLoader:
         # Get random enemy
         enemy = loader.get_enemy()
         assert enemy is not None
-        assert 'name' in enemy
-        assert 'health' in enemy
-        assert 'attack' in enemy
-        assert 'defense' in enemy
+        assert "name" in enemy
+        assert "health" in enemy
+        assert "attack" in enemy
+        assert "defense" in enemy
 
     def test_get_skill_challenge_by_difficulty(self):
         """Test getting skill challenge by difficulty."""
@@ -145,21 +145,21 @@ class TestChallengeContentLoader:
         # Get skill challenge with specific difficulty
         challenge = loader.get_skill_challenge(difficulty=3)
         assert challenge is not None
-        assert challenge['difficulty'] == 3
-        assert 'scenario' in challenge
-        assert 'action' in challenge
-        assert 'skill_type' in challenge
+        assert challenge["difficulty"] == 3
+        assert "scenario" in challenge
+        assert "action" in challenge
+        assert "skill_type" in challenge
 
     def test_get_skill_challenge_by_type(self):
         """Test getting skill challenge by skill type."""
         loader = ChallengeContentLoader()
 
         # Get strength challenge
-        challenge = loader.get_skill_challenge(skill_type='strength')
+        challenge = loader.get_skill_challenge(skill_type="strength")
         assert challenge is not None
-        assert challenge['skill_type'] == 'strength'
-        assert 'scenario' in challenge
-        assert 'action' in challenge
+        assert challenge["skill_type"] == "strength"
+        assert "scenario" in challenge
+        assert "action" in challenge
 
     def test_get_skill_challenge_random(self):
         """Test getting random skill challenge."""
@@ -168,20 +168,20 @@ class TestChallengeContentLoader:
         # Get random skill challenge
         challenge = loader.get_skill_challenge()
         assert challenge is not None
-        assert 'skill_type' in challenge
-        assert 'scenario' in challenge
-        assert 'action' in challenge
+        assert "skill_type" in challenge
+        assert "scenario" in challenge
+        assert "action" in challenge
 
     def test_get_memory_challenge_config(self):
         """Test getting memory challenge configuration."""
         loader = ChallengeContentLoader()
 
         # Get memory challenge config
-        config = loader.get_memory_challenge_config(difficulty=5, memory_type='sequence')
+        config = loader.get_memory_challenge_config(difficulty=5, memory_type="sequence")
         assert config is not None
-        assert config['memory_type'] == 'sequence'
-        assert 'symbols' in config
-        assert 'difficulty_settings' in config
+        assert config["memory_type"] == "sequence"
+        assert "symbols" in config
+        assert "difficulty_settings" in config
 
     def test_get_memory_challenge_config_random(self):
         """Test getting random memory challenge configuration."""
@@ -190,22 +190,22 @@ class TestChallengeContentLoader:
         # Get random memory challenge config
         config = loader.get_memory_challenge_config()
         assert config is not None
-        assert 'memory_type' in config
+        assert "memory_type" in config
 
     def test_get_reward_for_challenge_type(self):
         """Test getting rewards for different challenge types."""
         loader = ChallengeContentLoader()
 
         # Test different challenge types
-        challenge_types = ['riddle', 'puzzle', 'combat', 'skill', 'memory']
+        challenge_types = ["riddle", "puzzle", "combat", "skill", "memory"]
 
         for challenge_type in challenge_types:
             reward = loader.get_reward_for_challenge_type(challenge_type, difficulty=5)
             assert reward is not None
-            assert 'name' in reward
-            assert 'description' in reward
-            assert 'value' in reward
-            assert reward['value'] > 0
+            assert "name" in reward
+            assert "description" in reward
+            assert "value" in reward
+            assert reward["value"] > 0
 
     def test_get_combat_scenario(self):
         """Test getting combat scenario."""
@@ -214,9 +214,9 @@ class TestChallengeContentLoader:
         # Get combat scenario
         scenario = loader.get_combat_scenario()
         assert scenario is not None
-        assert 'type' in scenario
-        assert 'description' in scenario
-        assert 'initiative_bonus' in scenario
+        assert "type" in scenario
+        assert "description" in scenario
+        assert "initiative_bonus" in scenario
 
     def test_validate_content(self):
         """Test content validation."""
@@ -235,11 +235,11 @@ class TestChallengeContentLoader:
         # Get content stats
         stats = loader.get_content_stats()
         assert isinstance(stats, dict)
-        assert 'riddles' in stats
-        assert 'puzzles' in stats
-        assert 'enemies' in stats
-        assert 'skill_challenges' in stats
-        assert 'memory_types' in stats
+        assert "riddles" in stats
+        assert "puzzles" in stats
+        assert "enemies" in stats
+        assert "skill_challenges" in stats
+        assert "memory_types" in stats
 
         # All counts should be positive
         for count in stats.values():
@@ -251,17 +251,17 @@ class TestChallengeContentLoader:
 
         # Test riddle variety
         riddles = [loader.get_riddle() for _ in range(10)]
-        riddle_texts = [r['riddle'] for r in riddles]
+        riddle_texts = [r["riddle"] for r in riddles]
         assert len(set(riddle_texts)) > 5  # Should have variety
 
         # Test puzzle variety
         puzzles = [loader.get_puzzle() for _ in range(10)]
-        puzzle_types = [p['type'] for p in puzzles]
+        puzzle_types = [p["type"] for p in puzzles]
         assert len(set(puzzle_types)) > 1  # Should have different types
 
         # Test enemy variety
         enemies = [loader.get_enemy() for _ in range(10)]
-        enemy_names = [e['name'] for e in enemies]
+        enemy_names = [e["name"] for e in enemies]
         assert len(set(enemy_names)) > 3  # Should have variety
 
     def test_difficulty_scaling(self):
@@ -272,25 +272,25 @@ class TestChallengeContentLoader:
         easy_riddle = loader.get_riddle(difficulty=1)
         hard_riddle = loader.get_riddle(difficulty=9)
 
-        assert easy_riddle['difficulty'] < hard_riddle['difficulty']
+        assert easy_riddle["difficulty"] < hard_riddle["difficulty"]
 
         # Test enemy difficulty scaling
         easy_enemy = loader.get_enemy(difficulty=1)
         hard_enemy = loader.get_enemy(difficulty=9)
 
-        assert easy_enemy['difficulty'] < hard_enemy['difficulty']
-        assert easy_enemy['health'] < hard_enemy['health']
-        assert easy_enemy['attack'] < hard_enemy['attack']
+        assert easy_enemy["difficulty"] < hard_enemy["difficulty"]
+        assert easy_enemy["health"] < hard_enemy["health"]
+        assert easy_enemy["attack"] < hard_enemy["attack"]
 
     def test_reward_value_scaling(self):
         """Test that reward values scale with difficulty."""
         loader = ChallengeContentLoader()
 
         # Test reward scaling
-        easy_reward = loader.get_reward_for_challenge_type('riddle', difficulty=1)
-        hard_reward = loader.get_reward_for_challenge_type('riddle', difficulty=10)
+        easy_reward = loader.get_reward_for_challenge_type("riddle", difficulty=1)
+        hard_reward = loader.get_reward_for_challenge_type("riddle", difficulty=10)
 
-        assert easy_reward['value'] < hard_reward['value']
+        assert easy_reward["value"] < hard_reward["value"]
 
 
 class TestGlobalContentLoader:
@@ -327,18 +327,18 @@ class TestContentIntegration:
         loader = ChallengeContentLoader()
 
         # Test each challenge type
-        challenge_types = ['riddle', 'puzzle', 'combat', 'skill', 'memory']
+        challenge_types = ["riddle", "puzzle", "combat", "skill", "memory"]
 
         for challenge_type in challenge_types:
-            if challenge_type == 'riddle':
+            if challenge_type == "riddle":
                 content = loader.get_riddle()
-            elif challenge_type == 'puzzle':
+            elif challenge_type == "puzzle":
                 content = loader.get_puzzle()
-            elif challenge_type == 'combat':
+            elif challenge_type == "combat":
                 content = loader.get_enemy()
-            elif challenge_type == 'skill':
+            elif challenge_type == "skill":
                 content = loader.get_skill_challenge()
-            elif challenge_type == 'memory':
+            elif challenge_type == "memory":
                 content = loader.get_memory_challenge_config()
 
             assert content is not None, f"No content available for {challenge_type}"
@@ -363,19 +363,19 @@ class TestContentIntegration:
 
         # Test riddle completeness
         riddle = loader.get_riddle()
-        required_riddle_fields = ['riddle', 'answers', 'difficulty']
+        required_riddle_fields = ["riddle", "answers", "difficulty"]
         for field in required_riddle_fields:
             assert field in riddle, f"Riddle missing required field: {field}"
 
         # Test enemy completeness
         enemy = loader.get_enemy()
-        required_enemy_fields = ['name', 'health', 'attack', 'defense', 'difficulty']
+        required_enemy_fields = ["name", "health", "attack", "defense", "difficulty"]
         for field in required_enemy_fields:
             assert field in enemy, f"Enemy missing required field: {field}"
 
         # Test skill challenge completeness
         skill = loader.get_skill_challenge()
-        required_skill_fields = ['scenario', 'action', 'difficulty', 'skill_type']
+        required_skill_fields = ["scenario", "action", "difficulty", "skill_type"]
         for field in required_skill_fields:
             assert field in skill, f"Skill challenge missing required field: {field}"
 
@@ -384,17 +384,17 @@ class TestContentIntegration:
         loader = ChallengeContentLoader()
 
         # Test that we have content across all skill types
-        skill_types = ['strength', 'intelligence', 'dexterity', 'luck']
+        skill_types = ["strength", "intelligence", "dexterity", "luck"]
         for skill_type in skill_types:
             challenge = loader.get_skill_challenge(skill_type=skill_type)
             assert challenge is not None
-            assert challenge['skill_type'] == skill_type
+            assert challenge["skill_type"] == skill_type
 
         # Test that we have different puzzle types
         found_types = set()
 
         for _ in range(20):  # Try multiple times to find different types
             puzzle = loader.get_puzzle()
-            found_types.add(puzzle['type'])
+            found_types.add(puzzle["type"])
 
         assert len(found_types) > 1, "Should have multiple puzzle types available"

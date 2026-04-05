@@ -13,7 +13,7 @@ from src.config.game_config import GameConfig
 class TestGameConfig:
     """Test cases for GameConfig class."""
 
-    @patch('src.config.game_config.GameConfig._find_config_file')
+    @patch("src.config.game_config.GameConfig._find_config_file")
     def test_init_with_default_config(self, mock_find_config):
         """Test GameConfig initialization with default configuration."""
         # Mock to return None so no config file is found
@@ -30,14 +30,8 @@ class TestGameConfig:
 
     def test_init_with_custom_config_file(self):
         """Test GameConfig initialization with custom config file."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
-            test_config = {
-                "victory": {
-                    "flag_content": "CUSTOM_FLAG_2024",
-                    "flag_prefix": "CTF{",
-                    "flag_suffix": "}"
-                }
-            }
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
+            test_config = {"victory": {"flag_content": "CUSTOM_FLAG_2024", "flag_prefix": "CTF{", "flag_suffix": "}"}}
             json.dump(test_config, f)
             temp_file = f.name
 
@@ -62,12 +56,12 @@ class TestGameConfig:
 
     def test_load_config_invalid_json(self):
         """Test loading configuration with invalid JSON."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             f.write("{ invalid json content")
             temp_file = f.name
 
         try:
-            with patch('src.config.game_config.logging.getLogger') as mock_logger:
+            with patch("src.config.game_config.logging.getLogger") as mock_logger:
                 mock_log = mock_logger.return_value
                 config = GameConfig(config_file=temp_file)
 
@@ -79,7 +73,7 @@ class TestGameConfig:
 
     def test_save_config(self):
         """Test saving configuration to file."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             temp_file = f.name
 
         try:
@@ -114,7 +108,7 @@ class TestGameConfig:
         with pytest.raises(IOError):
             config.save_config()
 
-    @patch('src.config.game_config.GameConfig._find_config_file')
+    @patch("src.config.game_config.GameConfig._find_config_file")
     def test_get_dot_notation(self, mock_find_config):
         """Test getting values using dot notation."""
         # Mock to return None so no config file is found
@@ -183,10 +177,10 @@ class TestGameConfig:
             root_config = os.path.join(temp_dir, "game_config.json")
             config_dir_config = os.path.join(config_dir, "game_config.json")
 
-            with open(root_config, 'w') as f:
+            with open(root_config, "w") as f:
                 json.dump({"victory": {"flag_content": "ROOT_FLAG"}}, f)
 
-            with open(config_dir_config, 'w') as f:
+            with open(config_dir_config, "w") as f:
                 json.dump({"victory": {"flag_content": "CONFIG_DIR_FLAG"}}, f)
 
             # Change to temp directory to test search
@@ -208,16 +202,14 @@ class TestGameConfig:
 
     def test_merge_config(self):
         """Test configuration merging functionality."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             # Partial config that should merge with defaults
             partial_config = {
                 "victory": {
                     "flag_content": "MERGED_FLAG"
                     # Missing flag_prefix, flag_suffix, prize_message
                 },
-                "new_section": {
-                    "custom_value": "test"
-                }
+                "new_section": {"custom_value": "test"},
             }
             json.dump(partial_config, f)
             temp_file = f.name
@@ -228,14 +220,14 @@ class TestGameConfig:
             # Verify merged values
             assert config.get("victory.flag_content") == "MERGED_FLAG"
             assert config.get("victory.flag_prefix") == "FLAG{"  # From defaults
-            assert config.get("victory.flag_suffix") == "}"      # From defaults
+            assert config.get("victory.flag_suffix") == "}"  # From defaults
             assert config.get("game.title") == "Labyrinth Adventure Game"  # From defaults
             assert config.get("new_section.custom_value") == "test"  # From file
 
         finally:
             os.unlink(temp_file)
 
-    @patch('src.config.game_config.GameConfig._find_config_file')
+    @patch("src.config.game_config.GameConfig._find_config_file")
     def test_get_victory_flag_default(self, mock_find_config):
         """Test get_victory_flag with default configuration."""
         # Mock to return None so no config file is found
@@ -256,7 +248,7 @@ class TestGameConfig:
         flag = config.get_victory_flag()
         assert flag == "CTF{CUSTOM_CHALLENGE_2024]"
 
-    @patch('src.config.game_config.GameConfig._find_config_file')
+    @patch("src.config.game_config.GameConfig._find_config_file")
     def test_get_victory_flag_partial_custom(self, mock_find_config):
         """Test get_victory_flag with partially customized configuration."""
         # Mock to return None so no config file is found
@@ -269,7 +261,7 @@ class TestGameConfig:
         flag = config.get_victory_flag()
         assert flag == "FLAG{PARTIAL_CUSTOM}"
 
-    @patch('src.config.game_config.GameConfig._find_config_file')
+    @patch("src.config.game_config.GameConfig._find_config_file")
     def test_get_victory_message_default(self, mock_find_config):
         """Test get_victory_message with default configuration."""
         # Mock to return None so no config file is found
@@ -278,10 +270,12 @@ class TestGameConfig:
         config = GameConfig()
 
         message = config.get_victory_message()
-        expected = "🏆 YOUR PRIZE: FLAG{LABYRINTH_MASTER_2024}\n\nYou have proven yourself worthy of the ancient secrets!"
+        expected = (
+            "🏆 YOUR PRIZE: FLAG{LABYRINTH_MASTER_2024}\n\nYou have proven yourself worthy of the ancient secrets!"
+        )
         assert message == expected
 
-    @patch('src.config.game_config.GameConfig._find_config_file')
+    @patch("src.config.game_config.GameConfig._find_config_file")
     def test_get_victory_message_custom_flag(self, mock_find_config):
         """Test get_victory_message with custom flag configuration."""
         # Mock to return None so no config file is found
@@ -292,10 +286,12 @@ class TestGameConfig:
         config.set("victory.flag_prefix", "CHALLENGE{")
 
         message = config.get_victory_message()
-        expected = "🏆 YOUR PRIZE: CHALLENGE{CUSTOM_FLAG_2024}\n\nYou have proven yourself worthy of the ancient secrets!"
+        expected = (
+            "🏆 YOUR PRIZE: CHALLENGE{CUSTOM_FLAG_2024}\n\nYou have proven yourself worthy of the ancient secrets!"
+        )
         assert message == expected
 
-    @patch('src.config.game_config.GameConfig._find_config_file')
+    @patch("src.config.game_config.GameConfig._find_config_file")
     def test_get_victory_message_custom_template(self, mock_find_config):
         """Test get_victory_message with custom message template."""
         # Mock to return None so no config file is found
@@ -322,7 +318,7 @@ class TestGameConfig:
 
     def test_update_flag_content_success(self):
         """Test successful flag content update."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             temp_file = f.name
 
         try:
@@ -346,7 +342,7 @@ class TestGameConfig:
 
     def test_update_flag_content_with_whitespace(self):
         """Test flag content update strips whitespace."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             temp_file = f.name
 
         try:
@@ -389,7 +385,7 @@ class TestGameConfig:
 
     def test_default_configuration_structure(self):
         """Test that default configuration has all required sections."""
-        with patch('src.config.game_config.GameConfig._find_config_file') as mock_find_config:
+        with patch("src.config.game_config.GameConfig._find_config_file") as mock_find_config:
             mock_find_config.return_value = None
             config = GameConfig()
 
@@ -424,7 +420,7 @@ class TestGameConfig:
 
                 # Test 1: Only home config exists (lowest priority)
                 if not home_config_exists:
-                    with open(home_config, 'w') as f:
+                    with open(home_config, "w") as f:
                         json.dump({"victory": {"flag_content": "HOME_FLAG"}}, f)
 
                 config = GameConfig()
@@ -435,7 +431,7 @@ class TestGameConfig:
 
                 # Test 2: Config directory file exists (medium priority)
                 config_dir_file = os.path.join(config_dir, "game_config.json")
-                with open(config_dir_file, 'w') as f:
+                with open(config_dir_file, "w") as f:
                     json.dump({"victory": {"flag_content": "CONFIG_DIR_FLAG"}}, f)
 
                 config = GameConfig()
@@ -444,7 +440,7 @@ class TestGameConfig:
 
                 # Test 3: Root config file exists (highest priority)
                 root_config = os.path.join(temp_dir, "game_config.json")
-                with open(root_config, 'w') as f:
+                with open(root_config, "w") as f:
                     json.dump({"victory": {"flag_content": "ROOT_FLAG"}}, f)
 
                 config = GameConfig()
@@ -456,16 +452,14 @@ class TestGameConfig:
 
     def test_configuration_merging_preserves_defaults(self):
         """Test that configuration merging preserves default values for missing keys."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             # Create partial config with only some victory settings
             partial_config = {
                 "victory": {
                     "flag_content": "PARTIAL_FLAG"
                     # Missing flag_prefix, flag_suffix, prize_message
                 },
-                "custom_section": {
-                    "custom_value": "test"
-                }
+                "custom_section": {"custom_value": "test"},
                 # Missing game and display sections
             }
             json.dump(partial_config, f)
@@ -496,7 +490,7 @@ class TestGameConfigErrorHandling:
 
     def test_load_config_permission_error(self):
         """Test loading configuration when file has no read permission."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump({"victory": {"flag_content": "TEST_FLAG"}}, f)
             temp_file = f.name
 
@@ -504,7 +498,7 @@ class TestGameConfigErrorHandling:
             # Remove read permission
             os.chmod(temp_file, 0o000)
 
-            with patch('src.config.game_config.logging.getLogger') as mock_logger:
+            with patch("src.config.game_config.logging.getLogger") as mock_logger:
                 mock_log = mock_logger.return_value
                 config = GameConfig(config_file=temp_file)
 
@@ -520,13 +514,13 @@ class TestGameConfigErrorHandling:
 
     def test_load_config_empty_file(self):
         """Test loading configuration from empty file."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             # Write empty content
             f.write("")
             temp_file = f.name
 
         try:
-            with patch('src.config.game_config.logging.getLogger') as mock_logger:
+            with patch("src.config.game_config.logging.getLogger") as mock_logger:
                 mock_log = mock_logger.return_value
                 config = GameConfig(config_file=temp_file)
 
@@ -540,13 +534,13 @@ class TestGameConfigErrorHandling:
 
     def test_load_config_non_dict_json(self):
         """Test loading configuration when JSON is not a dictionary."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             # Write valid JSON but not a dictionary
             json.dump(["not", "a", "dictionary"], f)
             temp_file = f.name
 
         try:
-            with patch('src.config.game_config.logging.getLogger') as mock_logger:
+            with patch("src.config.game_config.logging.getLogger") as mock_logger:
                 mock_log = mock_logger.return_value
                 config = GameConfig(config_file=temp_file)
 
@@ -559,13 +553,13 @@ class TestGameConfigErrorHandling:
 
     def test_load_config_unicode_decode_error(self):
         """Test loading configuration with encoding issues."""
-        with tempfile.NamedTemporaryFile(mode='wb', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="wb", suffix=".json", delete=False) as f:
             # Write invalid UTF-8 bytes
             f.write(b'\xff\xfe{"victory": {"flag_content": "TEST"}}')
             temp_file = f.name
 
         try:
-            with patch('src.config.game_config.logging.getLogger') as mock_logger:
+            with patch("src.config.game_config.logging.getLogger") as mock_logger:
                 mock_log = mock_logger.return_value
                 config = GameConfig(config_file=temp_file)
 
@@ -578,14 +572,14 @@ class TestGameConfigErrorHandling:
 
     def test_load_config_file_deleted_during_load(self):
         """Test loading configuration when file is deleted between checks."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump({"victory": {"flag_content": "TEST_FLAG"}}, f)
             temp_file = f.name
 
         # Delete the file
         os.unlink(temp_file)
 
-        with patch('src.config.game_config.logging.getLogger') as mock_logger:
+        with patch("src.config.game_config.logging.getLogger") as mock_logger:
             mock_log = mock_logger.return_value
             config = GameConfig(config_file=temp_file)
 
@@ -626,7 +620,7 @@ class TestGameConfigErrorHandling:
 
     def test_save_config_file_permission_error(self):
         """Test saving configuration when file has no write permission."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump({"victory": {"flag_content": "TEST"}}, f)
             temp_file = f.name
 
@@ -656,7 +650,7 @@ class TestGameConfigErrorHandling:
             config = GameConfig(config_file=config_file)
 
             # Mock json.dump to fail after temp file is created
-            with patch('json.dump', side_effect=OSError("Disk full")):
+            with patch("json.dump", side_effect=OSError("Disk full")):
                 with pytest.raises(OSError):
                     config.save_config()
 
@@ -672,11 +666,11 @@ class TestGameConfigErrorHandling:
 
     def test_update_flag_content_newline_warning(self):
         """Test update_flag_content warns about newline characters."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             temp_file = f.name
 
         try:
-            with patch('src.config.game_config.logging.getLogger') as mock_logger:
+            with patch("src.config.game_config.logging.getLogger") as mock_logger:
                 mock_log = mock_logger.return_value
                 config = GameConfig(config_file=temp_file)
 
@@ -708,7 +702,7 @@ class TestGameConfigErrorHandling:
 
     def test_get_config_file_path_search(self):
         """Test get_config_file_path with file search."""
-        with patch('src.config.game_config.GameConfig._find_config_file') as mock_find:
+        with patch("src.config.game_config.GameConfig._find_config_file") as mock_find:
             mock_find.return_value = "found_config.json"
             config = GameConfig()
             assert config.get_config_file_path() == "found_config.json"
@@ -750,7 +744,7 @@ class TestGameConfigErrorHandling:
                 "flag_content": "TEST"
                 # Missing other required fields
             },
-            "game": {"title": "Test"}
+            "game": {"title": "Test"},
         }
 
         result = config.validate_configuration()
@@ -778,7 +772,7 @@ class TestGameConfigErrorHandling:
                 "flag_content": "TEST",
                 "flag_prefix": "FLAG{",
                 "flag_suffix": "}",
-                "prize_message": "Prize: {flag}"
+                "prize_message": "Prize: {flag}",
             }
         }
 
@@ -789,10 +783,10 @@ class TestGameConfigErrorHandling:
 
     def test_get_victory_message_template_error(self):
         """Test get_victory_message with template formatting error."""
-        with patch('src.config.game_config.GameConfig._find_config_file') as mock_find_config:
+        with patch("src.config.game_config.GameConfig._find_config_file") as mock_find_config:
             mock_find_config.return_value = None
 
-            with patch('src.config.game_config.logging.getLogger') as mock_logger:
+            with patch("src.config.game_config.logging.getLogger") as mock_logger:
                 mock_log = mock_logger.return_value
                 config = GameConfig()
                 config.set("victory.prize_message", "Invalid template {invalid_placeholder}")
@@ -805,7 +799,7 @@ class TestGameConfigErrorHandling:
 
     def test_get_victory_message_fallback_error(self):
         """Test get_victory_message when even fallback template fails."""
-        with patch('src.config.game_config.GameConfig._find_config_file') as mock_find_config:
+        with patch("src.config.game_config.GameConfig._find_config_file") as mock_find_config:
             mock_find_config.return_value = None
             config = GameConfig()
 
@@ -815,7 +809,8 @@ class TestGameConfigErrorHandling:
                     raise Exception("Format error")
 
             # Mock the get method to return our failing template
-            with patch.object(config, 'get') as mock_get:
+            with patch.object(config, "get") as mock_get:
+
                 def side_effect(key, default=None):
                     if key == "victory.prize_message":
                         return FailingTemplate()
@@ -836,14 +831,14 @@ class TestGameConfigErrorHandling:
 
     def test_load_config_unexpected_error(self):
         """Test load_config handles unexpected errors gracefully."""
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump({"victory": {"flag_content": "TEST"}}, f)
             temp_file = f.name
 
         try:
             # Mock open to raise unexpected error
-            with patch('builtins.open', side_effect=RuntimeError("Unexpected error")):
-                with patch('src.config.game_config.logging.getLogger') as mock_logger:
+            with patch("builtins.open", side_effect=RuntimeError("Unexpected error")):
+                with patch("src.config.game_config.logging.getLogger") as mock_logger:
                     mock_log = mock_logger.return_value
                     config = GameConfig(config_file=temp_file)
 
@@ -862,7 +857,7 @@ class TestGameConfigErrorHandling:
         config.set("victory.flag_content", "TEST_FLAG")
 
         # Mock json.dump to raise UnicodeEncodeError
-        with patch('json.dump', side_effect=UnicodeEncodeError('utf-8', 'test', 0, 1, 'test error')):
+        with patch("json.dump", side_effect=UnicodeEncodeError("utf-8", "test", 0, 1, "test error")):
             with pytest.raises(IOError, match="Failed to save configuration due to encoding error"):
                 config.save_config()
 
@@ -871,6 +866,6 @@ class TestGameConfigErrorHandling:
         config = GameConfig()
 
         # Mock json.dump to raise unexpected error
-        with patch('json.dump', side_effect=RuntimeError("Unexpected error")):
+        with patch("json.dump", side_effect=RuntimeError("Unexpected error")):
             with pytest.raises(IOError, match="Failed to save configuration"):
                 config.save_config()

@@ -19,7 +19,7 @@ class TestChallengeDisplayFix:
 
     def test_skill_challenge_examine_is_intermediate(self):
         """Test that skill challenge 'examine' action is intermediate (no SUCCESS/FAILED)."""
-        challenge = SkillChallenge(difficulty=3, skill_type='strength')
+        challenge = SkillChallenge(difficulty=3, skill_type="strength")
 
         result = challenge.process_response("examine", self.player_stats)
 
@@ -33,7 +33,7 @@ class TestChallengeDisplayFix:
 
     def test_skill_challenge_invalid_action_is_intermediate(self):
         """Test that skill challenge invalid actions are intermediate."""
-        challenge = SkillChallenge(difficulty=3, skill_type='strength')
+        challenge = SkillChallenge(difficulty=3, skill_type="strength")
 
         result = challenge.process_response("invalid_action", self.player_stats)
 
@@ -47,10 +47,10 @@ class TestChallengeDisplayFix:
 
     def test_skill_challenge_attempt_shows_result(self):
         """Test that skill challenge actual attempts show SUCCESS/FAILED."""
-        challenge = SkillChallenge(difficulty=1, skill_type='strength')  # Easy challenge
+        challenge = SkillChallenge(difficulty=1, skill_type="strength")  # Easy challenge
 
         # Get the correct action for this challenge
-        action = challenge.challenge_scenario['action']
+        action = challenge.challenge_scenario["action"]
         result = challenge.process_response(action, self.player_stats)
 
         assert result.is_intermediate is False
@@ -87,7 +87,7 @@ class TestChallengeDisplayFix:
 
     def test_memory_challenge_ready_is_intermediate(self):
         """Test that memory challenge 'ready' action is intermediate."""
-        challenge = MemoryChallenge(difficulty=3, memory_type='sequence')
+        challenge = MemoryChallenge(difficulty=3, memory_type="sequence")
 
         result = challenge.process_response("ready")
 
@@ -101,7 +101,7 @@ class TestChallengeDisplayFix:
 
     def test_memory_challenge_invalid_ready_is_intermediate(self):
         """Test that memory challenge invalid 'ready' responses are intermediate."""
-        challenge = MemoryChallenge(difficulty=3, memory_type='sequence')
+        challenge = MemoryChallenge(difficulty=3, memory_type="sequence")
 
         result = challenge.process_response("not_ready")
 
@@ -173,11 +173,16 @@ class TestChallengeDisplayFix:
     def test_all_challenge_types_have_proper_intermediate_flags(self):
         """Test that all challenge types properly use is_intermediate flag."""
         test_cases = [
-            (SkillChallenge(difficulty=3, skill_type='strength'), "examine", True, True),  # (challenge, input, needs_stats, should_be_intermediate)
+            (
+                SkillChallenge(difficulty=3, skill_type="strength"),
+                "examine",
+                True,
+                True,
+            ),  # (challenge, input, needs_stats, should_be_intermediate)
             (PuzzleChallenge(difficulty=3), "hint", False, True),
-            (MemoryChallenge(difficulty=3, memory_type='sequence'), "ready", False, True),
+            (MemoryChallenge(difficulty=3, memory_type="sequence"), "ready", False, True),
             (CombatChallenge(difficulty=3), "invalid_action", True, True),
-            (RiddleChallenge(difficulty=3), "wrong_answer", False, False)  # This should NOT be intermediate
+            (RiddleChallenge(difficulty=3), "wrong_answer", False, False),  # This should NOT be intermediate
         ]
 
         for challenge, test_input, needs_stats, should_be_intermediate in test_cases:
@@ -186,8 +191,9 @@ class TestChallengeDisplayFix:
             else:
                 result = challenge.process_response(test_input)
 
-            assert result.is_intermediate == should_be_intermediate, \
+            assert result.is_intermediate == should_be_intermediate, (
                 f"Challenge {type(challenge).__name__} with input '{test_input}' should {'be' if should_be_intermediate else 'not be'} intermediate"
+            )
 
     def test_display_manager_respects_intermediate_flag(self):
         """Test that DisplayManager properly handles is_intermediate flag."""
@@ -195,9 +201,7 @@ class TestChallengeDisplayFix:
 
         # Test intermediate result (should not show SUCCESS/FAILED)
         intermediate_result = ChallengeResult(
-            success=False,
-            message="This is an intermediate action",
-            is_intermediate=True
+            success=False, message="This is an intermediate action", is_intermediate=True
         )
 
         display = self.display_manager.display_challenge_result(intermediate_result)
@@ -206,22 +210,14 @@ class TestChallengeDisplayFix:
         assert "This is an intermediate action" in display
 
         # Test non-intermediate success result (should show SUCCESS)
-        success_result = ChallengeResult(
-            success=True,
-            message="You succeeded!",
-            is_intermediate=False
-        )
+        success_result = ChallengeResult(success=True, message="You succeeded!", is_intermediate=False)
 
         display = self.display_manager.display_challenge_result(success_result)
         assert "SUCCESS!" in display
         assert "You succeeded!" in display
 
         # Test non-intermediate failure result (should show FAILED)
-        failure_result = ChallengeResult(
-            success=False,
-            message="You failed!",
-            is_intermediate=False
-        )
+        failure_result = ChallengeResult(success=False, message="You failed!", is_intermediate=False)
 
         display = self.display_manager.display_challenge_result(failure_result)
         assert "FAILED!" in display

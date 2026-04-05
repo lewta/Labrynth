@@ -13,9 +13,7 @@ class TestChamber:
     def test_valid_chamber_creation(self):
         """Test creating a valid chamber."""
         chamber = Chamber(
-            chamber_id=1,
-            name="Entrance Hall",
-            description="A dimly lit stone chamber with ancient carvings."
+            chamber_id=1, name="Entrance Hall", description="A dimly lit stone chamber with ancient carvings."
         )
         assert chamber.id == 1
         assert chamber.name == "Entrance Hall"
@@ -28,65 +26,37 @@ class TestChamber:
     def test_invalid_chamber_negative_id(self):
         """Test chamber creation with negative ID."""
         with pytest.raises(GameException, match="Chamber ID must be a positive integer"):
-            Chamber(
-                chamber_id=-1,
-                name="Test Chamber",
-                description="Test description"
-            )
+            Chamber(chamber_id=-1, name="Test Chamber", description="Test description")
 
     def test_invalid_chamber_zero_id(self):
         """Test chamber creation with zero ID."""
         with pytest.raises(GameException, match="Chamber ID must be a positive integer"):
-            Chamber(
-                chamber_id=0,
-                name="Test Chamber",
-                description="Test description"
-            )
+            Chamber(chamber_id=0, name="Test Chamber", description="Test description")
 
     def test_invalid_chamber_non_integer_id(self):
         """Test chamber creation with non-integer ID."""
         with pytest.raises(GameException, match="Chamber ID must be a positive integer"):
-            Chamber(
-                chamber_id="invalid",
-                name="Test Chamber",
-                description="Test description"
-            )
+            Chamber(chamber_id="invalid", name="Test Chamber", description="Test description")
 
     def test_invalid_chamber_empty_name(self):
         """Test chamber creation with empty name."""
         with pytest.raises(GameException, match="Chamber name must be a non-empty string"):
-            Chamber(
-                chamber_id=1,
-                name="",
-                description="Test description"
-            )
+            Chamber(chamber_id=1, name="", description="Test description")
 
     def test_invalid_chamber_none_name(self):
         """Test chamber creation with None name."""
         with pytest.raises(GameException, match="Chamber name must be a non-empty string"):
-            Chamber(
-                chamber_id=1,
-                name=None,
-                description="Test description"
-            )
+            Chamber(chamber_id=1, name=None, description="Test description")
 
     def test_invalid_chamber_empty_description(self):
         """Test chamber creation with empty description."""
         with pytest.raises(GameException, match="Chamber description must be a non-empty string"):
-            Chamber(
-                chamber_id=1,
-                name="Test Chamber",
-                description=""
-            )
+            Chamber(chamber_id=1, name="Test Chamber", description="")
 
     def test_invalid_chamber_none_description(self):
         """Test chamber creation with None description."""
         with pytest.raises(GameException, match="Chamber description must be a non-empty string"):
-            Chamber(
-                chamber_id=1,
-                name="Test Chamber",
-                description=None
-            )
+            Chamber(chamber_id=1, name="Test Chamber", description=None)
 
     def test_get_description_basic(self):
         """Test getting basic chamber description."""
@@ -391,22 +361,22 @@ class TestChamber:
 
         info = chamber.get_chamber_info()
         expected = {
-            'id': 1,
-            'name': 'Test Chamber',
-            'description': 'A test chamber.',
-            'completed': True,
-            'exits': ['north', 'south'],
-            'items': ['Sword'],
-            'has_challenge': True
+            "id": 1,
+            "name": "Test Chamber",
+            "description": "A test chamber.",
+            "completed": True,
+            "exits": ["north", "south"],
+            "items": ["Sword"],
+            "has_challenge": True,
         }
 
-        assert info['id'] == expected['id']
-        assert info['name'] == expected['name']
-        assert info['description'] == expected['description']
-        assert info['completed'] == expected['completed']
-        assert set(info['exits']) == set(expected['exits'])
-        assert info['items'] == expected['items']
-        assert info['has_challenge'] == expected['has_challenge']
+        assert info["id"] == expected["id"]
+        assert info["name"] == expected["name"]
+        assert info["description"] == expected["description"]
+        assert info["completed"] == expected["completed"]
+        assert set(info["exits"]) == set(expected["exits"])
+        assert info["items"] == expected["items"]
+        assert info["has_challenge"] == expected["has_challenge"]
 
     def test_str_representation(self):
         """Test string representation of chamber."""

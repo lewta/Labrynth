@@ -12,34 +12,33 @@ class SkillChallenge(Challenge):
 
     # Skill types and their associated stats
     SKILL_TYPES = {
-        'strength': {
-            'stat': 'strength',
-            'name': 'Strength Challenge',
-            'description': 'A test of physical power and endurance',
-            'actions': ['lift', 'push', 'break', 'climb', 'force']
+        "strength": {
+            "stat": "strength",
+            "name": "Strength Challenge",
+            "description": "A test of physical power and endurance",
+            "actions": ["lift", "push", "break", "climb", "force"],
         },
-        'intelligence': {
-            'stat': 'intelligence',
-            'name': 'Intelligence Challenge',
-            'description': 'A test of mental acuity and problem-solving',
-            'actions': ['analyze', 'calculate', 'deduce', 'reason', 'solve']
+        "intelligence": {
+            "stat": "intelligence",
+            "name": "Intelligence Challenge",
+            "description": "A test of mental acuity and problem-solving",
+            "actions": ["analyze", "calculate", "deduce", "reason", "solve"],
         },
-        'dexterity': {
-            'stat': 'dexterity',
-            'name': 'Dexterity Challenge',
-            'description': 'A test of agility and precise movement',
-            'actions': ['dodge', 'balance', 'sneak', 'pick', 'jump']
+        "dexterity": {
+            "stat": "dexterity",
+            "name": "Dexterity Challenge",
+            "description": "A test of agility and precise movement",
+            "actions": ["dodge", "balance", "sneak", "pick", "jump"],
         },
-        'luck': {
-            'stat': 'luck',
-            'name': 'Luck Challenge',
-            'description': 'A test of fortune and chance',
-            'actions': ['gamble', 'risk', 'chance', 'try', 'hope']
-        }
+        "luck": {
+            "stat": "luck",
+            "name": "Luck Challenge",
+            "description": "A test of fortune and chance",
+            "actions": ["gamble", "risk", "chance", "try", "hope"],
+        },
     }
 
-    def __init__(self, difficulty: int = 5, skill_type: str = None,
-                 reward_item: Item = None, **kwargs):
+    def __init__(self, difficulty: int = 5, skill_type: str = None, reward_item: Item = None, **kwargs):
         """Initialize a skill challenge.
 
         Args:
@@ -58,8 +57,8 @@ class SkillChallenge(Challenge):
         self.skill_type = skill_type
         skill_info = self.SKILL_TYPES[skill_type]
 
-        name = kwargs.get('name', skill_info['name'])
-        description = kwargs.get('description', skill_info['description'])
+        name = kwargs.get("name", skill_info["name"])
+        description = kwargs.get("description", skill_info["description"])
 
         super().__init__(name, description, difficulty)
 
@@ -90,53 +89,49 @@ class SkillChallenge(Challenge):
             Dictionary with scenario details
         """
         scenarios = {
-            'strength': [
+            "strength": [
                 "A massive boulder blocks your path. You need to move it aside.",
                 "Heavy iron bars block a doorway. You must bend them to pass.",
                 "A deep pit requires you to climb up using only your grip strength.",
                 "Ancient chains bind a treasure chest. You need to break them.",
-                "A stone door is stuck shut and requires great force to open."
+                "A stone door is stuck shut and requires great force to open.",
             ],
-            'intelligence': [
+            "intelligence": [
                 "Ancient symbols cover the wall. You must decipher their meaning.",
                 "A complex mechanical puzzle blocks your way forward.",
                 "Mysterious runes glow with power. You need to understand their pattern.",
                 "A riddle is carved in stone, but it's written in an ancient language.",
-                "Multiple levers control a mechanism. You must determine the correct sequence."
+                "Multiple levers control a mechanism. You must determine the correct sequence.",
             ],
-            'dexterity': [
+            "dexterity": [
                 "Pressure plates cover the floor. You must navigate without triggering them.",
                 "A narrow ledge spans a dangerous chasm. You need perfect balance.",
                 "Spinning blades block the passage. You must time your movement precisely.",
                 "A complex lock requires delicate manipulation to open.",
-                "Swinging pendulums guard the exit. You need to slip through at the right moment."
+                "Swinging pendulums guard the exit. You need to slip through at the right moment.",
             ],
-            'luck': [
+            "luck": [
                 "Three identical doors stand before you. Only one leads forward safely.",
                 "A magical wheel spins with various symbols. You must choose when to stop it.",
                 "Ancient dice lie on a pedestal. The gods will judge your fortune.",
                 "A shimmering portal flickers unstably. You must time your entry perfectly.",
-                "Five treasure chests sit before you, but only one contains what you need."
-            ]
+                "Five treasure chests sit before you, but only one contains what you need.",
+            ],
         }
 
         scenario_text = random.choice(scenarios[self.skill_type])
         skill_info = self.SKILL_TYPES[self.skill_type]
-        action_word = random.choice(skill_info['actions'])
+        action_word = random.choice(skill_info["actions"])
 
-        return {
-            'scenario': scenario_text,
-            'action': action_word,
-            'stat': skill_info['stat']
-        }
+        return {"scenario": scenario_text, "action": action_word, "stat": skill_info["stat"]}
 
     def _get_default_reward(self) -> Item:
         """Get a default reward item based on skill type and difficulty."""
         reward_types = {
-            'strength': ["Power Gauntlets", "Strength Potion", "Mighty Belt", "Iron Ring"],
-            'intelligence': ["Wisdom Scroll", "Knowledge Crystal", "Scholar's Tome", "Mind Gem"],
-            'dexterity': ["Agility Boots", "Swift Cloak", "Nimble Ring", "Grace Amulet"],
-            'luck': ["Fortune Coin", "Lucky Charm", "Fate Stone", "Blessed Token"]
+            "strength": ["Power Gauntlets", "Strength Potion", "Mighty Belt", "Iron Ring"],
+            "intelligence": ["Wisdom Scroll", "Knowledge Crystal", "Scholar's Tome", "Mind Gem"],
+            "dexterity": ["Agility Boots", "Swift Cloak", "Nimble Ring", "Grace Amulet"],
+            "luck": ["Fortune Coin", "Lucky Charm", "Fate Stone", "Blessed Token"],
         }
 
         rewards = reward_types[self.skill_type]
@@ -146,7 +141,7 @@ class SkillChallenge(Challenge):
             name=reward_name,
             description=f"A {reward_name.lower()} that enhances your {self.skill_type}",
             item_type="enhancement",
-            value=self.difficulty * 12
+            value=self.difficulty * 12,
         )
 
     def present_challenge(self) -> str:
@@ -186,15 +181,15 @@ class SkillChallenge(Challenge):
 
         action = response.lower().strip()
 
-        if action == 'examine':
+        if action == "examine":
             return self._examine_challenge(player_stats)
-        elif action == self.challenge_scenario['action'] or action in ['attempt', 'try', 'do']:
+        elif action == self.challenge_scenario["action"] or action in ["attempt", "try", "do"]:
             return self._attempt_challenge(player_stats)
         else:
             return ChallengeResult(
                 success=False,
                 message=f"Invalid action! Use '{self.challenge_scenario['action']}' to attempt the challenge or 'examine' to study it.",
-                is_intermediate=True
+                is_intermediate=True,
             )
 
     def _examine_challenge(self, player_stats: PlayerStats) -> ChallengeResult:
@@ -228,11 +223,7 @@ class SkillChallenge(Challenge):
 
         message = f"You carefully examine the situation. {hint} {difficulty_hint}"
 
-        return ChallengeResult(
-            success=False,
-            message=message,
-            is_intermediate=True
-        )
+        return ChallengeResult(success=False, message=message, is_intermediate=True)
 
     def _attempt_challenge(self, player_stats: PlayerStats) -> ChallengeResult:
         """Attempt the skill challenge.
@@ -259,28 +250,19 @@ class SkillChallenge(Challenge):
             # Success!
             self.mark_completed()
             success_message = self._get_success_message(roll, success_chance)
-            return ChallengeResult(
-                success=True,
-                message=success_message,
-                reward=self.reward_item
-            )
+            return ChallengeResult(success=True, message=success_message, reward=self.reward_item)
         else:
             # Failure
             remaining_attempts = self.max_attempts - self.attempts
 
             if remaining_attempts > 0:
                 failure_message = self._get_failure_message(roll, success_chance, remaining_attempts)
-                return ChallengeResult(
-                    success=False,
-                    message=failure_message
-                )
+                return ChallengeResult(success=False, message=failure_message)
             else:
                 # Past attempt limit — keep trying but take damage each time
                 final_failure_message = self._get_final_failure_message()
                 return ChallengeResult(
-                    success=False,
-                    message=final_failure_message,
-                    damage=self._calculate_failure_damage()
+                    success=False, message=final_failure_message, damage=self._calculate_failure_damage()
                 )
 
     def _calculate_success_chance(self, stat_value: int) -> int:
@@ -339,10 +321,10 @@ class SkillChallenge(Challenge):
             quality = "successfully"
 
         messages = {
-            'strength': f"You {quality} overcome the physical challenge through sheer power!",
-            'intelligence': f"You {quality} solve the mental puzzle with clever thinking!",
-            'dexterity': f"You {quality} navigate the challenge with precise movements!",
-            'luck': f"Fortune smiles upon you as you {quality} make the right choice!"
+            "strength": f"You {quality} overcome the physical challenge through sheer power!",
+            "intelligence": f"You {quality} solve the mental puzzle with clever thinking!",
+            "dexterity": f"You {quality} navigate the challenge with precise movements!",
+            "luck": f"Fortune smiles upon you as you {quality} make the right choice!",
         }
 
         return messages[self.skill_type]
@@ -366,10 +348,10 @@ class SkillChallenge(Challenge):
             quality = "narrowly"
 
         messages = {
-            'strength': f"You {quality} fail to overcome the physical challenge.",
-            'intelligence': f"You {quality} fail to solve the mental puzzle.",
-            'dexterity': f"You {quality} fail to navigate the challenge precisely.",
-            'luck': "Fortune does not favor you this time."
+            "strength": f"You {quality} fail to overcome the physical challenge.",
+            "intelligence": f"You {quality} fail to solve the mental puzzle.",
+            "dexterity": f"You {quality} fail to navigate the challenge precisely.",
+            "luck": "Fortune does not favor you this time.",
         }
 
         base_message = messages[self.skill_type]
@@ -382,10 +364,10 @@ class SkillChallenge(Challenge):
             Final failure message
         """
         messages = {
-            'strength': "Despite your best efforts, you lack the physical power needed. You strain yourself in the attempt.",
-            'intelligence': "The mental challenge proves too complex for you to solve. The effort leaves you mentally drained.",
-            'dexterity': "Your movements aren't precise enough to overcome the challenge. You suffer minor injuries from your clumsy attempts.",
-            'luck': "Fortune has completely abandoned you. Your poor choices lead to unfortunate consequences."
+            "strength": "Despite your best efforts, you lack the physical power needed. You strain yourself in the attempt.",
+            "intelligence": "The mental challenge proves too complex for you to solve. The effort leaves you mentally drained.",
+            "dexterity": "Your movements aren't precise enough to overcome the challenge. You suffer minor injuries from your clumsy attempts.",
+            "luck": "Fortune has completely abandoned you. Your poor choices lead to unfortunate consequences.",
         }
 
         return messages[self.skill_type]
@@ -418,7 +400,7 @@ class SkillChallenge(Challenge):
             "max_attempts": self.max_attempts,
             "success_threshold": self.success_threshold,
             "scenario": self.challenge_scenario,
-            "completed": self.completed
+            "completed": self.completed,
         }
 
     def get_success_chance_for_stats(self, player_stats: PlayerStats) -> int:

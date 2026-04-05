@@ -57,9 +57,9 @@ class TestMapCommand:
 
         output = ui_controller.get_captured_output()
         assert len(output) == 1
-        assert output[0] == test_map + '\n'
+        assert output[0] == test_map + "\n"
 
-    @patch('src.game.engine.MapRenderer')
+    @patch("src.game.engine.MapRenderer")
     def test_game_engine_display_map_no_chambers(self, mock_map_renderer):
         """Test displaying map when no chambers have been visited."""
         engine = GameEngine()
@@ -76,7 +76,7 @@ class TestMapCommand:
         # MapRenderer should not be called
         mock_map_renderer.return_value.render_map.assert_not_called()
 
-    @patch('src.game.engine.MapRenderer')
+    @patch("src.game.engine.MapRenderer")
     def test_game_engine_display_map_with_chambers(self, mock_map_renderer):
         """Test displaying map with visited chambers."""
         engine = GameEngine()
@@ -130,7 +130,7 @@ class TestMapCommand:
         assert len(output) > 0
 
         # Check that legend content is present
-        legend_content = ''.join(output)
+        legend_content = "".join(output)
         assert "LEGEND" in legend_content
         assert "Current Location" in legend_content
         assert "Completed Chamber" in legend_content
@@ -148,10 +148,7 @@ class TestMapCommand:
 
         # Create a map command
         parsed_command = ParsedCommand(
-            command_type=CommandType.EXAMINATION,
-            action="map",
-            parameters=[],
-            raw_input="map"
+            command_type=CommandType.EXAMINATION, action="map", parameters=[], raw_input="map"
         )
 
         engine._handle_examination_command(parsed_command)
@@ -169,10 +166,7 @@ class TestMapCommand:
 
         # Create a map legend command
         parsed_command = ParsedCommand(
-            command_type=CommandType.EXAMINATION,
-            action="map",
-            parameters=["legend"],
-            raw_input="map legend"
+            command_type=CommandType.EXAMINATION, action="map", parameters=["legend"], raw_input="map legend"
         )
 
         engine._handle_examination_command(parsed_command)
@@ -203,7 +197,7 @@ class TestMapCommand:
         assert len(output) > 0
 
         # Should contain map content
-        output_text = ''.join(output)
+        output_text = "".join(output)
         assert "LABYRINTH MAP" in output_text or "Integration Test Chamber" in output_text
 
     def test_map_command_help_text(self):
@@ -232,11 +226,7 @@ class TestMapCommand:
         chamber3 = Mock()
         chamber3.name = "Chamber 3"
 
-        chambers = {
-            1: chamber1,
-            2: chamber2,
-            3: chamber3
-        }
+        chambers = {1: chamber1, 2: chamber2, 3: chamber3}
 
         def get_chamber_mock(chamber_id):
             return chambers.get(chamber_id)
@@ -258,5 +248,5 @@ class TestMapCommand:
         assert len(output) > 0
 
         # Should contain map content
-        output_text = ''.join(output)
+        output_text = "".join(output)
         assert "LABYRINTH MAP" in output_text

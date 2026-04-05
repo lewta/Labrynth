@@ -48,8 +48,8 @@ class TestSystemIntegration:
             chamber = world_manager.get_chamber(chamber_id)
             if chamber and chamber.challenge:
                 # Verify challenge is properly created
-                assert hasattr(chamber.challenge, 'present_challenge')
-                assert hasattr(chamber.challenge, 'process_response')
+                assert hasattr(chamber.challenge, "present_challenge")
+                assert hasattr(chamber.challenge, "process_response")
                 assert callable(chamber.challenge.present_challenge)
                 assert callable(chamber.challenge.process_response)
 
@@ -64,9 +64,9 @@ class TestSystemIntegration:
         # Verify that chambers exist and have basic structure
         chamber_1 = world_manager.get_chamber(1)
         assert chamber_1 is not None
-        assert hasattr(chamber_1, 'name')
-        assert hasattr(chamber_1, 'description')
-        assert hasattr(chamber_1, 'connections')
+        assert hasattr(chamber_1, "name")
+        assert hasattr(chamber_1, "description")
+        assert hasattr(chamber_1, "connections")
 
         # Verify connections are bidirectional
         for chamber_id in range(1, 4):  # Test first few chambers
@@ -76,10 +76,7 @@ class TestSystemIntegration:
                     target_chamber = world_manager.get_chamber(target_id)
                     if target_chamber:
                         # Check that target chamber has a connection back
-                        reverse_directions = {
-                            'north': 'south', 'south': 'north',
-                            'east': 'west', 'west': 'east'
-                        }
+                        reverse_directions = {"north": "south", "south": "north", "east": "west", "west": "east"}
                         reverse_dir = reverse_directions.get(direction)
                         if reverse_dir:
                             assert reverse_dir in target_chamber.connections
@@ -91,7 +88,7 @@ class TestSystemIntegration:
         challenge_factory = ChallengeFactory()
 
         # Test randomized challenge creation
-        for challenge_type in ['riddle', 'puzzle', 'combat', 'skill', 'memory']:
+        for challenge_type in ["riddle", "puzzle", "combat", "skill", "memory"]:
             # Create multiple challenges to test randomization
             challenges = []
             for _ in range(5):
@@ -111,7 +108,7 @@ class TestSystemIntegration:
         challenge_factory = ChallengeFactory()
 
         # Test that content is properly loaded for each challenge type
-        challenge_types = ['riddle', 'puzzle', 'combat', 'skill', 'memory']
+        challenge_types = ["riddle", "puzzle", "combat", "skill", "memory"]
 
         for challenge_type in challenge_types:
             # Get content for challenge type
@@ -152,12 +149,12 @@ class TestSystemIntegration:
 
         # Test command parser integration
         valid_commands = engine.command_parser.get_available_commands()
-        assert 'go' in valid_commands
-        assert 'move' in valid_commands
-        assert 'look' in valid_commands
-        assert 'help' in valid_commands
-        assert 'help' in valid_commands
-        assert 'quit' in valid_commands
+        assert "go" in valid_commands
+        assert "move" in valid_commands
+        assert "look" in valid_commands
+        assert "help" in valid_commands
+        assert "help" in valid_commands
+        assert "quit" in valid_commands
 
 
 class TestConfigurationIntegration:
@@ -182,14 +179,14 @@ class TestConfigurationIntegration:
                 "1": {
                     "name": "Entrance Hall",
                     "description": "A dimly lit entrance chamber",
-                    "connections": {"north": 2}
+                    "connections": {"north": 2},
                 },
                 "2": {
                     "name": "Test Chamber",
                     "description": "A test chamber",
                     "connections": {"south": 1},
-                    "challenge_type": "riddle"
-                }
+                    "challenge_type": "riddle",
+                },
             }
         }
 
@@ -202,11 +199,11 @@ class TestConfigurationIntegration:
     def test_challenge_configuration_files_exist(self):
         """Test that challenge configuration files exist."""
         challenge_files = [
-            'config/challenges/riddles.json',
-            'config/challenges/puzzles.json',
-            'config/challenges/combat.json',
-            'config/challenges/skills.json',
-            'config/challenges/memory.json'
+            "config/challenges/riddles.json",
+            "config/challenges/puzzles.json",
+            "config/challenges/combat.json",
+            "config/challenges/skills.json",
+            "config/challenges/memory.json",
         ]
 
         for config_file in challenge_files:
@@ -227,7 +224,7 @@ class TestConfigurationIntegration:
 
         # Test that it can work with challenge factory
         challenge_factory = ChallengeFactory()
-        challenge = challenge_factory.create_challenge('riddle', difficulty=1)
+        challenge = challenge_factory.create_challenge("riddle", difficulty=1)
         assert challenge is not None
 
     def test_configuration_validation_integration(self):
@@ -261,17 +258,13 @@ class TestConfigurationIntegration:
         # Create a minimal custom configuration
         custom_config = {
             "chambers": {
-                "1": {
-                    "name": "Test Entrance",
-                    "description": "A test entrance chamber",
-                    "connections": {"north": 2}
-                },
+                "1": {"name": "Test Entrance", "description": "A test entrance chamber", "connections": {"north": 2}},
                 "2": {
                     "name": "Test Chamber",
                     "description": "A test chamber with a riddle",
                     "connections": {"south": 1},
-                    "challenge_type": "riddle"
-                }
+                    "challenge_type": "riddle",
+                },
             }
         }
 
@@ -305,7 +298,7 @@ class TestErrorHandlingIntegration:
         try:
             # Create invalid JSON file
             invalid_config_file = os.path.join(temp_dir, "invalid.json")
-            with open(invalid_config_file, 'w') as f:
+            with open(invalid_config_file, "w") as f:
                 f.write("{ invalid json content")
 
             # Should handle invalid JSON gracefully
@@ -327,13 +320,13 @@ class TestErrorHandlingIntegration:
         challenge_factory = ChallengeFactory()
 
         # Mock missing content
-        with patch('src.utils.challenge_content.get_content_loader') as mock_loader:
+        with patch("src.utils.challenge_content.get_content_loader") as mock_loader:
             mock_content_loader = MagicMock()
             mock_content_loader.get_challenge_content.return_value = []
             mock_loader.return_value = mock_content_loader
 
             # Should handle missing content gracefully
-            challenge = challenge_factory.create_challenge('riddle', difficulty=1)
+            challenge = challenge_factory.create_challenge("riddle", difficulty=1)
             assert challenge is not None
 
             # Should provide some default content
@@ -350,13 +343,14 @@ class TestErrorHandlingIntegration:
 
             # Create corrupted save file
             corrupted_save = os.path.join(temp_dir, "corrupted.json")
-            with open(corrupted_save, 'w') as f:
+            with open(corrupted_save, "w") as f:
                 f.write("{ corrupted save data")
 
             save_manager = SaveLoadManager()
 
             # Should raise SaveLoadException for corrupted saves
             from src.utils.exceptions import SaveLoadException
+
             with pytest.raises(SaveLoadException, match="Save file is corrupted"):
                 save_manager.load_game(corrupted_save)
 
@@ -412,7 +406,7 @@ class TestPerformanceIntegration:
         import time
 
         challenge_factory = ChallengeFactory()
-        challenge_types = ['riddle', 'puzzle', 'combat', 'skill', 'memory']
+        challenge_types = ["riddle", "puzzle", "combat", "skill", "memory"]
 
         start_time = time.time()
 

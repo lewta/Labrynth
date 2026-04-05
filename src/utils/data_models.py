@@ -8,6 +8,7 @@ from src.utils.exceptions import GameException
 @dataclass
 class Item:
     """Represents an item that can be collected and used by the player."""
+
     name: str
     description: str
     item_type: str
@@ -47,6 +48,7 @@ class Item:
 @dataclass
 class ChallengeResult:
     """Result of a challenge attempt."""
+
     success: bool
     message: str
     reward: Item | None = None
@@ -83,6 +85,7 @@ class ChallengeResult:
 @dataclass
 class PlayerStats:
     """Player statistics that affect challenge outcomes."""
+
     strength: int = 10
     intelligence: int = 10
     dexterity: int = 10
@@ -94,7 +97,7 @@ class PlayerStats:
 
     def validate(self) -> None:
         """Validate player stats data integrity."""
-        stats = ['strength', 'intelligence', 'dexterity', 'luck']
+        stats = ["strength", "intelligence", "dexterity", "luck"]
         for stat in stats:
             value = getattr(self, stat)
             if not isinstance(value, int) or value < 0:
@@ -133,6 +136,7 @@ class PlayerStats:
 @dataclass
 class GameState:
     """Complete game state for save/load functionality."""
+
     current_chamber: int
     player_health: int
     inventory_items: list[Item] = field(default_factory=list)

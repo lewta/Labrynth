@@ -150,18 +150,18 @@ class TestProgressTrackerMapData:
         # Check chamber 1 data
         assert 1 in map_data
         chamber1_data = map_data[1]
-        assert chamber1_data['chamber_id'] == 1
-        assert chamber1_data['visited'] is True
-        assert chamber1_data['completed'] is True
-        assert chamber1_data['connections'] == {"north": 2, "east": 3}
+        assert chamber1_data["chamber_id"] == 1
+        assert chamber1_data["visited"] is True
+        assert chamber1_data["completed"] is True
+        assert chamber1_data["connections"] == {"north": 2, "east": 3}
 
         # Check chamber 2 data
         assert 2 in map_data
         chamber2_data = map_data[2]
-        assert chamber2_data['chamber_id'] == 2
-        assert chamber2_data['visited'] is True
-        assert chamber2_data['completed'] is False
-        assert chamber2_data['connections'] == {"south": 1}
+        assert chamber2_data["chamber_id"] == 2
+        assert chamber2_data["visited"] is True
+        assert chamber2_data["completed"] is False
+        assert chamber2_data["connections"] == {"south": 1}
 
     def test_reset_clears_map_data(self):
         """Test that reset clears all map-related data."""
@@ -199,12 +199,12 @@ class TestProgressTrackerMapData:
 
         summary = tracker.get_progress_summary()
 
-        assert 'visited_chambers' in summary
-        assert 'completed_chambers' in summary
-        assert 'visited_chamber_ids' in summary
-        assert 'completed_chamber_ids' in summary
+        assert "visited_chambers" in summary
+        assert "completed_chambers" in summary
+        assert "visited_chamber_ids" in summary
+        assert "completed_chamber_ids" in summary
 
-        assert summary['visited_chambers'] == 2
-        assert summary['completed_chambers'] == 1
-        assert set(summary['visited_chamber_ids']) == {1, 2}
-        assert summary['completed_chamber_ids'] == [1]
+        assert summary["visited_chambers"] == 2
+        assert summary["completed_chambers"] == 1
+        assert set(summary["visited_chamber_ids"]) == {1, 2}
+        assert summary["completed_chamber_ids"] == [1]

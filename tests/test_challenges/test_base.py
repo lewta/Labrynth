@@ -1,6 +1,5 @@
 """Tests for the Challenge abstract base class."""
 
-
 import pytest
 
 from src.challenges.base import Challenge
@@ -18,7 +17,7 @@ class TestChallengeABC:
     def test_challenge_abstract_methods(self):
         """Test that Challenge has the required abstract methods."""
         abstract_methods = Challenge.__abstractmethods__
-        expected_methods = {'present_challenge', 'process_response', 'get_reward'}
+        expected_methods = {"present_challenge", "process_response", "get_reward"}
         assert abstract_methods == expected_methods
 
 
@@ -27,12 +26,7 @@ class ConcreteChallenge(Challenge):
 
     def __init__(self, name: str, description: str, difficulty: int):
         super().__init__(name, description, difficulty)
-        self.reward_item = Item(
-            name="Test Reward",
-            description="A test reward item",
-            item_type="key",
-            value=10
-        )
+        self.reward_item = Item(name="Test Reward", description="A test reward item", item_type="key", value=10)
 
     def present_challenge(self) -> str:
         return f"Test challenge: {self.description}"
@@ -42,7 +36,7 @@ class ConcreteChallenge(Challenge):
         return ChallengeResult(
             success=success,
             message="Correct!" if success else "Incorrect!",
-            reward=self.reward_item if success else None
+            reward=self.reward_item if success else None,
         )
 
     def get_reward(self) -> Item:
@@ -55,9 +49,7 @@ class TestConcreteChallenge:
     def setup_method(self):
         """Set up test fixtures."""
         self.challenge = ConcreteChallenge(
-            name="Test Challenge",
-            description="A test challenge for unit testing",
-            difficulty=5
+            name="Test Challenge", description="A test challenge for unit testing", difficulty=5
         )
 
     def test_challenge_initialization(self):

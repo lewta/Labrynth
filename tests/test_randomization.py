@@ -27,6 +27,7 @@ class MockChallenge(Challenge):
 
     def process_response(self, response):
         from src.utils.data_models import ChallengeResult
+
         return ChallengeResult(success=True, message="Mock success")
 
     def get_reward(self):
@@ -49,10 +50,7 @@ class TestRandomizationConfig:
     def test_custom_config(self):
         """Test custom configuration values."""
         config = RandomizationConfig(
-            level=RandomizationLevel.HEAVY,
-            seed=12345,
-            challenge_variety=False,
-            difficulty_variance=2
+            level=RandomizationLevel.HEAVY, seed=12345, challenge_variety=False, difficulty_variance=2
         )
 
         assert config.level == RandomizationLevel.HEAVY
@@ -133,31 +131,31 @@ class TestChallengeRandomizer:
         # NONE level should not randomize
         config = RandomizationConfig(level=RandomizationLevel.NONE)
         randomizer = ChallengeRandomizer(config)
-        assert not randomizer.should_randomize_content('riddle')
+        assert not randomizer.should_randomize_content("riddle")
 
         # Other levels should randomize
         config = RandomizationConfig(level=RandomizationLevel.MODERATE)
         randomizer = ChallengeRandomizer(config)
-        assert randomizer.should_randomize_content('riddle')
+        assert randomizer.should_randomize_content("riddle")
 
     def test_get_challenge_variation_riddle(self):
         """Test riddle challenge variations."""
-        variations = self.randomizer.get_challenge_variation('riddle', 5)
+        variations = self.randomizer.get_challenge_variation("riddle", 5)
 
         # Should have some variation parameters
         assert isinstance(variations, dict)
         # Moderate level should include category preferences
-        if 'preferred_category' in variations:
-            assert variations['preferred_category'] in ['wordplay', 'objects', 'abstract', 'mathematical', 'ancient']
+        if "preferred_category" in variations:
+            assert variations["preferred_category"] in ["wordplay", "objects", "abstract", "mathematical", "ancient"]
 
     def test_get_challenge_variation_combat(self):
         """Test combat challenge variations."""
-        variations = self.randomizer.get_challenge_variation('combat', 5)
+        variations = self.randomizer.get_challenge_variation("combat", 5)
 
         assert isinstance(variations, dict)
         # Should have enemy type preferences for moderate level
-        if 'preferred_enemy_type' in variations:
-            assert variations['preferred_enemy_type'] in ['easy', 'medium', 'hard', 'boss']
+        if "preferred_enemy_type" in variations:
+            assert variations["preferred_enemy_type"] in ["easy", "medium", "hard", "boss"]
 
     def test_ensure_challenge_variety(self):
         """Test challenge variety enforcement."""
@@ -181,17 +179,17 @@ class TestChallengeRandomizer:
         """Test randomization statistics."""
         stats = self.randomizer.get_randomization_stats()
 
-        assert 'level' in stats
-        assert 'seed' in stats
-        assert 'challenges_created' in stats
-        assert 'variety_enabled' in stats
-        assert 'difficulty_variance' in stats
+        assert "level" in stats
+        assert "seed" in stats
+        assert "challenges_created" in stats
+        assert "variety_enabled" in stats
+        assert "difficulty_variance" in stats
 
-        assert stats['level'] == 'moderate'
-        assert stats['seed'] == 42
-        assert stats['challenges_created'] == 0
-        assert stats['variety_enabled'] is True
-        assert stats['difficulty_variance'] == 1
+        assert stats["level"] == "moderate"
+        assert stats["seed"] == 42
+        assert stats["challenges_created"] == 0
+        assert stats["variety_enabled"] is True
+        assert stats["difficulty_variance"] == 1
 
     def test_reset_session(self):
         """Test session reset."""
@@ -209,7 +207,7 @@ class TestRandomizationIntegration:
         """Set up test fixtures."""
         # Use only MockChallenge so random selection is deterministic
         ChallengeFactory.clear_registry()
-        ChallengeFactory.register_challenge_type('mock', MockChallenge)
+        ChallengeFactory.register_challenge_type("mock", MockChallenge)
 
         # Set up randomization
         config = RandomizationConfig(level=RandomizationLevel.MODERATE, seed=42)
@@ -219,7 +217,7 @@ class TestRandomizationIntegration:
         """Clean up after tests."""
         ChallengeFactory.clear_registry()
 
-    @patch('src.utils.challenge_content.get_content_loader')
+    @patch("src.utils.challenge_content.get_content_loader")
     def test_factory_randomization(self, mock_content_loader):
         """Test factory integration with randomization."""
         # Mock content loader
@@ -227,21 +225,21 @@ class TestRandomizationIntegration:
         mock_content_loader.return_value = mock_loader
 
         # Create challenge with randomization
-        challenge = ChallengeFactory.create_challenge('mock', difficulty=5, randomize=True)
+        challenge = ChallengeFactory.create_challenge("mock", difficulty=5, randomize=True)
 
         assert isinstance(challenge, MockChallenge)
         # Difficulty might be randomized
         assert 1 <= challenge.difficulty <= 10
 
-    @patch('src.utils.challenge_content.get_content_loader')
+    @patch("src.utils.challenge_content.get_content_loader")
     def test_factory_no_randomization(self, mock_content_loader):
         """Test factory without randomization."""
-        challenge = ChallengeFactory.create_challenge('mock', difficulty=5, randomize=False)
+        challenge = ChallengeFactory.create_challenge("mock", difficulty=5, randomize=False)
 
         assert isinstance(challenge, MockChallenge)
         assert challenge.difficulty == 5
 
-    @patch('src.utils.challenge_content.get_content_loader')
+    @patch("src.utils.challenge_content.get_content_loader")
     def test_create_random_challenge(self, mock_content_loader):
         """Test creating completely random challenge."""
         # Mock content loader
@@ -253,18 +251,14 @@ class TestRandomizationIntegration:
         assert isinstance(challenge, MockChallenge)
         assert 1 <= challenge.difficulty <= 10
 
-    @patch('src.utils.challenge_content.get_content_loader')
+    @patch("src.utils.challenge_content.get_content_loader")
     def test_create_challenge_set(self, mock_content_loader):
         """Test creating set of challenges."""
         # Mock content loader
         mock_loader = MagicMock()
         mock_content_loader.return_value = mock_loader
 
-        challenges = ChallengeFactory.create_challenge_set(
-            count=3,
-            difficulty_range=(3, 7),
-            challenge_types=['mock']
-        )
+        challenges = ChallengeFactory.create_challenge_set(count=3, difficulty_range=(3, 7), challenge_types=["mock"])
 
         assert len(challenges) == 3
         assert all(isinstance(c, MockChallenge) for c in challenges)
@@ -276,12 +270,7 @@ class TestRandomizationUtilities:
 
     def test_create_randomization_config(self):
         """Test config creation utility."""
-        config = create_randomization_config(
-            level='heavy',
-            seed=123,
-            variety=False,
-            variance=3
-        )
+        config = create_randomization_config(level="heavy", seed=123, variety=False, variance=3)
 
         assert config.level == RandomizationLevel.HEAVY
         assert config.seed == 123
@@ -311,12 +300,10 @@ class TestRandomizationUtilities:
 class TestRandomizationLevels:
     """Test different randomization levels."""
 
-    @pytest.mark.parametrize("level", [
-        RandomizationLevel.NONE,
-        RandomizationLevel.LIGHT,
-        RandomizationLevel.MODERATE,
-        RandomizationLevel.HEAVY
-    ])
+    @pytest.mark.parametrize(
+        "level",
+        [RandomizationLevel.NONE, RandomizationLevel.LIGHT, RandomizationLevel.MODERATE, RandomizationLevel.HEAVY],
+    )
     def test_all_randomization_levels(self, level):
         """Test all randomization levels work."""
         config = RandomizationConfig(level=level, seed=42)
@@ -326,10 +313,10 @@ class TestRandomizationLevels:
         difficulty = randomizer.randomize_difficulty(5)
         assert 1 <= difficulty <= 10
 
-        should_randomize = randomizer.should_randomize_content('riddle')
+        should_randomize = randomizer.should_randomize_content("riddle")
         assert isinstance(should_randomize, bool)
 
-        variations = randomizer.get_challenge_variation('riddle', 5)
+        variations = randomizer.get_challenge_variation("riddle", 5)
         assert isinstance(variations, dict)
 
     def test_randomization_consistency_with_seed(self):

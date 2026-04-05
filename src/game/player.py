@@ -321,29 +321,26 @@ class PlayerManager:
         inventory_info = self.inventory.get_capacity_info()
 
         return {
-            'health': {
-                'current': self.current_health,
-                'max': self.max_health,
-                'percentage': self.get_health_percentage()
+            "health": {
+                "current": self.current_health,
+                "max": self.max_health,
+                "percentage": self.get_health_percentage(),
             },
-            'level': self._level,
-            'experience': {
-                'current': self._experience_points,
-                'to_next_level': self.get_experience_to_next_level()
+            "level": self._level,
+            "experience": {"current": self._experience_points, "to_next_level": self.get_experience_to_next_level()},
+            "stats": {
+                "strength": self.stats.strength,
+                "intelligence": self.stats.intelligence,
+                "dexterity": self.stats.dexterity,
+                "luck": self.stats.luck,
             },
-            'stats': {
-                'strength': self.stats.strength,
-                'intelligence': self.stats.intelligence,
-                'dexterity': self.stats.dexterity,
-                'luck': self.stats.luck
+            "inventory": {
+                "items": len(self.inventory),
+                "capacity": inventory_info["max"],
+                "available": inventory_info["available"],
+                "total_value": self.inventory.get_total_value(),
             },
-            'inventory': {
-                'items': len(self.inventory),
-                'capacity': inventory_info['max'],
-                'available': inventory_info['available'],
-                'total_value': self.inventory.get_total_value()
-            },
-            'alive': self.is_alive()
+            "alive": self.is_alive(),
         }
 
     def get_combat_stats(self) -> dict[str, int]:
@@ -354,12 +351,12 @@ class PlayerManager:
             Dict[str, int]: Combat-relevant stats
         """
         return {
-            'attack_power': self.stats.strength + (self._level - 1) * 2,
-            'defense': self.stats.dexterity + (self._level - 1),
-            'accuracy': self.stats.dexterity + self.stats.luck,
-            'critical_chance': self.stats.luck,
-            'health': self.current_health,
-            'max_health': self.max_health
+            "attack_power": self.stats.strength + (self._level - 1) * 2,
+            "defense": self.stats.dexterity + (self._level - 1),
+            "accuracy": self.stats.dexterity + self.stats.luck,
+            "critical_chance": self.stats.luck,
+            "health": self.current_health,
+            "max_health": self.max_health,
         }
 
     def reset_to_defaults(self) -> None:
@@ -374,16 +371,16 @@ class PlayerManager:
     def __str__(self) -> str:
         """Return a string representation of the player status."""
         status = self.get_status()
-        health = status['health']
-        stats = status['stats']
-        inventory = status['inventory']
+        health = status["health"]
+        stats = status["stats"]
+        inventory = status["inventory"]
 
         lines = [
             f"Player Status (Level {status['level']}):",
             f"  Health: {health['current']}/{health['max']} ({health['percentage']:.1%})",
             f"  Experience: {status['experience']['current']} ({status['experience']['to_next_level']} to next level)",
             f"  Stats: STR {stats['strength']}, INT {stats['intelligence']}, DEX {stats['dexterity']}, LCK {stats['luck']}",
-            f"  Inventory: {inventory['items']}/{inventory['capacity']} items (value: {inventory['total_value']})"
+            f"  Inventory: {inventory['items']}/{inventory['capacity']} items (value: {inventory['total_value']})",
         ]
 
         return "\n".join(lines)

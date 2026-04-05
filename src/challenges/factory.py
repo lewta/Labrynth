@@ -102,49 +102,59 @@ class ChallengeFactory:
         randomized_content = {}
 
         try:
-            if challenge_type == 'riddle' and 'riddle_text' not in existing_kwargs:
+            if challenge_type == "riddle" and "riddle_text" not in existing_kwargs:
                 riddle_data = content_loader.get_riddle(difficulty)
-                randomized_content.update({
-                    'riddle_text': riddle_data.get('riddle'),
-                    'answers': riddle_data.get('answers', []),
-                    'name': f"Riddle Challenge ({riddle_data.get('category', 'mystery').title()})",
-                    'description': f"A {riddle_data.get('category', 'mysterious')} riddle that tests your wit"
-                })
+                randomized_content.update(
+                    {
+                        "riddle_text": riddle_data.get("riddle"),
+                        "answers": riddle_data.get("answers", []),
+                        "name": f"Riddle Challenge ({riddle_data.get('category', 'mystery').title()})",
+                        "description": f"A {riddle_data.get('category', 'mysterious')} riddle that tests your wit",
+                    }
+                )
 
-            elif challenge_type == 'puzzle' and 'puzzle_type' not in existing_kwargs:
+            elif challenge_type == "puzzle" and "puzzle_type" not in existing_kwargs:
                 puzzle_data = content_loader.get_puzzle(difficulty)
-                puzzle_type = puzzle_data.get('type', 'sequence')
-                randomized_content.update({
-                    'puzzle_type': puzzle_type,
-                    'name': f"Logic Puzzle ({puzzle_type.replace('_', ' ').title()})",
-                    'description': f"A challenging {puzzle_type.replace('_', ' ')} puzzle"
-                })
+                puzzle_type = puzzle_data.get("type", "sequence")
+                randomized_content.update(
+                    {
+                        "puzzle_type": puzzle_type,
+                        "name": f"Logic Puzzle ({puzzle_type.replace('_', ' ').title()})",
+                        "description": f"A challenging {puzzle_type.replace('_', ' ')} puzzle",
+                    }
+                )
 
-            elif challenge_type == 'combat' and 'enemy_name' not in existing_kwargs:
+            elif challenge_type == "combat" and "enemy_name" not in existing_kwargs:
                 enemy_data = content_loader.get_enemy(difficulty)
-                randomized_content.update({
-                    'enemy_name': enemy_data.get('name'),
-                    'name': f"Combat Challenge ({enemy_data.get('category', 'enemy').title()})",
-                    'description': f"A dangerous {enemy_data.get('name', 'enemy')} blocks your path"
-                })
+                randomized_content.update(
+                    {
+                        "enemy_name": enemy_data.get("name"),
+                        "name": f"Combat Challenge ({enemy_data.get('category', 'enemy').title()})",
+                        "description": f"A dangerous {enemy_data.get('name', 'enemy')} blocks your path",
+                    }
+                )
 
-            elif challenge_type == 'skill' and 'skill_type' not in existing_kwargs:
+            elif challenge_type == "skill" and "skill_type" not in existing_kwargs:
                 skill_data = content_loader.get_skill_challenge(difficulty)
-                skill_type = skill_data.get('skill_type', 'strength')
-                randomized_content.update({
-                    'skill_type': skill_type,
-                    'name': f"Skill Challenge ({skill_type.title()})",
-                    'description': f"A challenge that tests your {skill_type}"
-                })
+                skill_type = skill_data.get("skill_type", "strength")
+                randomized_content.update(
+                    {
+                        "skill_type": skill_type,
+                        "name": f"Skill Challenge ({skill_type.title()})",
+                        "description": f"A challenge that tests your {skill_type}",
+                    }
+                )
 
-            elif challenge_type == 'memory' and 'memory_type' not in existing_kwargs:
+            elif challenge_type == "memory" and "memory_type" not in existing_kwargs:
                 memory_data = content_loader.get_memory_challenge_config(difficulty)
-                memory_type = memory_data.get('memory_type', 'sequence')
-                randomized_content.update({
-                    'memory_type': memory_type,
-                    'name': f"Memory Challenge ({memory_type.title()})",
-                    'description': f"A {memory_type} memory challenge that tests your recall"
-                })
+                memory_type = memory_data.get("memory_type", "sequence")
+                randomized_content.update(
+                    {
+                        "memory_type": memory_type,
+                        "name": f"Memory Challenge ({memory_type.title()})",
+                        "description": f"A {memory_type} memory challenge that tests your recall",
+                    }
+                )
 
         except Exception:
             # If randomization fails, continue without it
@@ -187,8 +197,13 @@ class ChallengeFactory:
         return challenge
 
     @classmethod
-    def create_challenge_set(cls, count: int, difficulty_range: tuple = (1, 10),
-                           challenge_types: list | None = None, ensure_variety: bool = True) -> list:
+    def create_challenge_set(
+        cls,
+        count: int,
+        difficulty_range: tuple = (1, 10),
+        challenge_types: list | None = None,
+        ensure_variety: bool = True,
+    ) -> list:
         """Create a set of randomized challenges.
 
         Args:
@@ -216,7 +231,7 @@ class ChallengeFactory:
             if ensure_variety and len(available_types) > 1:
                 # Try to avoid repeating the same type consecutively
                 if challenges and len(available_types) > 1:
-                    last_type = type(challenges[-1]).__name__.lower().replace('challenge', '')
+                    last_type = type(challenges[-1]).__name__.lower().replace("challenge", "")
                     filtered_types = [t for t in available_types if t != last_type]
                     challenge_type = randomizer._random.choice(filtered_types if filtered_types else available_types)
                 else:
@@ -247,11 +262,11 @@ def _register_builtin_types() -> None:
     from src.challenges.riddle import RiddleChallenge
     from src.challenges.skill import SkillChallenge
 
-    ChallengeFactory.register_challenge_type('riddle', RiddleChallenge)
-    ChallengeFactory.register_challenge_type('puzzle', PuzzleChallenge)
-    ChallengeFactory.register_challenge_type('combat', CombatChallenge)
-    ChallengeFactory.register_challenge_type('skill', SkillChallenge)
-    ChallengeFactory.register_challenge_type('memory', MemoryChallenge)
+    ChallengeFactory.register_challenge_type("riddle", RiddleChallenge)
+    ChallengeFactory.register_challenge_type("puzzle", PuzzleChallenge)
+    ChallengeFactory.register_challenge_type("combat", CombatChallenge)
+    ChallengeFactory.register_challenge_type("skill", SkillChallenge)
+    ChallengeFactory.register_challenge_type("memory", MemoryChallenge)
 
 
 _register_builtin_types()

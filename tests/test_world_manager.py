@@ -42,18 +42,10 @@ class TestWorldManager:
         """Test initializing from valid configuration."""
         config = {
             "chambers": {
-                "1": {
-                    "name": "Test Chamber 1",
-                    "description": "First test chamber",
-                    "connections": {"north": 2}
-                },
-                "2": {
-                    "name": "Test Chamber 2",
-                    "description": "Second test chamber",
-                    "connections": {"south": 1}
-                }
+                "1": {"name": "Test Chamber 1", "description": "First test chamber", "connections": {"north": 2}},
+                "2": {"name": "Test Chamber 2", "description": "Second test chamber", "connections": {"south": 1}},
             },
-            "starting_chamber": 1
+            "starting_chamber": 1,
         }
 
         world = WorldManager()
@@ -80,25 +72,14 @@ class TestWorldManager:
 
     def test_initialize_from_config_invalid_chamber_id(self):
         """Test initializing from configuration with invalid chamber ID."""
-        config = {
-            "chambers": {
-                "invalid_id": {
-                    "name": "Test Chamber",
-                    "description": "Test description"
-                }
-            }
-        }
+        config = {"chambers": {"invalid_id": {"name": "Test Chamber", "description": "Test description"}}}
         world = WorldManager()
         with pytest.raises(GameException, match="Invalid chamber ID: invalid_id"):
             world.initialize_labyrinth(config)
 
     def test_initialize_from_config_invalid_chamber_data(self):
         """Test initializing from configuration with invalid chamber data."""
-        config = {
-            "chambers": {
-                "1": "invalid_chamber_data"
-            }
-        }
+        config = {"chambers": {"1": "invalid_chamber_data"}}
         world = WorldManager()
         with pytest.raises(GameException, match="Chamber 1 data must be a dictionary"):
             world.initialize_labyrinth(config)
@@ -110,7 +91,7 @@ class TestWorldManager:
                 "1": {
                     "name": "Test Chamber",
                     "description": "Test description",
-                    "connections": {"north": "invalid_target"}
+                    "connections": {"north": "invalid_target"},
                 }
             }
         }
@@ -121,13 +102,8 @@ class TestWorldManager:
     def test_initialize_from_config_invalid_starting_chamber(self):
         """Test initializing from configuration with invalid starting chamber."""
         config = {
-            "chambers": {
-                "1": {
-                    "name": "Test Chamber",
-                    "description": "Test description"
-                }
-            },
-            "starting_chamber": 999
+            "chambers": {"1": {"name": "Test Chamber", "description": "Test description"}},
+            "starting_chamber": 999,
         }
         world = WorldManager()
         with pytest.raises(GameException, match="Starting chamber 999 does not exist"):
@@ -529,21 +505,13 @@ class TestWorldManager:
         """Test loading configuration from valid file."""
         config = {
             "chambers": {
-                "1": {
-                    "name": "Test Chamber",
-                    "description": "Test description",
-                    "connections": {"north": 2}
-                },
-                "2": {
-                    "name": "Second Chamber",
-                    "description": "Second description",
-                    "connections": {"south": 1}
-                }
+                "1": {"name": "Test Chamber", "description": "Test description", "connections": {"north": 2}},
+                "2": {"name": "Second Chamber", "description": "Second description", "connections": {"south": 1}},
             }
         }
 
         # Create temporary file
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(config, f)
             temp_file = f.name
 
@@ -566,7 +534,7 @@ class TestWorldManager:
     def test_load_from_file_invalid_json(self):
         """Test loading from file with invalid JSON."""
         # Create temporary file with invalid JSON
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             f.write("invalid json content")
             temp_file = f.name
 

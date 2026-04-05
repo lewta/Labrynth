@@ -8,15 +8,17 @@ from typing import Any
 
 class RandomizationLevel(Enum):
     """Levels of randomization for challenges."""
-    NONE = "none"           # No randomization, use fixed content
-    LIGHT = "light"         # Light randomization within same difficulty
-    MODERATE = "moderate"   # Moderate randomization across difficulty ranges
-    HEAVY = "heavy"         # Heavy randomization with significant variation
+
+    NONE = "none"  # No randomization, use fixed content
+    LIGHT = "light"  # Light randomization within same difficulty
+    MODERATE = "moderate"  # Moderate randomization across difficulty ranges
+    HEAVY = "heavy"  # Heavy randomization with significant variation
 
 
 @dataclass
 class RandomizationConfig:
     """Configuration for challenge randomization."""
+
     level: RandomizationLevel = RandomizationLevel.MODERATE
     seed: int | None = None
     challenge_variety: bool = True
@@ -102,15 +104,15 @@ class ChallengeRandomizer:
             return variations
 
         # Type-specific variations
-        if challenge_type == 'riddle':
+        if challenge_type == "riddle":
             variations.update(self._get_riddle_variations(difficulty))
-        elif challenge_type == 'puzzle':
+        elif challenge_type == "puzzle":
             variations.update(self._get_puzzle_variations(difficulty))
-        elif challenge_type == 'combat':
+        elif challenge_type == "combat":
             variations.update(self._get_combat_variations(difficulty))
-        elif challenge_type == 'skill':
+        elif challenge_type == "skill":
             variations.update(self._get_skill_variations(difficulty))
-        elif challenge_type == 'memory':
+        elif challenge_type == "memory":
             variations.update(self._get_memory_variations(difficulty))
 
         return variations
@@ -121,12 +123,12 @@ class ChallengeRandomizer:
 
         # Category preferences based on randomization level
         if self.config.level in [RandomizationLevel.MODERATE, RandomizationLevel.HEAVY]:
-            categories = ['wordplay', 'objects', 'abstract', 'mathematical', 'ancient']
-            variations['preferred_category'] = self._random.choice(categories)
+            categories = ["wordplay", "objects", "abstract", "mathematical", "ancient"]
+            variations["preferred_category"] = self._random.choice(categories)
 
         # Hint availability
         if self.config.level == RandomizationLevel.HEAVY:
-            variations['hints_enabled'] = self._random.choice([True, False])
+            variations["hints_enabled"] = self._random.choice([True, False])
 
         return variations
 
@@ -136,12 +138,12 @@ class ChallengeRandomizer:
 
         # Puzzle type preferences
         if self.config.level in [RandomizationLevel.MODERATE, RandomizationLevel.HEAVY]:
-            puzzle_types = ['sequence', 'logic_grid', 'math_puzzle', 'pattern', 'mechanical']
-            variations['preferred_type'] = self._random.choice(puzzle_types)
+            puzzle_types = ["sequence", "logic_grid", "math_puzzle", "pattern", "mechanical"]
+            variations["preferred_type"] = self._random.choice(puzzle_types)
 
         # Complexity variations
         if self.config.level == RandomizationLevel.HEAVY:
-            variations['complexity_modifier'] = self._random.choice([-1, 0, 1])
+            variations["complexity_modifier"] = self._random.choice([-1, 0, 1])
 
         return variations
 
@@ -151,20 +153,20 @@ class ChallengeRandomizer:
 
         # Enemy type preferences
         if self.config.level in [RandomizationLevel.MODERATE, RandomizationLevel.HEAVY]:
-            enemy_types = ['easy', 'medium', 'hard', 'boss']
+            enemy_types = ["easy", "medium", "hard", "boss"]
             # Filter by difficulty
             if difficulty <= 3:
-                enemy_types = ['easy', 'medium']
+                enemy_types = ["easy", "medium"]
             elif difficulty <= 7:
-                enemy_types = ['medium', 'hard']
+                enemy_types = ["medium", "hard"]
             else:
-                enemy_types = ['hard', 'boss']
+                enemy_types = ["hard", "boss"]
 
-            variations['preferred_enemy_type'] = self._random.choice(enemy_types)
+            variations["preferred_enemy_type"] = self._random.choice(enemy_types)
 
         # Combat scenario variations
         if self.config.level == RandomizationLevel.HEAVY:
-            variations['scenario_modifier'] = self._random.choice(['ambush', 'duel', 'guard', 'hunt'])
+            variations["scenario_modifier"] = self._random.choice(["ambush", "duel", "guard", "hunt"])
 
         return variations
 
@@ -174,12 +176,12 @@ class ChallengeRandomizer:
 
         # Skill type preferences
         if self.config.level in [RandomizationLevel.MODERATE, RandomizationLevel.HEAVY]:
-            skill_types = ['strength', 'intelligence', 'dexterity', 'luck']
-            variations['preferred_skill'] = self._random.choice(skill_types)
+            skill_types = ["strength", "intelligence", "dexterity", "luck"]
+            variations["preferred_skill"] = self._random.choice(skill_types)
 
         # Success threshold variations
         if self.config.level == RandomizationLevel.HEAVY:
-            variations['threshold_modifier'] = self._random.choice([-5, 0, 5])
+            variations["threshold_modifier"] = self._random.choice([-5, 0, 5])
 
         return variations
 
@@ -189,12 +191,12 @@ class ChallengeRandomizer:
 
         # Memory type preferences
         if self.config.level in [RandomizationLevel.MODERATE, RandomizationLevel.HEAVY]:
-            memory_types = ['sequence', 'pattern']
-            variations['preferred_memory_type'] = self._random.choice(memory_types)
+            memory_types = ["sequence", "pattern"]
+            variations["preferred_memory_type"] = self._random.choice(memory_types)
 
         # Sequence length variations
         if self.config.level == RandomizationLevel.HEAVY:
-            variations['length_modifier'] = self._random.choice([-1, 0, 1])
+            variations["length_modifier"] = self._random.choice([-1, 0, 1])
 
         return variations
 
@@ -213,7 +215,7 @@ class ChallengeRandomizer:
         # Track challenge types
         challenge_types = []
         for challenge in challenges:
-            challenge_type = type(challenge).__name__.lower().replace('challenge', '')
+            challenge_type = type(challenge).__name__.lower().replace("challenge", "")
             challenge_types.append(challenge_type)
 
         # If we have too many consecutive challenges of the same type, shuffle
@@ -221,11 +223,11 @@ class ChallengeRandomizer:
         max_consecutive = 2
 
         for i in range(1, len(challenge_types)):
-            if challenge_types[i] == challenge_types[i-1]:
+            if challenge_types[i] == challenge_types[i - 1]:
                 consecutive_count += 1
                 if consecutive_count > max_consecutive:
                     # Find a different challenge to swap with
-                    for j in range(i+1, len(challenges)):
+                    for j in range(i + 1, len(challenges)):
                         if challenge_types[j] != challenge_types[i]:
                             # Swap challenges
                             challenges[i], challenges[j] = challenges[j], challenges[i]
@@ -244,11 +246,11 @@ class ChallengeRandomizer:
             Dictionary with randomization statistics
         """
         return {
-            'level': self.config.level.value,
-            'seed': self.config.seed,
-            'challenges_created': len(self._session_challenges),
-            'variety_enabled': self.config.challenge_variety,
-            'difficulty_variance': self.config.difficulty_variance
+            "level": self.config.level.value,
+            "seed": self.config.seed,
+            "challenges_created": len(self._session_challenges),
+            "variety_enabled": self.config.challenge_variety,
+            "difficulty_variance": self.config.difficulty_variance,
         }
 
     def reset_session(self) -> None:
@@ -282,8 +284,9 @@ def set_randomization_config(config: RandomizationConfig) -> None:
     _global_randomizer = ChallengeRandomizer(config)
 
 
-def create_randomization_config(level: str = "moderate", seed: int = None,
-                              variety: bool = True, variance: int = 1) -> RandomizationConfig:
+def create_randomization_config(
+    level: str = "moderate", seed: int = None, variety: bool = True, variance: int = 1
+) -> RandomizationConfig:
     """Create a randomization configuration.
 
     Args:
@@ -296,9 +299,4 @@ def create_randomization_config(level: str = "moderate", seed: int = None,
         RandomizationConfig instance
     """
     level_enum = RandomizationLevel(level.lower())
-    return RandomizationConfig(
-        level=level_enum,
-        seed=seed,
-        challenge_variety=variety,
-        difficulty_variance=variance
-    )
+    return RandomizationConfig(level=level_enum, seed=seed, challenge_variety=variety, difficulty_variance=variance)

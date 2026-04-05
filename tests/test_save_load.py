@@ -28,11 +28,11 @@ class TestSaveLoadManager:
             player_health=75,
             inventory_items=[
                 Item("Health Potion", "Restores health", "potion", 50),
-                Item("Magic Sword", "A powerful weapon", "weapon", 100)
+                Item("Magic Sword", "A powerful weapon", "weapon", 100),
             ],
             completed_chambers={1, 3},
             game_time=1800,  # 30 minutes
-            player_stats=PlayerStats(strength=12, intelligence=8, dexterity=15, luck=10)
+            player_stats=PlayerStats(strength=12, intelligence=8, dexterity=15, luck=10),
         )
 
     def teardown_method(self):
@@ -67,12 +67,12 @@ class TestSaveLoadManager:
         with open(save_file) as f:
             save_data = json.load(f)
 
-        assert 'game_state' in save_data
-        assert 'metadata' in save_data
-        assert save_data['game_state']['current_chamber'] == 2
-        assert save_data['game_state']['player_health'] == 75
-        assert len(save_data['game_state']['inventory_items']) == 2
-        assert save_data['game_state']['completed_chambers'] == [1, 3]
+        assert "game_state" in save_data
+        assert "metadata" in save_data
+        assert save_data["game_state"]["current_chamber"] == 2
+        assert save_data["game_state"]["player_health"] == 75
+        assert len(save_data["game_state"]["inventory_items"]) == 2
+        assert save_data["game_state"]["completed_chambers"] == [1, 3]
 
     def test_save_game_adds_json_extension(self):
         """Test that save_game adds .json extension if not present."""
@@ -85,10 +85,7 @@ class TestSaveLoadManager:
     def test_save_game_invalid_state(self):
         """Test saving invalid game state."""
         # Create a valid state first, then make it invalid
-        invalid_state = GameState(
-            current_chamber=1,
-            player_health=100
-        )
+        invalid_state = GameState(current_chamber=1, player_health=100)
         # Manually set invalid value after creation to bypass validation
         invalid_state.current_chamber = -1
 
@@ -139,7 +136,7 @@ class TestSaveLoadManager:
         """Test loading corrupted JSON file."""
         # Create a corrupted save file
         save_file = Path(self.temp_dir) / "corrupted_save.json"
-        with open(save_file, 'w') as f:
+        with open(save_file, "w") as f:
             f.write("{ invalid json content")
 
         with pytest.raises(SaveLoadException, match="Save file is corrupted"):
@@ -149,7 +146,7 @@ class TestSaveLoadManager:
         """Test loading save file with invalid structure."""
         # Create a save file with invalid structure
         save_file = Path(self.temp_dir) / "invalid_structure.json"
-        with open(save_file, 'w') as f:
+        with open(save_file, "w") as f:
             json.dump({"invalid": "structure"}, f)
 
         with pytest.raises(SaveLoadException, match="Save file missing 'game_state'"):
@@ -165,7 +162,7 @@ class TestSaveLoadManager:
                 # Missing player_health
             }
         }
-        with open(save_file, 'w') as f:
+        with open(save_file, "w") as f:
             json.dump(save_data, f)
 
         with pytest.raises(SaveLoadException, match="Save file missing required field"):
@@ -217,13 +214,13 @@ class TestSaveLoadManager:
         info = self.save_manager.get_save_info("info_test")
 
         assert info is not None
-        assert info['filename'] == "info_test.json"
-        assert info['current_chamber'] == 2
-        assert info['player_health'] == 75
-        assert info['completed_chambers'] == 2
-        assert info['game_time'] == 1800
-        assert 'save_time' in info
-        assert 'file_size' in info
+        assert info["filename"] == "info_test.json"
+        assert info["current_chamber"] == 2
+        assert info["player_health"] == 75
+        assert info["completed_chambers"] == 2
+        assert info["game_time"] == 1800
+        assert "save_time" in info
+        assert "file_size" in info
 
     def test_get_save_info_not_found(self):
         """Test getting info for non-existent save file."""
@@ -255,11 +252,12 @@ class TestSaveLoadManager:
 
         # Create multiple backup files manually with different timestamps
         import time
+
         for i in range(7):
             timestamp = f"20250101_{100000 + i:06d}"  # Different timestamps
             backup_name = f"cleanup_test_backup_{timestamp}.json"
             backup_path = Path(self.temp_dir) / backup_name
-            with open(backup_path, 'w') as f:
+            with open(backup_path, "w") as f:
                 json.dump({"test": "backup"}, f)
             # Set different modification times
             os.utime(backup_path, (time.time() - i, time.time() - i))
@@ -283,11 +281,11 @@ class TestSaveLoadManager:
         # Serialize
         serialized = self.save_manager._serialize_item(item)
 
-        assert serialized['name'] == "Test Item"
-        assert serialized['description'] == "A test item"
-        assert serialized['item_type'] == "misc"
-        assert serialized['value'] == 42
-        assert serialized['usable'] is False
+        assert serialized["name"] == "Test Item"
+        assert serialized["description"] == "A test item"
+        assert serialized["item_type"] == "misc"
+        assert serialized["value"] == 42
+        assert serialized["usable"] is False
 
         # Deserialize
         deserialized = self.save_manager._deserialize_item(serialized)
@@ -303,13 +301,13 @@ class TestSaveLoadManager:
         # Serialize
         serialized = self.save_manager._serialize_game_state(self.test_game_state)
 
-        assert 'game_state' in serialized
-        game_data = serialized['game_state']
-        assert game_data['current_chamber'] == 2
-        assert game_data['player_health'] == 75
-        assert len(game_data['inventory_items']) == 2
-        assert game_data['completed_chambers'] == [1, 3]
-        assert game_data['game_time'] == 1800
+        assert "game_state" in serialized
+        game_data = serialized["game_state"]
+        assert game_data["current_chamber"] == 2
+        assert game_data["player_health"] == 75
+        assert len(game_data["inventory_items"]) == 2
+        assert game_data["completed_chambers"] == [1, 3]
+        assert game_data["game_time"] == 1800
 
         # Deserialize
         deserialized = self.save_manager._deserialize_game_state(serialized)
@@ -324,12 +322,7 @@ class TestSaveLoadManager:
     def test_validate_save_file_valid(self):
         """Test validation of valid save file."""
         valid_save_data = {
-            'game_state': {
-                'current_chamber': 1,
-                'player_health': 100,
-                'inventory_items': [],
-                'completed_chambers': []
-            }
+            "game_state": {"current_chamber": 1, "player_health": 100, "inventory_items": [], "completed_chambers": []}
         }
 
         # Should not raise exception
@@ -338,9 +331,9 @@ class TestSaveLoadManager:
     def test_validate_save_file_invalid_type(self):
         """Test validation of save file with invalid data types."""
         invalid_save_data = {
-            'game_state': {
-                'current_chamber': "not_an_int",  # Should be int
-                'player_health': 100
+            "game_state": {
+                "current_chamber": "not_an_int",  # Should be int
+                "player_health": 100,
             }
         }
 

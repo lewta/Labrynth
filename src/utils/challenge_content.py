@@ -24,17 +24,17 @@ class ChallengeContentLoader:
     def _load_all_content(self) -> None:
         """Load all challenge content files into cache."""
         content_files = {
-            'riddles': 'riddles.json',
-            'puzzles': 'puzzles.json',
-            'combat': 'combat.json',
-            'skills': 'skills.json',
-            'memory': 'memory.json'
+            "riddles": "riddles.json",
+            "puzzles": "puzzles.json",
+            "combat": "combat.json",
+            "skills": "skills.json",
+            "memory": "memory.json",
         }
 
         for content_type, filename in content_files.items():
             file_path = os.path.join(self.content_dir, filename)
             try:
-                with open(file_path, encoding='utf-8') as f:
+                with open(file_path, encoding="utf-8") as f:
                     self._content_cache[content_type] = json.load(f)
             except FileNotFoundError:
                 raise GameException(f"Challenge content file not found: {file_path}")
@@ -51,7 +51,7 @@ class ChallengeContentLoader:
         Returns:
             Dictionary containing riddle data
         """
-        riddles_data = self._content_cache.get('riddles', {}).get('riddles', {})
+        riddles_data = self._content_cache.get("riddles", {}).get("riddles", {})
 
         # Collect all riddles that match criteria
         matching_riddles = []
@@ -59,11 +59,11 @@ class ChallengeContentLoader:
         for _difficulty_group, riddles in riddles_data.items():
             for riddle in riddles:
                 # Check difficulty match
-                if difficulty is not None and riddle.get('difficulty') != difficulty:
+                if difficulty is not None and riddle.get("difficulty") != difficulty:
                     continue
 
                 # Check category match
-                if category is not None and riddle.get('category') != category:
+                if category is not None and riddle.get("category") != category:
                     continue
 
                 matching_riddles.append(riddle)
@@ -91,7 +91,7 @@ class ChallengeContentLoader:
         Returns:
             Dictionary containing puzzle data
         """
-        puzzles_data = self._content_cache.get('puzzles', {}).get('puzzles', {})
+        puzzles_data = self._content_cache.get("puzzles", {}).get("puzzles", {})
 
         # If specific type requested, get from that category
         if puzzle_type and puzzle_type in puzzles_data:
@@ -99,15 +99,15 @@ class ChallengeContentLoader:
 
             if difficulty is not None:
                 # Filter by difficulty
-                matching_puzzles = [p for p in puzzles if p.get('difficulty') == difficulty]
+                matching_puzzles = [p for p in puzzles if p.get("difficulty") == difficulty]
                 if matching_puzzles:
                     puzzle = random.choice(matching_puzzles)
-                    puzzle['type'] = puzzle_type
+                    puzzle["type"] = puzzle_type
                     return puzzle
 
             # Return random puzzle from the type
             puzzle = random.choice(puzzles)
-            puzzle['type'] = puzzle_type
+            puzzle["type"] = puzzle_type
             return puzzle
 
         # Collect all puzzles that match difficulty
@@ -115,9 +115,9 @@ class ChallengeContentLoader:
 
         for puzzle_category, puzzles in puzzles_data.items():
             for puzzle in puzzles:
-                if difficulty is None or puzzle.get('difficulty') == difficulty:
+                if difficulty is None or puzzle.get("difficulty") == difficulty:
                     puzzle_copy = puzzle.copy()
-                    puzzle_copy['type'] = puzzle_category
+                    puzzle_copy["type"] = puzzle_category
                     matching_puzzles.append(puzzle_copy)
 
         if not matching_puzzles:
@@ -126,7 +126,7 @@ class ChallengeContentLoader:
             for puzzle_category, puzzles in puzzles_data.items():
                 for puzzle in puzzles:
                     puzzle_copy = puzzle.copy()
-                    puzzle_copy['type'] = puzzle_category
+                    puzzle_copy["type"] = puzzle_category
                     all_puzzles.append(puzzle_copy)
 
             if not all_puzzles:
@@ -146,7 +146,7 @@ class ChallengeContentLoader:
         Returns:
             Dictionary containing enemy data
         """
-        enemies_data = self._content_cache.get('combat', {}).get('enemies', {})
+        enemies_data = self._content_cache.get("combat", {}).get("enemies", {})
 
         # If specific type requested, get from that category
         if enemy_type and enemy_type in enemies_data:
@@ -154,15 +154,15 @@ class ChallengeContentLoader:
 
             if difficulty is not None:
                 # Filter by difficulty
-                matching_enemies = [e for e in enemies if e.get('difficulty') == difficulty]
+                matching_enemies = [e for e in enemies if e.get("difficulty") == difficulty]
                 if matching_enemies:
                     enemy = random.choice(matching_enemies)
-                    enemy['category'] = enemy_type
+                    enemy["category"] = enemy_type
                     return enemy
 
             # Return random enemy from the type
             enemy = random.choice(enemies)
-            enemy['category'] = enemy_type
+            enemy["category"] = enemy_type
             return enemy
 
         # Collect all enemies that match difficulty
@@ -170,9 +170,9 @@ class ChallengeContentLoader:
 
         for enemy_category, enemies in enemies_data.items():
             for enemy in enemies:
-                if difficulty is None or enemy.get('difficulty') == difficulty:
+                if difficulty is None or enemy.get("difficulty") == difficulty:
                     enemy_copy = enemy.copy()
-                    enemy_copy['category'] = enemy_category
+                    enemy_copy["category"] = enemy_category
                     matching_enemies.append(enemy_copy)
 
         if not matching_enemies:
@@ -181,7 +181,7 @@ class ChallengeContentLoader:
             for enemy_category, enemies in enemies_data.items():
                 for enemy in enemies:
                     enemy_copy = enemy.copy()
-                    enemy_copy['category'] = enemy_category
+                    enemy_copy["category"] = enemy_category
                     all_enemies.append(enemy_copy)
 
             if not all_enemies:
@@ -201,7 +201,7 @@ class ChallengeContentLoader:
         Returns:
             Dictionary containing skill challenge data
         """
-        skills_data = self._content_cache.get('skills', {}).get('skill_challenges', {})
+        skills_data = self._content_cache.get("skills", {}).get("skill_challenges", {})
 
         # If specific skill type requested, get from that category
         if skill_type and skill_type in skills_data:
@@ -209,15 +209,15 @@ class ChallengeContentLoader:
 
             if difficulty is not None:
                 # Filter by difficulty
-                matching_challenges = [c for c in challenges if c.get('difficulty') == difficulty]
+                matching_challenges = [c for c in challenges if c.get("difficulty") == difficulty]
                 if matching_challenges:
                     challenge = random.choice(matching_challenges)
-                    challenge['skill_type'] = skill_type
+                    challenge["skill_type"] = skill_type
                     return challenge
 
             # Return random challenge from the skill type
             challenge = random.choice(challenges)
-            challenge['skill_type'] = skill_type
+            challenge["skill_type"] = skill_type
             return challenge
 
         # Collect all challenges that match difficulty
@@ -225,9 +225,9 @@ class ChallengeContentLoader:
 
         for skill_category, challenges in skills_data.items():
             for challenge in challenges:
-                if difficulty is None or challenge.get('difficulty') == difficulty:
+                if difficulty is None or challenge.get("difficulty") == difficulty:
                     challenge_copy = challenge.copy()
-                    challenge_copy['skill_type'] = skill_category
+                    challenge_copy["skill_type"] = skill_category
                     matching_challenges.append(challenge_copy)
 
         if not matching_challenges:
@@ -236,7 +236,7 @@ class ChallengeContentLoader:
             for skill_category, challenges in skills_data.items():
                 for challenge in challenges:
                     challenge_copy = challenge.copy()
-                    challenge_copy['skill_type'] = skill_category
+                    challenge_copy["skill_type"] = skill_category
                     all_challenges.append(challenge_copy)
 
             if not all_challenges:
@@ -256,29 +256,29 @@ class ChallengeContentLoader:
         Returns:
             Dictionary containing memory challenge configuration
         """
-        memory_data = self._content_cache.get('memory', {}).get('memory_challenges', {})
+        memory_data = self._content_cache.get("memory", {}).get("memory_challenges", {})
 
         # Default to sequence if no type specified
         if memory_type is None:
-            memory_type = random.choice(['sequence', 'pattern'])
+            memory_type = random.choice(["sequence", "pattern"])
 
         if memory_type not in memory_data:
-            memory_type = 'sequence'  # Fallback
+            memory_type = "sequence"  # Fallback
 
         config = memory_data[memory_type].copy()
 
         # Add difficulty-specific settings
         if difficulty is not None:
-            difficulty_settings = config.get('difficulty_settings', {})
+            difficulty_settings = config.get("difficulty_settings", {})
             if str(difficulty) in difficulty_settings:
                 config.update(difficulty_settings[str(difficulty)])
 
         # Add a random scenario
-        scenarios = self._content_cache.get('memory', {}).get('memory_challenges', {}).get('scenarios', [])
+        scenarios = self._content_cache.get("memory", {}).get("memory_challenges", {}).get("scenarios", [])
         if scenarios:
-            config['scenario'] = random.choice(scenarios)
+            config["scenario"] = random.choice(scenarios)
 
-        config['memory_type'] = memory_type
+        config["memory_type"] = memory_type
         return config
 
     def get_reward_for_challenge_type(self, challenge_type: str, difficulty: int = 5) -> dict[str, Any]:
@@ -291,42 +291,69 @@ class ChallengeContentLoader:
         Returns:
             Dictionary containing reward data
         """
-        if challenge_type == 'combat':
+        if challenge_type == "combat":
             enemy_data = self.get_enemy(difficulty)
-            loot = enemy_data.get('loot', [])
+            loot = enemy_data.get("loot", [])
             if loot:
                 reward_name = random.choice(loot)
                 return {
-                    'name': reward_name,
-                    'description': f"A {reward_name.lower()} taken from a defeated enemy",
-                    'item_type': 'weapon' if 'weapon' in reward_name.lower() or 'sword' in reward_name.lower() or 'axe' in reward_name.lower() else 'treasure',
-                    'value': difficulty * 15
+                    "name": reward_name,
+                    "description": f"A {reward_name.lower()} taken from a defeated enemy",
+                    "item_type": "weapon"
+                    if "weapon" in reward_name.lower() or "sword" in reward_name.lower() or "axe" in reward_name.lower()
+                    else "treasure",
+                    "value": difficulty * 15,
                 }
 
-        elif challenge_type == 'skill':
-            skills_data = self._content_cache.get('skills', {}).get('skill_rewards', {})
-            skill_type = random.choice(['strength', 'intelligence', 'dexterity', 'luck'])
+        elif challenge_type == "skill":
+            skills_data = self._content_cache.get("skills", {}).get("skill_rewards", {})
+            skill_type = random.choice(["strength", "intelligence", "dexterity", "luck"])
 
             if skill_type in skills_data:
                 rewards = skills_data[skill_type]
                 reward = random.choice(rewards)
-                reward['value'] = reward.get('value', 40) + (difficulty * 5)
+                reward["value"] = reward.get("value", 40) + (difficulty * 5)
                 return reward
 
-        elif challenge_type == 'memory':
-            memory_rewards = self._content_cache.get('memory', {}).get('memory_rewards', [])
+        elif challenge_type == "memory":
+            memory_rewards = self._content_cache.get("memory", {}).get("memory_rewards", [])
             if memory_rewards:
                 reward = random.choice(memory_rewards)
-                reward['value'] = reward.get('value', 40) + (difficulty * 5)
+                reward["value"] = reward.get("value", 40) + (difficulty * 5)
                 return reward
 
         # Default rewards for riddle and puzzle
         default_rewards = [
-            {'name': 'Ancient Key', 'description': 'A key to unlock hidden secrets', 'item_type': 'key', 'value': difficulty * 10},
-            {'name': 'Wisdom Scroll', 'description': 'A scroll containing ancient knowledge', 'item_type': 'scroll', 'value': difficulty * 12},
-            {'name': 'Crystal Shard', 'description': 'A magical crystal fragment', 'item_type': 'crystal', 'value': difficulty * 8},
-            {'name': 'Golden Coin', 'description': 'A valuable gold coin', 'item_type': 'treasure', 'value': difficulty * 15},
-            {'name': 'Magic Rune', 'description': 'A rune inscribed with magical power', 'item_type': 'rune', 'value': difficulty * 11}
+            {
+                "name": "Ancient Key",
+                "description": "A key to unlock hidden secrets",
+                "item_type": "key",
+                "value": difficulty * 10,
+            },
+            {
+                "name": "Wisdom Scroll",
+                "description": "A scroll containing ancient knowledge",
+                "item_type": "scroll",
+                "value": difficulty * 12,
+            },
+            {
+                "name": "Crystal Shard",
+                "description": "A magical crystal fragment",
+                "item_type": "crystal",
+                "value": difficulty * 8,
+            },
+            {
+                "name": "Golden Coin",
+                "description": "A valuable gold coin",
+                "item_type": "treasure",
+                "value": difficulty * 15,
+            },
+            {
+                "name": "Magic Rune",
+                "description": "A rune inscribed with magical power",
+                "item_type": "rune",
+                "value": difficulty * 11,
+            },
         ]
 
         return random.choice(default_rewards)
@@ -337,15 +364,11 @@ class ChallengeContentLoader:
         Returns:
             Dictionary containing combat scenario data
         """
-        scenarios = self._content_cache.get('combat', {}).get('combat_scenarios', [])
+        scenarios = self._content_cache.get("combat", {}).get("combat_scenarios", [])
 
         if not scenarios:
             # Default scenario
-            return {
-                'type': 'guard',
-                'description': '{enemy_name} blocks your path forward.',
-                'initiative_bonus': 0
-            }
+            return {"type": "guard", "description": "{enemy_name} blocks your path forward.", "initiative_bonus": 0}
 
         return random.choice(scenarios)
 
@@ -358,34 +381,34 @@ class ChallengeContentLoader:
         warnings = []
 
         # Check riddles
-        riddles_data = self._content_cache.get('riddles', {}).get('riddles', {})
+        riddles_data = self._content_cache.get("riddles", {}).get("riddles", {})
         if not riddles_data:
             warnings.append("No riddles found in content database")
         else:
             for category, riddles in riddles_data.items():
                 for i, riddle in enumerate(riddles):
-                    if not riddle.get('riddle'):
+                    if not riddle.get("riddle"):
                         warnings.append(f"Riddle {i} in category {category} missing riddle text")
-                    if not riddle.get('answers'):
+                    if not riddle.get("answers"):
                         warnings.append(f"Riddle {i} in category {category} missing answers")
 
         # Check puzzles
-        puzzles_data = self._content_cache.get('puzzles', {}).get('puzzles', {})
+        puzzles_data = self._content_cache.get("puzzles", {}).get("puzzles", {})
         if not puzzles_data:
             warnings.append("No puzzles found in content database")
 
         # Check combat
-        enemies_data = self._content_cache.get('combat', {}).get('enemies', {})
+        enemies_data = self._content_cache.get("combat", {}).get("enemies", {})
         if not enemies_data:
             warnings.append("No enemies found in content database")
 
         # Check skills
-        skills_data = self._content_cache.get('skills', {}).get('skill_challenges', {})
+        skills_data = self._content_cache.get("skills", {}).get("skill_challenges", {})
         if not skills_data:
             warnings.append("No skill challenges found in content database")
 
         # Check memory
-        memory_data = self._content_cache.get('memory', {}).get('memory_challenges', {})
+        memory_data = self._content_cache.get("memory", {}).get("memory_challenges", {})
         if not memory_data:
             warnings.append("No memory challenges found in content database")
 
@@ -400,28 +423,28 @@ class ChallengeContentLoader:
         stats = {}
 
         # Count riddles
-        riddles_data = self._content_cache.get('riddles', {}).get('riddles', {})
+        riddles_data = self._content_cache.get("riddles", {}).get("riddles", {})
         riddle_count = sum(len(riddles) for riddles in riddles_data.values())
-        stats['riddles'] = riddle_count
+        stats["riddles"] = riddle_count
 
         # Count puzzles
-        puzzles_data = self._content_cache.get('puzzles', {}).get('puzzles', {})
+        puzzles_data = self._content_cache.get("puzzles", {}).get("puzzles", {})
         puzzle_count = sum(len(puzzles) for puzzles in puzzles_data.values())
-        stats['puzzles'] = puzzle_count
+        stats["puzzles"] = puzzle_count
 
         # Count enemies
-        enemies_data = self._content_cache.get('combat', {}).get('enemies', {})
+        enemies_data = self._content_cache.get("combat", {}).get("enemies", {})
         enemy_count = sum(len(enemies) for enemies in enemies_data.values())
-        stats['enemies'] = enemy_count
+        stats["enemies"] = enemy_count
 
         # Count skill challenges
-        skills_data = self._content_cache.get('skills', {}).get('skill_challenges', {})
+        skills_data = self._content_cache.get("skills", {}).get("skill_challenges", {})
         skill_count = sum(len(challenges) for challenges in skills_data.values())
-        stats['skill_challenges'] = skill_count
+        stats["skill_challenges"] = skill_count
 
         # Count memory challenge types
-        memory_data = self._content_cache.get('memory', {}).get('memory_challenges', {})
-        stats['memory_types'] = len(memory_data)
+        memory_data = self._content_cache.get("memory", {}).get("memory_challenges", {})
+        stats["memory_types"] = len(memory_data)
 
         return stats
 
@@ -434,49 +457,49 @@ class ChallengeContentLoader:
         Returns:
             List of challenge content dictionaries
         """
-        if challenge_type == 'riddle':
-            riddles_data = self._content_cache.get('riddles', {}).get('riddles', {})
+        if challenge_type == "riddle":
+            riddles_data = self._content_cache.get("riddles", {}).get("riddles", {})
             all_riddles = []
             for _category, riddles in riddles_data.items():
                 if isinstance(riddles, list):
                     all_riddles.extend(riddles)
             return all_riddles
 
-        elif challenge_type == 'puzzle':
-            puzzles_data = self._content_cache.get('puzzles', {}).get('puzzles', {})
+        elif challenge_type == "puzzle":
+            puzzles_data = self._content_cache.get("puzzles", {}).get("puzzles", {})
             all_puzzles = []
             for _puzzle_type, puzzles in puzzles_data.items():
                 if isinstance(puzzles, list):
                     all_puzzles.extend(puzzles)
             return all_puzzles
 
-        elif challenge_type == 'combat':
-            combat_data = self._content_cache.get('combat', {})
+        elif challenge_type == "combat":
+            combat_data = self._content_cache.get("combat", {})
             all_combat = []
 
             # Handle enemies (dict structure)
-            enemies_data = combat_data.get('enemies', {})
+            enemies_data = combat_data.get("enemies", {})
             for _category, enemies in enemies_data.items():
                 if isinstance(enemies, list):
                     all_combat.extend(enemies)
 
             # Handle scenarios (list structure)
-            scenarios = combat_data.get('combat_scenarios', [])
+            scenarios = combat_data.get("combat_scenarios", [])
             if isinstance(scenarios, list):
                 all_combat.extend(scenarios)
 
             return all_combat
 
-        elif challenge_type == 'skill':
-            skills_data = self._content_cache.get('skills', {}).get('skill_challenges', {})
+        elif challenge_type == "skill":
+            skills_data = self._content_cache.get("skills", {}).get("skill_challenges", {})
             all_skills = []
             for _skill_type, challenges in skills_data.items():
                 if isinstance(challenges, list):
                     all_skills.extend(challenges)
             return all_skills
 
-        elif challenge_type == 'memory':
-            memory_data = self._content_cache.get('memory', {}).get('memory_challenges', {})
+        elif challenge_type == "memory":
+            memory_data = self._content_cache.get("memory", {}).get("memory_challenges", {})
             all_memory = []
             for _memory_type, challenges in memory_data.items():
                 if isinstance(challenges, list):

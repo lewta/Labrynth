@@ -1,6 +1,5 @@
 """Tests for the CommandParser class."""
 
-
 from src.game.command_parser import CommandParser, CommandType, ParsedCommand
 
 
@@ -319,12 +318,7 @@ class TestCommandParser:
 
     def test_parsed_command_dataclass(self):
         """Test ParsedCommand dataclass functionality."""
-        cmd = ParsedCommand(
-            command_type=CommandType.MOVEMENT,
-            action="go",
-            parameters=["north"],
-            raw_input="go north"
-        )
+        cmd = ParsedCommand(command_type=CommandType.MOVEMENT, action="go", parameters=["north"], raw_input="go north")
 
         assert cmd.command_type == CommandType.MOVEMENT
         assert cmd.action == "go"

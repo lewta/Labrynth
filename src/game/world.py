@@ -215,13 +215,13 @@ class Chamber:
             Dictionary containing chamber information
         """
         return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'completed': self.completed,
-            'exits': self.get_exits(),
-            'items': [item.name for item in self.items],
-            'has_challenge': self.challenge is not None
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "completed": self.completed,
+            "exits": self.get_exits(),
+            "items": [item.name for item in self.items],
+            "has_challenge": self.challenge is not None,
         }
 
     def __str__(self) -> str:
@@ -256,7 +256,7 @@ class WorldManager:
             self._load_from_config(config_data)
 
         # Store generation info if available
-        self._generation_info = config_data.get('generation_info') if config_data else None
+        self._generation_info = config_data.get("generation_info") if config_data else None
 
         # Validate the labyrinth after initialization
         self._validate_labyrinth()
@@ -288,6 +288,7 @@ class WorldManager:
             # Add simple challenges to fallback chambers
             try:
                 from src.challenges.factory import ChallengeFactory
+
                 chamber1.set_challenge(ChallengeFactory.create_challenge("riddle", 3))
                 chamber2.set_challenge(ChallengeFactory.create_challenge("puzzle", 4))
                 chamber3.set_challenge(ChallengeFactory.create_challenge("skill", 5))
@@ -348,6 +349,7 @@ class WorldManager:
             if challenge_type:
                 try:
                     from src.challenges.factory import ChallengeFactory
+
                     # Create challenge with moderate difficulty (can be randomized)
                     difficulty = chamber_data.get("difficulty", 5)
                     challenge = ChallengeFactory.create_challenge(challenge_type, difficulty)
@@ -643,7 +645,7 @@ class WorldManager:
             "starting_chamber_id": self.starting_chamber_id,
             "total_chambers": len(self.chambers),
             "completed_chambers": self.get_completed_chambers(),
-            "chamber_ids": list(self.chambers.keys())
+            "chamber_ids": list(self.chambers.keys()),
         }
 
     def load_from_file(self, config_file_path: str) -> None:
@@ -656,10 +658,9 @@ class WorldManager:
         config_data = config_loader.load_from_file(config_file_path)
         self.initialize_labyrinth(config_data)
 
-    def generate_random_labyrinth(self, chamber_count: int = 13,
-                                 layout: str = "hybrid",
-                                 connectivity: float = 0.3,
-                                 seed: int = None) -> None:
+    def generate_random_labyrinth(
+        self, chamber_count: int = 13, layout: str = "hybrid", connectivity: float = 0.3, seed: int = None
+    ) -> None:
         """Generate a randomized labyrinth.
 
         Args:
@@ -669,10 +670,7 @@ class WorldManager:
             seed: Random seed for reproducible generation
         """
         config_data = create_randomized_labyrinth(
-            chamber_count=chamber_count,
-            layout=layout,
-            connectivity=connectivity,
-            seed=seed
+            chamber_count=chamber_count, layout=layout, connectivity=connectivity, seed=seed
         )
         self.initialize_labyrinth(config_data)
 
@@ -694,7 +692,7 @@ class WorldManager:
         """
         # This would need to be tracked during initialization
         # For now, we'll check if we have generation info
-        return hasattr(self, '_generation_info') and self._generation_info is not None
+        return hasattr(self, "_generation_info") and self._generation_info is not None
 
     def get_generation_info(self) -> dict[str, Any] | None:
         """Get information about how the labyrinth was generated.
@@ -702,7 +700,7 @@ class WorldManager:
         Returns:
             Generation information if available, None otherwise
         """
-        return getattr(self, '_generation_info', None)
+        return getattr(self, "_generation_info", None)
 
     def __str__(self) -> str:
         """String representation of the world manager."""
@@ -710,6 +708,8 @@ class WorldManager:
 
     def __repr__(self) -> str:
         """Detailed string representation of the world manager."""
-        return (f"WorldManager(chambers={len(self.chambers)}, "
-                f"current_chamber={self.current_chamber_id}, "
-                f"starting_chamber={self.starting_chamber_id})")
+        return (
+            f"WorldManager(chambers={len(self.chambers)}, "
+            f"current_chamber={self.current_chamber_id}, "
+            f"starting_chamber={self.starting_chamber_id})"
+        )

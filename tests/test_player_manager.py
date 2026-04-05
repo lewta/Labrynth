@@ -281,26 +281,26 @@ class TestPlayerManager:
         status = player.get_status()
 
         # Check structure and values
-        assert 'health' in status
-        assert status['health']['current'] == 80
-        assert status['health']['max'] == 100
-        assert status['health']['percentage'] == 0.8
+        assert "health" in status
+        assert status["health"]["current"] == 80
+        assert status["health"]["max"] == 100
+        assert status["health"]["percentage"] == 0.8
 
-        assert status['level'] == 1
+        assert status["level"] == 1
 
-        assert 'experience' in status
-        assert status['experience']['current'] == 50
-        assert status['experience']['to_next_level'] == 50
+        assert "experience" in status
+        assert status["experience"]["current"] == 50
+        assert status["experience"]["to_next_level"] == 50
 
-        assert 'stats' in status
-        assert status['stats']['strength'] == 15
-        assert status['stats']['intelligence'] == 10
+        assert "stats" in status
+        assert status["stats"]["strength"] == 15
+        assert status["stats"]["intelligence"] == 10
 
-        assert 'inventory' in status
-        assert status['inventory']['items'] == 1
-        assert status['inventory']['total_value'] == 100
+        assert "inventory" in status
+        assert status["inventory"]["items"] == 1
+        assert status["inventory"]["total_value"] == 100
 
-        assert status['alive'] is True
+        assert status["alive"] is True
 
     def test_get_combat_stats(self):
         """Test combat-relevant stats calculation."""
@@ -313,19 +313,19 @@ class TestPlayerManager:
 
         combat_stats = player.get_combat_stats()
 
-        assert combat_stats['attack_power'] == 15  # 15 strength + 0 level bonus
-        assert combat_stats['defense'] == 13  # 13 dexterity + 0 level bonus
-        assert combat_stats['accuracy'] == 25  # 13 dex + 12 luck
-        assert combat_stats['critical_chance'] == 12  # 12 luck
-        assert combat_stats['health'] == 100
-        assert combat_stats['max_health'] == 100
+        assert combat_stats["attack_power"] == 15  # 15 strength + 0 level bonus
+        assert combat_stats["defense"] == 13  # 13 dexterity + 0 level bonus
+        assert combat_stats["accuracy"] == 25  # 13 dex + 12 luck
+        assert combat_stats["critical_chance"] == 12  # 12 luck
+        assert combat_stats["health"] == 100
+        assert combat_stats["max_health"] == 100
 
         # Test with level up
         player.add_experience(100)  # Level up to 2
         combat_stats = player.get_combat_stats()
 
-        assert combat_stats['attack_power'] == 18  # 16 strength + 2 level bonus
-        assert combat_stats['defense'] == 15  # 14 dexterity + 1 level bonus
+        assert combat_stats["attack_power"] == 18  # 16 strength + 2 level bonus
+        assert combat_stats["defense"] == 15  # 14 dexterity + 1 level bonus
 
     def test_reset_to_defaults(self):
         """Test resetting player to default state."""

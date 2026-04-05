@@ -18,18 +18,10 @@ class MockChallenge(Challenge):
         return f"Mock challenge with difficulty {self.difficulty}"
 
     def process_response(self, response: str) -> ChallengeResult:
-        return ChallengeResult(
-            success=True,
-            message="Mock response processed"
-        )
+        return ChallengeResult(success=True, message="Mock response processed")
 
     def get_reward(self) -> Item:
-        return Item(
-            name="Mock Reward",
-            description="A mock reward",
-            item_type="test",
-            value=1
-        )
+        return Item(name="Mock Reward", description="A mock reward", item_type="test", value=1)
 
 
 class AnotherMockChallenge(Challenge):
@@ -95,10 +87,7 @@ class TestChallengeFactory:
         ChallengeFactory.register_challenge_type("another", AnotherMockChallenge)
 
         challenge = ChallengeFactory.create_challenge(
-            "another",
-            difficulty=3,
-            special_param="custom_value",
-            randomize=False
+            "another", difficulty=3, special_param="custom_value", randomize=False
         )
 
         assert isinstance(challenge, AnotherMockChallenge)

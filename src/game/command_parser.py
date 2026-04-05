@@ -7,6 +7,7 @@ from typing import Any
 
 class CommandType(Enum):
     """Types of commands available in the game."""
+
     MOVEMENT = "movement"
     EXAMINATION = "examination"
     INVENTORY = "inventory"
@@ -18,6 +19,7 @@ class CommandType(Enum):
 @dataclass
 class ParsedCommand:
     """Represents a parsed user command."""
+
     command_type: CommandType
     action: str
     parameters: list[str]
@@ -34,245 +36,256 @@ class CommandParser:
         self._commands = self._initialize_commands()
         self._aliases = self._initialize_aliases()
         self._direction_aliases = {
-            'n': 'north', 'north': 'north',
-            's': 'south', 'south': 'south',
-            'e': 'east', 'east': 'east',
-            'w': 'west', 'west': 'west',
-            'ne': 'northeast', 'northeast': 'northeast',
-            'nw': 'northwest', 'northwest': 'northwest',
-            'se': 'southeast', 'southeast': 'southeast',
-            'sw': 'southwest', 'southwest': 'southwest',
-            'up': 'up', 'u': 'up',
-            'down': 'down', 'd': 'down'
+            "n": "north",
+            "north": "north",
+            "s": "south",
+            "south": "south",
+            "e": "east",
+            "east": "east",
+            "w": "west",
+            "west": "west",
+            "ne": "northeast",
+            "northeast": "northeast",
+            "nw": "northwest",
+            "northwest": "northwest",
+            "se": "southeast",
+            "southeast": "southeast",
+            "sw": "southwest",
+            "southwest": "southwest",
+            "up": "up",
+            "u": "up",
+            "down": "down",
+            "d": "down",
         }
 
     def _initialize_commands(self) -> dict[str, dict[str, Any]]:
         """Initialize the available commands and their metadata."""
         return {
             # Movement commands
-            'go': {
-                'type': CommandType.MOVEMENT,
-                'description': 'Move in the specified direction',
-                'usage': 'go <direction>',
-                'parameters': ['direction'],
-                'min_params': 1,
-                'max_params': 1
+            "go": {
+                "type": CommandType.MOVEMENT,
+                "description": "Move in the specified direction",
+                "usage": "go <direction>",
+                "parameters": ["direction"],
+                "min_params": 1,
+                "max_params": 1,
             },
-            'move': {
-                'type': CommandType.MOVEMENT,
-                'description': 'Move in the specified direction',
-                'usage': 'move <direction>',
-                'parameters': ['direction'],
-                'min_params': 1,
-                'max_params': 1
+            "move": {
+                "type": CommandType.MOVEMENT,
+                "description": "Move in the specified direction",
+                "usage": "move <direction>",
+                "parameters": ["direction"],
+                "min_params": 1,
+                "max_params": 1,
             },
-
             # Examination commands
-            'look': {
-                'type': CommandType.EXAMINATION,
-                'description': 'Examine your surroundings',
-                'usage': 'look [target]',
-                'parameters': ['target'],
-                'min_params': 0,
-                'max_params': 1
+            "look": {
+                "type": CommandType.EXAMINATION,
+                "description": "Examine your surroundings",
+                "usage": "look [target]",
+                "parameters": ["target"],
+                "min_params": 0,
+                "max_params": 1,
             },
-            'examine': {
-                'type': CommandType.EXAMINATION,
-                'description': 'Examine something closely',
-                'usage': 'examine <target>',
-                'parameters': ['target'],
-                'min_params': 1,
-                'max_params': 1
+            "examine": {
+                "type": CommandType.EXAMINATION,
+                "description": "Examine something closely",
+                "usage": "examine <target>",
+                "parameters": ["target"],
+                "min_params": 1,
+                "max_params": 1,
             },
-            'inspect': {
-                'type': CommandType.EXAMINATION,
-                'description': 'Inspect an object or area',
-                'usage': 'inspect <target>',
-                'parameters': ['target'],
-                'min_params': 1,
-                'max_params': 1
+            "inspect": {
+                "type": CommandType.EXAMINATION,
+                "description": "Inspect an object or area",
+                "usage": "inspect <target>",
+                "parameters": ["target"],
+                "min_params": 1,
+                "max_params": 1,
             },
-            'map': {
-                'type': CommandType.EXAMINATION,
-                'description': 'Display a map of visited chambers',
-                'usage': 'map [legend]',
-                'parameters': ['option'],
-                'min_params': 0,
-                'max_params': 1
+            "map": {
+                "type": CommandType.EXAMINATION,
+                "description": "Display a map of visited chambers",
+                "usage": "map [legend]",
+                "parameters": ["option"],
+                "min_params": 0,
+                "max_params": 1,
             },
-
             # Inventory commands
-            'inventory': {
-                'type': CommandType.INVENTORY,
-                'description': 'View your inventory',
-                'usage': 'inventory',
-                'parameters': [],
-                'min_params': 0,
-                'max_params': 0
+            "inventory": {
+                "type": CommandType.INVENTORY,
+                "description": "View your inventory",
+                "usage": "inventory",
+                "parameters": [],
+                "min_params": 0,
+                "max_params": 0,
             },
-            'items': {
-                'type': CommandType.INVENTORY,
-                'description': 'View your items',
-                'usage': 'items',
-                'parameters': [],
-                'min_params': 0,
-                'max_params': 0
+            "items": {
+                "type": CommandType.INVENTORY,
+                "description": "View your items",
+                "usage": "items",
+                "parameters": [],
+                "min_params": 0,
+                "max_params": 0,
             },
-            'use': {
-                'type': CommandType.INVENTORY,
-                'description': 'Use an item from your inventory',
-                'usage': 'use <item>',
-                'parameters': ['item'],
-                'min_params': 1,
-                'max_params': 1
+            "use": {
+                "type": CommandType.INVENTORY,
+                "description": "Use an item from your inventory",
+                "usage": "use <item>",
+                "parameters": ["item"],
+                "min_params": 1,
+                "max_params": 1,
             },
-            'drop': {
-                'type': CommandType.INVENTORY,
-                'description': 'Drop an item from your inventory',
-                'usage': 'drop <item>',
-                'parameters': ['item'],
-                'min_params': 1,
-                'max_params': 1
+            "drop": {
+                "type": CommandType.INVENTORY,
+                "description": "Drop an item from your inventory",
+                "usage": "drop <item>",
+                "parameters": ["item"],
+                "min_params": 1,
+                "max_params": 1,
             },
-
             # Interaction commands
-            'take': {
-                'type': CommandType.INTERACTION,
-                'description': 'Take an item',
-                'usage': 'take <item>',
-                'parameters': ['item'],
-                'min_params': 1,
-                'max_params': 1
+            "take": {
+                "type": CommandType.INTERACTION,
+                "description": "Take an item",
+                "usage": "take <item>",
+                "parameters": ["item"],
+                "min_params": 1,
+                "max_params": 1,
             },
-            'get': {
-                'type': CommandType.INTERACTION,
-                'description': 'Get an item',
-                'usage': 'get <item>',
-                'parameters': ['item'],
-                'min_params': 1,
-                'max_params': 1
+            "get": {
+                "type": CommandType.INTERACTION,
+                "description": "Get an item",
+                "usage": "get <item>",
+                "parameters": ["item"],
+                "min_params": 1,
+                "max_params": 1,
             },
-            'talk': {
-                'type': CommandType.INTERACTION,
-                'description': 'Talk to someone or something',
-                'usage': 'talk [target]',
-                'parameters': ['target'],
-                'min_params': 0,
-                'max_params': 1
+            "talk": {
+                "type": CommandType.INTERACTION,
+                "description": "Talk to someone or something",
+                "usage": "talk [target]",
+                "parameters": ["target"],
+                "min_params": 0,
+                "max_params": 1,
             },
-
             # System commands
-            'help': {
-                'type': CommandType.SYSTEM,
-                'description': 'Show available commands',
-                'usage': 'help [command]',
-                'parameters': ['command'],
-                'min_params': 0,
-                'max_params': 1
+            "help": {
+                "type": CommandType.SYSTEM,
+                "description": "Show available commands",
+                "usage": "help [command]",
+                "parameters": ["command"],
+                "min_params": 0,
+                "max_params": 1,
             },
-            'status': {
-                'type': CommandType.SYSTEM,
-                'description': 'Show your current status',
-                'usage': 'status',
-                'parameters': [],
-                'min_params': 0,
-                'max_params': 0
+            "status": {
+                "type": CommandType.SYSTEM,
+                "description": "Show your current status",
+                "usage": "status",
+                "parameters": [],
+                "min_params": 0,
+                "max_params": 0,
             },
-            'save': {
-                'type': CommandType.SYSTEM,
-                'description': 'Save your game',
-                'usage': 'save [filename]',
-                'parameters': ['filename'],
-                'min_params': 0,
-                'max_params': 1
+            "save": {
+                "type": CommandType.SYSTEM,
+                "description": "Save your game",
+                "usage": "save [filename]",
+                "parameters": ["filename"],
+                "min_params": 0,
+                "max_params": 1,
             },
-            'load': {
-                'type': CommandType.SYSTEM,
-                'description': 'Load a saved game',
-                'usage': 'load [filename]',
-                'parameters': ['filename'],
-                'min_params': 0,
-                'max_params': 1
+            "load": {
+                "type": CommandType.SYSTEM,
+                "description": "Load a saved game",
+                "usage": "load [filename]",
+                "parameters": ["filename"],
+                "min_params": 0,
+                "max_params": 1,
             },
-            'quit': {
-                'type': CommandType.SYSTEM,
-                'description': 'Quit the game',
-                'usage': 'quit',
-                'parameters': [],
-                'min_params': 0,
-                'max_params': 0
+            "quit": {
+                "type": CommandType.SYSTEM,
+                "description": "Quit the game",
+                "usage": "quit",
+                "parameters": [],
+                "min_params": 0,
+                "max_params": 0,
             },
-            'exit': {
-                'type': CommandType.SYSTEM,
-                'description': 'Exit the game',
-                'usage': 'exit',
-                'parameters': [],
-                'min_params': 0,
-                'max_params': 0
+            "exit": {
+                "type": CommandType.SYSTEM,
+                "description": "Exit the game",
+                "usage": "exit",
+                "parameters": [],
+                "min_params": 0,
+                "max_params": 0,
             },
-
             # Challenge commands
-            'answer': {
-                'type': CommandType.CHALLENGE,
-                'description': 'Answer a challenge question',
-                'usage': 'answer <response>',
-                'parameters': ['response'],
-                'min_params': 1,
-                'max_params': -1  # Unlimited parameters for multi-word answers
+            "answer": {
+                "type": CommandType.CHALLENGE,
+                "description": "Answer a challenge question",
+                "usage": "answer <response>",
+                "parameters": ["response"],
+                "min_params": 1,
+                "max_params": -1,  # Unlimited parameters for multi-word answers
             },
-            'solve': {
-                'type': CommandType.CHALLENGE,
-                'description': 'Solve a puzzle or challenge',
-                'usage': 'solve <solution>',
-                'parameters': ['solution'],
-                'min_params': 1,
-                'max_params': -1
+            "solve": {
+                "type": CommandType.CHALLENGE,
+                "description": "Solve a puzzle or challenge",
+                "usage": "solve <solution>",
+                "parameters": ["solution"],
+                "min_params": 1,
+                "max_params": -1,
             },
-            'skip': {
-                'type': CommandType.CHALLENGE,
-                'description': 'Skip the current challenge',
-                'usage': 'skip',
-                'parameters': [],
-                'min_params': 0,
-                'max_params': 0
-            }
+            "skip": {
+                "type": CommandType.CHALLENGE,
+                "description": "Skip the current challenge",
+                "usage": "skip",
+                "parameters": [],
+                "min_params": 0,
+                "max_params": 0,
+            },
         }
 
     def _initialize_aliases(self) -> dict[str, str]:
         """Initialize command aliases."""
         return {
             # Movement aliases
-            'north': 'go', 'n': 'go',
-            'south': 'go', 's': 'go',
-            'east': 'go', 'e': 'go',
-            'west': 'go', 'w': 'go',
-            'northeast': 'go', 'ne': 'go',
-            'northwest': 'go', 'nw': 'go',
-            'southeast': 'go', 'se': 'go',
-            'southwest': 'go', 'sw': 'go',
-            'up': 'go', 'u': 'go',
-            'down': 'go', 'd': 'go',
-
+            "north": "go",
+            "n": "go",
+            "south": "go",
+            "s": "go",
+            "east": "go",
+            "e": "go",
+            "west": "go",
+            "w": "go",
+            "northeast": "go",
+            "ne": "go",
+            "northwest": "go",
+            "nw": "go",
+            "southeast": "go",
+            "se": "go",
+            "southwest": "go",
+            "sw": "go",
+            "up": "go",
+            "u": "go",
+            "down": "go",
+            "d": "go",
             # Examination aliases
-            'l': 'look',
-            'ex': 'examine',
-            'check': 'examine',
-            'm': 'map',
-
+            "l": "look",
+            "ex": "examine",
+            "check": "examine",
+            "m": "map",
             # Inventory aliases
-            'inv': 'inventory',
-            'i': 'inventory',
-
+            "inv": "inventory",
+            "i": "inventory",
             # Interaction aliases
-            'pick': 'take',
-            'pickup': 'take',
-            'grab': 'take',
-
+            "pick": "take",
+            "pickup": "take",
+            "grab": "take",
             # System aliases
-            'h': 'help',
-            '?': 'help',
-            'stat': 'status',
-            'q': 'quit'
+            "h": "help",
+            "?": "help",
+            "stat": "status",
+            "q": "quit",
         }
 
     def parse_command(self, user_input: str) -> ParsedCommand:
@@ -291,7 +304,7 @@ class CommandParser:
                 parameters=[],
                 raw_input=user_input,
                 is_valid=False,
-                error_message="Please enter a command."
+                error_message="Please enter a command.",
             )
 
         # Clean and split input
@@ -305,7 +318,7 @@ class CommandParser:
                 parameters=[],
                 raw_input=user_input,
                 is_valid=False,
-                error_message="Please enter a command."
+                error_message="Please enter a command.",
             )
 
         command_word = parts[0]
@@ -319,7 +332,7 @@ class CommandParser:
                 action="go",
                 parameters=[direction],
                 raw_input=user_input,
-                is_valid=True
+                is_valid=True,
             )
 
         # Resolve aliases
@@ -338,7 +351,7 @@ class CommandParser:
                 parameters=parameters,
                 raw_input=user_input,
                 is_valid=False,
-                error_message=error_msg
+                error_message=error_msg,
             )
 
         # Validate parameters
@@ -347,23 +360,23 @@ class CommandParser:
 
         if not validation_result[0]:
             return ParsedCommand(
-                command_type=command_info['type'],
+                command_type=command_info["type"],
                 action=actual_command,
                 parameters=parameters,
                 raw_input=user_input,
                 is_valid=False,
-                error_message=validation_result[1]
+                error_message=validation_result[1],
             )
 
         # Handle special parameter processing
         processed_params = self._process_parameters(actual_command, parameters)
 
         return ParsedCommand(
-            command_type=command_info['type'],
+            command_type=command_info["type"],
             action=actual_command,
             parameters=processed_params,
             raw_input=user_input,
-            is_valid=True
+            is_valid=True,
         )
 
     def _split_input(self, input_text: str) -> list[str]:
@@ -416,8 +429,8 @@ class CommandParser:
             Tuple of (is_valid, error_message)
         """
         command_info = self._commands[command]
-        min_params = command_info['min_params']
-        max_params = command_info['max_params']
+        min_params = command_info["min_params"]
+        max_params = command_info["max_params"]
 
         param_count = len(parameters)
 
@@ -425,13 +438,19 @@ class CommandParser:
             if min_params == 1:
                 return False, f"Command '{command}' requires a parameter. Usage: {command_info['usage']}"
             else:
-                return False, f"Command '{command}' requires at least {min_params} parameters. Usage: {command_info['usage']}"
+                return (
+                    False,
+                    f"Command '{command}' requires at least {min_params} parameters. Usage: {command_info['usage']}",
+                )
 
         if max_params != -1 and param_count > max_params:
             if max_params == 0:
                 return False, f"Command '{command}' doesn't take any parameters. Usage: {command_info['usage']}"
             else:
-                return False, f"Command '{command}' takes at most {max_params} parameters. Usage: {command_info['usage']}"
+                return (
+                    False,
+                    f"Command '{command}' takes at most {max_params} parameters. Usage: {command_info['usage']}",
+                )
 
         return True, None
 
@@ -445,15 +464,15 @@ class CommandParser:
         Returns:
             List of processed parameters
         """
-        if command in ['go', 'move'] and parameters:
+        if command in ["go", "move"] and parameters:
             # Normalize direction parameters
             direction = parameters[0].lower()
             normalized_direction = self._direction_aliases.get(direction, direction)
             return [normalized_direction]
 
         # For answer and solve commands, join multi-word responses
-        if command in ['answer', 'solve'] and len(parameters) > 1:
-            return [' '.join(parameters)]
+        if command in ["answer", "solve"] and len(parameters) > 1:
+            return [" ".join(parameters)]
 
         return parameters
 
@@ -540,7 +559,7 @@ class CommandParser:
         Returns:
             Dictionary mapping command names to descriptions
         """
-        return {cmd: info['description'] for cmd, info in self._commands.items()}
+        return {cmd: info["description"] for cmd, info in self._commands.items()}
 
     def get_command_usage(self, command: str) -> str | None:
         """Get usage information for a specific command.
@@ -552,12 +571,12 @@ class CommandParser:
             Usage string or None if command doesn't exist
         """
         if command in self._commands:
-            return self._commands[command]['usage']
+            return self._commands[command]["usage"]
 
         # Check if it's an alias
         actual_command = self._aliases.get(command)
         if actual_command and actual_command in self._commands:
-            return self._commands[actual_command]['usage']
+            return self._commands[actual_command]["usage"]
 
         return None
 
@@ -570,11 +589,7 @@ class CommandParser:
         Returns:
             Dictionary of commands of the specified type
         """
-        return {
-            cmd: info['description']
-            for cmd, info in self._commands.items()
-            if info['type'] == command_type
-        }
+        return {cmd: info["description"] for cmd, info in self._commands.items() if info["type"] == command_type}
 
     def is_valid_direction(self, direction: str) -> bool:
         """Check if a string is a valid direction.

@@ -9,15 +9,9 @@ class TestPuzzleChallenge:
 
     def setup_method(self):
         """Set up test fixtures."""
-        self.sequence_puzzle = PuzzleChallenge(
-            difficulty=2,
-            puzzle_type=PuzzleType.SEQUENCE
-        )
+        self.sequence_puzzle = PuzzleChallenge(difficulty=2, puzzle_type=PuzzleType.SEQUENCE)
 
-        self.logic_puzzle = PuzzleChallenge(
-            difficulty=8,
-            puzzle_type=PuzzleType.LOGIC_GRID
-        )
+        self.logic_puzzle = PuzzleChallenge(difficulty=8, puzzle_type=PuzzleType.LOGIC_GRID)
 
     def test_puzzle_initialization_with_sequence_type(self):
         """Test puzzle initialization with sequence type."""
@@ -27,15 +21,15 @@ class TestPuzzleChallenge:
         assert self.sequence_puzzle.hints_used == 0
         assert self.sequence_puzzle.max_hints == 2
         assert self.sequence_puzzle.completed is False
-        assert self.sequence_puzzle.puzzle_data['type'] == 'sequence'
+        assert self.sequence_puzzle.puzzle_data["type"] == "sequence"
 
     def test_puzzle_initialization_with_logic_grid_type(self):
         """Test puzzle initialization with logic grid type."""
         assert self.logic_puzzle.difficulty == 8
         assert self.logic_puzzle.puzzle_type == PuzzleType.LOGIC_GRID
-        assert self.logic_puzzle.puzzle_data['type'] == 'logic_grid'
-        assert 'clues' in self.logic_puzzle.puzzle_data
-        assert 'questions' in self.logic_puzzle.puzzle_data
+        assert self.logic_puzzle.puzzle_data["type"] == "logic_grid"
+        assert "clues" in self.logic_puzzle.puzzle_data
+        assert "questions" in self.logic_puzzle.puzzle_data
 
     def test_puzzle_initialization_with_defaults(self):
         """Test puzzle initialization with default values."""
@@ -74,12 +68,12 @@ class TestPuzzleChallenge:
         assert "Logic Grid" in presentation
         assert "Clues:" in presentation
         assert "Question 1:" in presentation
-        assert len([line for line in presentation.split('\n') if line.strip().startswith(('1.', '2.', '3.', '4.'))]) > 0
+        assert len([line for line in presentation.split("\n") if line.strip().startswith(("1.", "2.", "3.", "4."))]) > 0
 
     def test_process_sequence_correct_answer(self):
         """Test processing correct answer for sequence puzzle."""
         # The sequence puzzle should have a known answer
-        correct_answer = self.sequence_puzzle.puzzle_data['answer']
+        correct_answer = self.sequence_puzzle.puzzle_data["answer"]
         result = self.sequence_puzzle.process_response(correct_answer)
 
         assert result.success is True
@@ -99,18 +93,18 @@ class TestPuzzleChallenge:
     def test_process_logic_grid_partial_completion(self):
         """Test processing logic grid answers step by step."""
         # Get the first correct answer
-        first_answer = self.logic_puzzle.puzzle_data['answers'][0]
+        first_answer = self.logic_puzzle.puzzle_data["answers"][0]
         result = self.logic_puzzle.process_response(first_answer)
 
         # Should be correct but not complete yet
         assert "Correct!" in result.message
-        assert self.logic_puzzle.puzzle_data['current_question'] == 1
+        assert self.logic_puzzle.puzzle_data["current_question"] == 1
         assert self.logic_puzzle.completed is False
 
     def test_process_logic_grid_full_completion(self):
         """Test completing entire logic grid puzzle."""
         # Answer all questions correctly
-        for answer in self.logic_puzzle.puzzle_data['answers']:
+        for answer in self.logic_puzzle.puzzle_data["answers"]:
             result = self.logic_puzzle.process_response(answer)
 
         # Last result should indicate completion
@@ -150,7 +144,7 @@ class TestPuzzleChallenge:
     def test_get_reward_when_completed(self):
         """Test getting reward when puzzle is completed."""
         # Complete the puzzle
-        correct_answer = self.sequence_puzzle.puzzle_data['answer']
+        correct_answer = self.sequence_puzzle.puzzle_data["answer"]
         self.sequence_puzzle.process_response(correct_answer)
 
         reward = self.sequence_puzzle.get_reward()
@@ -180,43 +174,43 @@ class TestPuzzleChallenge:
     def test_reset_logic_grid_puzzle(self):
         """Test resetting logic grid puzzle resets question progress."""
         # Answer first question
-        first_answer = self.logic_puzzle.puzzle_data['answers'][0]
+        first_answer = self.logic_puzzle.puzzle_data["answers"][0]
         self.logic_puzzle.process_response(first_answer)
 
-        assert self.logic_puzzle.puzzle_data['current_question'] == 1
+        assert self.logic_puzzle.puzzle_data["current_question"] == 1
 
         # Reset
         self.logic_puzzle.reset()
 
-        assert self.logic_puzzle.puzzle_data['current_question'] == 0
+        assert self.logic_puzzle.puzzle_data["current_question"] == 0
 
     def test_get_progress_information(self):
         """Test getting progress information."""
         progress = self.sequence_puzzle.get_progress()
 
-        assert 'puzzle_type' in progress
-        assert 'current_step' in progress
-        assert 'hints_used' in progress
-        assert 'completed' in progress
-        assert progress['puzzle_type'] == 'sequence'
-        assert progress['hints_used'] == 0
-        assert progress['completed'] is False
+        assert "puzzle_type" in progress
+        assert "current_step" in progress
+        assert "hints_used" in progress
+        assert "completed" in progress
+        assert progress["puzzle_type"] == "sequence"
+        assert progress["hints_used"] == 0
+        assert progress["completed"] is False
 
     def test_get_progress_logic_grid(self):
         """Test getting progress information for logic grid."""
         progress = self.logic_puzzle.get_progress()
 
-        assert 'questions_answered' in progress
-        assert 'total_questions' in progress
-        assert progress['questions_answered'] == 0
-        assert progress['total_questions'] == len(self.logic_puzzle.puzzle_data['questions'])
+        assert "questions_answered" in progress
+        assert "total_questions" in progress
+        assert progress["questions_answered"] == 0
+        assert progress["total_questions"] == len(self.logic_puzzle.puzzle_data["questions"])
 
     def test_math_puzzle_type(self):
         """Test math puzzle type functionality."""
         math_puzzle = PuzzleChallenge(difficulty=7, puzzle_type=PuzzleType.MATH_PUZZLE)
 
         assert math_puzzle.puzzle_type == PuzzleType.MATH_PUZZLE
-        assert math_puzzle.puzzle_data['type'] == 'math_puzzle'
+        assert math_puzzle.puzzle_data["type"] == "math_puzzle"
 
         presentation = math_puzzle.present_challenge()
         assert "Math Puzzle" in presentation
@@ -227,7 +221,7 @@ class TestPuzzleChallenge:
         pattern_puzzle = PuzzleChallenge(difficulty=4, puzzle_type=PuzzleType.PATTERN)
 
         assert pattern_puzzle.puzzle_type == PuzzleType.PATTERN
-        assert pattern_puzzle.puzzle_data['type'] == 'pattern'
+        assert pattern_puzzle.puzzle_data["type"] == "pattern"
 
         presentation = pattern_puzzle.present_challenge()
         assert "Pattern" in presentation
@@ -237,13 +231,10 @@ class TestPuzzleChallenge:
         """Test that PuzzleChallenge works with ChallengeFactory."""
         # Clear and re-register to ensure clean state
         ChallengeFactory.clear_registry()
-        ChallengeFactory.register_challenge_type('puzzle', PuzzleChallenge)
+        ChallengeFactory.register_challenge_type("puzzle", PuzzleChallenge)
 
         challenge = ChallengeFactory.create_challenge(
-            'puzzle',
-            difficulty=6,
-            puzzle_type=PuzzleType.SEQUENCE,
-            randomize=False
+            "puzzle", difficulty=6, puzzle_type=PuzzleType.SEQUENCE, randomize=False
         )
 
         assert isinstance(challenge, PuzzleChallenge)
@@ -261,7 +252,7 @@ class TestPuzzleChallenge:
 
     def test_case_insensitive_answers(self):
         """Test that answers are processed case-insensitively."""
-        correct_answer = self.sequence_puzzle.puzzle_data['answer']
+        correct_answer = self.sequence_puzzle.puzzle_data["answer"]
 
         # Test uppercase
         result = self.sequence_puzzle.process_response(correct_answer.upper())
@@ -269,7 +260,7 @@ class TestPuzzleChallenge:
 
     def test_whitespace_handling(self):
         """Test that whitespace in answers is handled correctly."""
-        correct_answer = self.sequence_puzzle.puzzle_data['answer']
+        correct_answer = self.sequence_puzzle.puzzle_data["answer"]
 
         # Test with extra whitespace
         result = self.sequence_puzzle.process_response(f"  {correct_answer}  ")
@@ -283,16 +274,16 @@ class TestPuzzleChallenge:
         pattern = PuzzleChallenge(difficulty=3, puzzle_type=PuzzleType.PATTERN)
 
         # Each should have different required fields
-        assert 'sequence' in sequence.puzzle_data
-        assert 'clues' in logic_grid.puzzle_data
-        assert 'explanation' in math_puzzle.puzzle_data
-        assert 'pattern' in pattern.puzzle_data
+        assert "sequence" in sequence.puzzle_data
+        assert "clues" in logic_grid.puzzle_data
+        assert "explanation" in math_puzzle.puzzle_data
+        assert "pattern" in pattern.puzzle_data
 
     def test_puzzle_data_consistency(self):
         """Test that puzzle data is consistent and complete."""
         puzzle = PuzzleChallenge(difficulty=5)
 
         # All puzzles should have these basic fields
-        assert 'type' in puzzle.puzzle_data
-        assert 'max_steps' in puzzle.puzzle_data
-        assert puzzle.puzzle_data['max_steps'] > 0
+        assert "type" in puzzle.puzzle_data
+        assert "max_steps" in puzzle.puzzle_data
+        assert puzzle.puzzle_data["max_steps"] > 0

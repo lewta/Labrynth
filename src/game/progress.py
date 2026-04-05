@@ -74,7 +74,7 @@ class ProgressTracker:
             raise GameException("Direction must be a non-empty string")
 
         direction = direction.lower().strip()
-        valid_directions = {'north', 'south', 'east', 'west'}
+        valid_directions = {"north", "south", "east", "west"}
         if direction not in valid_directions:
             raise GameException(f"Direction must be one of: {', '.join(valid_directions)}")
 
@@ -90,8 +90,7 @@ class ProgressTracker:
             Dict[int, Dict[str, int]]: Dictionary mapping chamber IDs to their connections
         """
         # Return a deep copy to prevent modification of internal data
-        return {chamber_id: connections.copy()
-                for chamber_id, connections in self.discovered_connections.items()}
+        return {chamber_id: connections.copy() for chamber_id, connections in self.discovered_connections.items()}
 
     def is_chamber_completed(self, chamber_id: int) -> bool:
         """Check if a chamber has been completed.
@@ -150,13 +149,13 @@ class ProgressTracker:
             Dict[str, Any]: Progress summary
         """
         return {
-            'completed_chambers': len(self.completed_chambers),
-            'visited_chambers': len(self.visited_chambers),
-            'challenges_completed': self.challenges_completed,
-            'total_score': self.total_score,
-            'completion_percentage': self.get_completion_percentage(),
-            'completed_chamber_ids': sorted(self.completed_chambers),
-            'visited_chamber_ids': sorted(self.visited_chambers)
+            "completed_chambers": len(self.completed_chambers),
+            "visited_chambers": len(self.visited_chambers),
+            "challenges_completed": self.challenges_completed,
+            "total_score": self.total_score,
+            "completion_percentage": self.get_completion_percentage(),
+            "completed_chamber_ids": sorted(self.completed_chambers),
+            "visited_chamber_ids": sorted(self.visited_chambers),
         }
 
     def get_map_data(self) -> dict[int, dict[str, Any]]:
@@ -169,10 +168,10 @@ class ProgressTracker:
 
         for chamber_id in self.visited_chambers:
             map_data[chamber_id] = {
-                'chamber_id': chamber_id,
-                'visited': True,
-                'completed': chamber_id in self.completed_chambers,
-                'connections': self.discovered_connections.get(chamber_id, {})
+                "chamber_id": chamber_id,
+                "visited": True,
+                "completed": chamber_id in self.completed_chambers,
+                "connections": self.discovered_connections.get(chamber_id, {}),
             }
 
         return map_data
@@ -190,6 +189,8 @@ class ProgressTracker:
     def __str__(self) -> str:
         """Return string representation of progress."""
         summary = self.get_progress_summary()
-        return (f"Progress: {summary['completed_chambers']}/13 chambers completed, "
-                f"{summary['challenges_completed']} challenges, "
-                f"Score: {summary['total_score']}")
+        return (
+            f"Progress: {summary['completed_chambers']}/13 chambers completed, "
+            f"{summary['challenges_completed']} challenges, "
+            f"Score: {summary['total_score']}"
+        )

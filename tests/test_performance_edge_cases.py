@@ -16,6 +16,7 @@ import pytest
 
 try:
     import psutil
+
     HAS_PSUTIL = True
 except ImportError:
     HAS_PSUTIL = False
@@ -52,7 +53,7 @@ class TestPerformanceRequirements:
     def test_challenge_creation_performance(self):
         """Test performance of challenge creation operations."""
         challenge_factory = ChallengeFactory()
-        challenge_types = ['riddle', 'puzzle', 'combat', 'skill', 'memory']
+        challenge_types = ["riddle", "puzzle", "combat", "skill", "memory"]
 
         start_time = time.time()
 
@@ -111,7 +112,7 @@ class TestPerformanceRequirements:
                 player_health=75,
                 inventory_items=items,
                 completed_chambers=set(range(1, 10)),
-                game_time=3600
+                game_time=3600,
             )
 
             save_file = os.path.join(temp_dir, "performance_test.json")
@@ -152,7 +153,7 @@ class TestPerformanceRequirements:
         for _ in range(100):
             # Create challenges
             challenges = []
-            for challenge_type in ['riddle', 'puzzle', 'combat']:
+            for challenge_type in ["riddle", "puzzle", "combat"]:
                 challenge = challenge_factory.create_challenge(challenge_type, difficulty=1)
                 challenges.append(challenge)
 
@@ -175,10 +176,11 @@ class TestPerformanceRequirements:
 
     def test_concurrent_operations_performance(self):
         """Test performance when multiple operations happen concurrently."""
+
         def create_challenges():
             factory = ChallengeFactory()
             for _ in range(50):
-                challenge = factory.create_challenge('riddle', difficulty=1)
+                challenge = factory.create_challenge("riddle", difficulty=1)
                 challenge.present_challenge()
 
         def navigate_world():
@@ -232,7 +234,7 @@ class TestEdgeCases:
 
         # Test completely corrupted JSON
         corrupted_file = os.path.join(self.temp_dir, "corrupted.json")
-        with open(corrupted_file, 'w') as f:
+        with open(corrupted_file, "w") as f:
             f.write("{ this is not valid json at all")
 
         with pytest.raises(SaveLoadException):
@@ -240,7 +242,7 @@ class TestEdgeCases:
 
         # Test valid JSON but invalid structure
         invalid_structure_file = os.path.join(self.temp_dir, "invalid_structure.json")
-        with open(invalid_structure_file, 'w') as f:
+        with open(invalid_structure_file, "w") as f:
             json.dump({"not_game_state": "invalid"}, f)
 
         with pytest.raises(SaveLoadException):
@@ -248,20 +250,20 @@ class TestEdgeCases:
 
         # Test partial data corruption
         partial_corruption_file = os.path.join(self.temp_dir, "partial_corruption.json")
-        with open(partial_corruption_file, 'w') as f:
-            json.dump({
-                "game_state": {
-                    "current_chamber": "not_an_integer",  # Wrong type
-                    "player_health": 100,
-                    "inventory_items": [],
-                    "completed_chambers": [],
-                    "game_time": 0
+        with open(partial_corruption_file, "w") as f:
+            json.dump(
+                {
+                    "game_state": {
+                        "current_chamber": "not_an_integer",  # Wrong type
+                        "player_health": 100,
+                        "inventory_items": [],
+                        "completed_chambers": [],
+                        "game_time": 0,
+                    },
+                    "metadata": {"save_time": "2023-01-01T00:00:00", "game_version": "1.0"},
                 },
-                "metadata": {
-                    "save_time": "2023-01-01T00:00:00",
-                    "game_version": "1.0"
-                }
-            }, f)
+                f,
+            )
 
         with pytest.raises(SaveLoadException):
             save_manager.load_game(partial_corruption_file)
@@ -314,7 +316,7 @@ class TestEdgeCases:
             player_health=1,  # Minimum health
             inventory_items=items,
             completed_chambers=set(range(1, 1000)),  # Many completed chambers
-            game_time=999999999  # Very large time
+            game_time=999999999,  # Very large time
         )
 
         # Should handle large game state
@@ -327,7 +329,7 @@ class TestEdgeCases:
                 player_health=100,
                 inventory_items=[],
                 completed_chambers=set(),
-                game_time=0
+                game_time=0,
             )
 
         with pytest.raises(GameException):
@@ -336,7 +338,7 @@ class TestEdgeCases:
                 player_health=-10,  # Negative health
                 inventory_items=[],
                 completed_chambers=set(),
-                game_time=0
+                game_time=0,
             )
 
     def test_challenge_edge_cases(self):
@@ -345,7 +347,7 @@ class TestEdgeCases:
 
         # Test with invalid challenge types
         try:
-            challenge = challenge_factory.create_challenge('invalid_type', difficulty=1)
+            challenge = challenge_factory.create_challenge("invalid_type", difficulty=1)
             # Should either return None or raise exception
             assert challenge is None
         except (ValueError, KeyError, GameException):
@@ -354,35 +356,35 @@ class TestEdgeCases:
 
         # Test with extreme difficulty values
         try:
-            challenge = challenge_factory.create_challenge('riddle', difficulty=999)
+            challenge = challenge_factory.create_challenge("riddle", difficulty=999)
             assert challenge is not None
         except ValueError:
             # High difficulty values might cause randomization issues, which is acceptable
             pass
 
         try:
-            challenge = challenge_factory.create_challenge('riddle', difficulty=-1)
+            challenge = challenge_factory.create_challenge("riddle", difficulty=-1)
             assert challenge is not None
         except (ValueError, GameException):
             # Negative difficulty values may cause errors, which is acceptable
             pass
 
         # Test challenge with empty/invalid responses
-        riddle = challenge_factory.create_challenge('riddle', difficulty=1)
+        riddle = challenge_factory.create_challenge("riddle", difficulty=1)
 
         # Test empty response
         result = riddle.process_response("")
-        assert hasattr(result, 'success')
+        assert hasattr(result, "success")
 
         # Test very long response
         long_response = "a" * 10000
         result = riddle.process_response(long_response)
-        assert hasattr(result, 'success')
+        assert hasattr(result, "success")
 
         # Test special characters
         special_response = "!@#$%^&*()_+{}|:<>?[]\\;'\",./"
         result = riddle.process_response(special_response)
-        assert hasattr(result, 'success')
+        assert hasattr(result, "success")
 
     def test_world_navigation_edge_cases(self):
         """Test edge cases in world navigation."""
@@ -475,7 +477,7 @@ class TestEdgeCases:
 
             # Create and destroy challenges
             factory = ChallengeFactory()
-            challenge = factory.create_challenge('riddle', difficulty=1)
+            challenge = factory.create_challenge("riddle", difficulty=1)
             challenge.present_challenge()
             challenge.process_response("test")
             del challenge
@@ -508,15 +510,13 @@ class TestStressTests:
             # Alternate between different types of operations
             if i % 4 == 0:
                 # Create and use challenges
-                challenge = challenge_factory.create_challenge('riddle', difficulty=1)
+                challenge = challenge_factory.create_challenge("riddle", difficulty=1)
                 challenge.present_challenge()
                 challenge.process_response("test answer")
 
             elif i % 4 == 1:
                 # Navigate world
-                current_chamber = engine.world_manager.get_chamber(
-                    engine.world_manager.current_chamber_id
-                )
+                current_chamber = engine.world_manager.get_chamber(engine.world_manager.current_chamber_id)
                 if current_chamber and current_chamber.connections:
                     direction = list(current_chamber.connections.keys())[0]
                     engine.world_manager.move_player(direction)
@@ -542,15 +542,14 @@ class TestStressTests:
     def test_large_save_file_handling(self):
         """Test handling of very large save files."""
         # Create a game state with many items and completed chambers
-        items = [Item(f"Item_{i}", f"Very long description for item {i} " * 10, "misc", i)
-                for i in range(500)]
+        items = [Item(f"Item_{i}", f"Very long description for item {i} " * 10, "misc", i) for i in range(500)]
 
         game_state = GameState(
             current_chamber=1,
             player_health=100,
             inventory_items=items,
             completed_chambers=set(range(1, 100)),
-            game_time=999999
+            game_time=999999,
         )
 
         save_manager = SaveLoadManager()
@@ -606,7 +605,7 @@ class TestStressTests:
             player_manager.get_status()
 
             # Rapid challenge creation
-            challenge = challenge_factory.create_challenge('riddle', difficulty=1)
+            challenge = challenge_factory.create_challenge("riddle", difficulty=1)
             challenge.present_challenge()
 
         total_time = time.time() - start_time

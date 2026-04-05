@@ -24,9 +24,7 @@ class TestMapRenderer:
     def test_calculate_positions_single_chamber(self):
         """Test position calculation for a single chamber."""
         renderer = MapRenderer()
-        chambers = {
-            1: ChamberInfo(1, "Start", True, False, {})
-        }
+        chambers = {1: ChamberInfo(1, "Start", True, False, {})}
 
         renderer._calculate_positions(chambers, 1)
 
@@ -41,7 +39,7 @@ class TestMapRenderer:
         chambers = {
             1: ChamberInfo(1, "Start", True, False, {"north": 2, "east": 3}),
             2: ChamberInfo(2, "North", True, False, {"south": 1}),
-            3: ChamberInfo(3, "East", True, True, {"west": 1})
+            3: ChamberInfo(3, "East", True, True, {"west": 1}),
         }
 
         renderer._calculate_positions(chambers, 1)
@@ -76,9 +74,7 @@ class TestMapRenderer:
     def test_place_chambers_current(self):
         """Test placing current chamber symbol."""
         renderer = MapRenderer()
-        chambers = {
-            1: ChamberInfo(1, "Current", True, False, {})
-        }
+        chambers = {1: ChamberInfo(1, "Current", True, False, {})}
         renderer.chamber_positions[1] = MapPosition(25, 25)
 
         grid = renderer._create_grid()
@@ -89,9 +85,7 @@ class TestMapRenderer:
     def test_place_chambers_completed(self):
         """Test placing completed chamber symbol."""
         renderer = MapRenderer()
-        chambers = {
-            1: ChamberInfo(1, "Completed", True, True, {})
-        }
+        chambers = {1: ChamberInfo(1, "Completed", True, True, {})}
         renderer.chamber_positions[1] = MapPosition(25, 25)
 
         grid = renderer._create_grid()
@@ -102,9 +96,7 @@ class TestMapRenderer:
     def test_place_chambers_visited(self):
         """Test placing visited chamber symbol."""
         renderer = MapRenderer()
-        chambers = {
-            1: ChamberInfo(1, "Visited", True, False, {})
-        }
+        chambers = {1: ChamberInfo(1, "Visited", True, False, {})}
         renderer.chamber_positions[1] = MapPosition(25, 25)
 
         grid = renderer._create_grid()
@@ -115,9 +107,7 @@ class TestMapRenderer:
     def test_place_chambers_unvisited_ignored(self):
         """Test that unvisited chambers are not placed."""
         renderer = MapRenderer()
-        chambers = {
-            1: ChamberInfo(1, "Unvisited", False, False, {})
-        }
+        chambers = {1: ChamberInfo(1, "Unvisited", False, False, {})}
         renderer.chamber_positions[1] = MapPosition(25, 25)
 
         grid = renderer._create_grid()
@@ -178,7 +168,7 @@ class TestMapRenderer:
         renderer = MapRenderer()
         chambers = {
             1: ChamberInfo(1, "Start", True, False, {"north": 2}),
-            2: ChamberInfo(2, "North", True, False, {"south": 1})
+            2: ChamberInfo(2, "North", True, False, {"south": 1}),
         }
 
         renderer.chamber_positions[1] = MapPosition(25, 25)
@@ -196,7 +186,7 @@ class TestMapRenderer:
         renderer = MapRenderer()
         chambers = {
             1: ChamberInfo(1, "Start", True, False, {"north": 2}),
-            2: ChamberInfo(2, "North", False, False, {"south": 1})  # Unvisited
+            2: ChamberInfo(2, "North", False, False, {"south": 1}),  # Unvisited
         }
 
         renderer.chamber_positions[1] = MapPosition(25, 25)
@@ -227,7 +217,7 @@ class TestMapRenderer:
         assert ConnectionSymbol.HORIZONTAL.value in result
 
         # Should be trimmed to content area
-        lines = result.split('\n')
+        lines = result.split("\n")
         assert len(lines) > 0
         # Find the line with content (some lines might be empty due to rstrip)
         content_lines = [line for line in lines if line.strip()]
@@ -240,7 +230,7 @@ class TestMapRenderer:
         chambers = {
             1: ChamberInfo(1, "Entrance", True, True, {"north": 2}),
             2: ChamberInfo(2, "Hall", True, False, {"south": 1, "east": 3}),
-            3: ChamberInfo(3, "Exit", True, False, {"west": 2})
+            3: ChamberInfo(3, "Exit", True, False, {"west": 2}),
         }
 
         result = renderer.render_map(chambers, 2)
@@ -264,9 +254,7 @@ class TestMapRenderer:
     def test_get_chamber_list_empty(self):
         """Test chamber list with no visited chambers."""
         renderer = MapRenderer()
-        chambers = {
-            1: ChamberInfo(1, "Unvisited", False, False, {})
-        }
+        chambers = {1: ChamberInfo(1, "Unvisited", False, False, {})}
 
         result = renderer.get_chamber_list(chambers)
 
@@ -278,15 +266,15 @@ class TestMapRenderer:
         chambers = {
             1: ChamberInfo(1, "Entrance", True, True, {}),
             2: ChamberInfo(2, "Hall", True, False, {}),
-            3: ChamberInfo(3, "Exit", True, False, {})
+            3: ChamberInfo(3, "Exit", True, False, {}),
         }
 
         result = renderer.get_chamber_list(chambers)
 
         assert "Visited Chambers:" in result
         assert "✓ 1: Entrance" in result  # Completed
-        assert "○ 2: Hall" in result      # Visited but not completed
-        assert "○ 3: Exit" in result      # Visited but not completed
+        assert "○ 2: Hall" in result  # Visited but not completed
+        assert "○ 3: Exit" in result  # Visited but not completed
 
     def test_map_position_hash(self):
         """Test MapPosition hashing for use in sets/dicts."""
@@ -304,11 +292,7 @@ class TestMapRenderer:
     def test_chamber_info_dataclass(self):
         """Test ChamberInfo dataclass functionality."""
         chamber = ChamberInfo(
-            chamber_id=1,
-            name="Test Chamber",
-            visited=True,
-            completed=False,
-            connections={"north": 2}
+            chamber_id=1, name="Test Chamber", visited=True, completed=False, connections={"north": 2}
         )
 
         assert chamber.chamber_id == 1
@@ -320,12 +304,7 @@ class TestMapRenderer:
 
         # Test with position
         chamber_with_pos = ChamberInfo(
-            chamber_id=2,
-            name="Test 2",
-            visited=True,
-            completed=True,
-            connections={},
-            position=MapPosition(10, 20)
+            chamber_id=2, name="Test 2", visited=True, completed=True, connections={}, position=MapPosition(10, 20)
         )
 
         assert chamber_with_pos.position.x == 10

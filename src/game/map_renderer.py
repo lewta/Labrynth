@@ -6,25 +6,28 @@ from enum import Enum
 
 class ChamberSymbol(Enum):
     """Symbols used to represent different chamber states."""
-    CURRENT = "●"      # Current player location
-    VISITED = "○"      # Visited chamber
-    COMPLETED = "◉"    # Completed chamber
-    UNKNOWN = "?"      # Unknown/unvisited chamber
-    WALL = "█"         # Wall/blocked area
-    EMPTY = " "        # Empty space
+
+    CURRENT = "●"  # Current player location
+    VISITED = "○"  # Visited chamber
+    COMPLETED = "◉"  # Completed chamber
+    UNKNOWN = "?"  # Unknown/unvisited chamber
+    WALL = "█"  # Wall/blocked area
+    EMPTY = " "  # Empty space
 
 
 class ConnectionSymbol(Enum):
     """Symbols used to represent connections between chambers."""
-    HORIZONTAL = "─"   # Horizontal connection
-    VERTICAL = "│"     # Vertical connection
-    UNKNOWN_H = "?"    # Unknown horizontal connection
-    UNKNOWN_V = "?"    # Unknown vertical connection
+
+    HORIZONTAL = "─"  # Horizontal connection
+    VERTICAL = "│"  # Vertical connection
+    UNKNOWN_H = "?"  # Unknown horizontal connection
+    UNKNOWN_V = "?"  # Unknown vertical connection
 
 
 @dataclass
 class MapPosition:
     """Represents a position on the map grid."""
+
     x: int
     y: int
 
@@ -35,6 +38,7 @@ class MapPosition:
 @dataclass
 class ChamberInfo:
     """Information about a chamber for map rendering."""
+
     chamber_id: int
     name: str
     visited: bool
@@ -93,14 +97,14 @@ class MapRenderer:
         queue = [(start_chamber_id, self.center_x, self.center_y)]
 
         direction_offsets = {
-            'north': (0, -2),
-            'south': (0, 2),
-            'east': (2, 0),
-            'west': (-2, 0),
-            'northeast': (2, -2),
-            'northwest': (-2, -2),
-            'southeast': (2, 2),
-            'southwest': (-2, 2)
+            "north": (0, -2),
+            "south": (0, 2),
+            "east": (2, 0),
+            "west": (-2, 0),
+            "northeast": (2, -2),
+            "northwest": (-2, -2),
+            "southeast": (2, 2),
+            "southwest": (-2, 2),
         }
 
         while queue:
@@ -143,11 +147,9 @@ class MapRenderer:
 
     def _create_grid(self) -> list[list[str]]:
         """Create an empty grid for the map."""
-        return [[ChamberSymbol.EMPTY.value for _ in range(self.grid_size)]
-                for _ in range(self.grid_size)]
+        return [[ChamberSymbol.EMPTY.value for _ in range(self.grid_size)] for _ in range(self.grid_size)]
 
-    def _place_chambers(self, grid: list[list[str]], chambers: dict[int, ChamberInfo],
-                       current_chamber_id: int) -> None:
+    def _place_chambers(self, grid: list[list[str]], chambers: dict[int, ChamberInfo], current_chamber_id: int) -> None:
         """Place chamber symbols on the grid."""
         for chamber_id, chamber in chambers.items():
             if not chamber.visited or chamber_id not in self.chamber_positions:
@@ -186,8 +188,7 @@ class MapRenderer:
                 # Draw connection line
                 self._draw_connection_line(grid, pos, target_pos)
 
-    def _draw_connection_line(self, grid: list[list[str]], pos1: MapPosition,
-                             pos2: MapPosition) -> None:
+    def _draw_connection_line(self, grid: list[list[str]], pos1: MapPosition, pos2: MapPosition) -> None:
         """Draw a connection line between two positions."""
         x1, y1 = pos1.x, pos1.y
         x2, y2 = pos2.x, pos2.y
@@ -256,13 +257,12 @@ class MapRenderer:
         # Convert to string
         lines = []
         for y in range(min_y, max_y + 1):
-            line = ''.join(grid[y][min_x:max_x + 1])
+            line = "".join(grid[y][min_x : max_x + 1])
             lines.append(line.rstrip())
 
-        return '\n'.join(lines)
+        return "\n".join(lines)
 
-    def _add_header_and_legend(self, map_str: str, chambers: dict[int, ChamberInfo],
-                              current_chamber_id: int) -> str:
+    def _add_header_and_legend(self, map_str: str, chambers: dict[int, ChamberInfo], current_chamber_id: int) -> str:
         """Add header and legend to the map."""
         current_chamber = chambers.get(current_chamber_id)
         current_name = current_chamber.name if current_chamber else "Unknown"
@@ -285,7 +285,7 @@ class MapRenderer:
             len(location_text) + 2,  # +2 for padding
             len(stats_text) + 2,
             len("LABYRINTH MAP") + 20,  # +20 for centering
-            len("LEGEND") + 20
+            len("LEGEND") + 20,
         )
 
         # Ensure width is reasonable (max 100 characters)
@@ -295,7 +295,7 @@ class MapRenderer:
         # Truncate current name if it's too long
         max_name_length = content_width - len("Current Location: ") - 2
         if len(current_name) > max_name_length:
-            current_name = current_name[:max_name_length-3] + "..."
+            current_name = current_name[: max_name_length - 3] + "..."
 
         # Create border lines
         top_border = "╔" + "═" * content_width + "╗"
@@ -324,7 +324,9 @@ class MapRenderer:
         legend += f"{middle_border}\n"
 
         # Format legend lines with proper padding
-        legend_line1 = f" {ChamberSymbol.CURRENT.value} Current Location    {ChamberSymbol.COMPLETED.value} Completed Chamber"
+        legend_line1 = (
+            f" {ChamberSymbol.CURRENT.value} Current Location    {ChamberSymbol.COMPLETED.value} Completed Chamber"
+        )
         legend_padding1 = content_width - len(legend_line1)
         legend += f"║{legend_line1}{' ' * legend_padding1}║\n"
 

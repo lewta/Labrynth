@@ -65,11 +65,7 @@ class TestUIController:
 
     def test_display_chamber(self):
         """Test displaying chamber information."""
-        self.ui_controller.display_chamber(
-            "Test Chamber",
-            "A mysterious room.",
-            ["north", "south"]
-        )
+        self.ui_controller.display_chamber("Test Chamber", "A mysterious room.", ["north", "south"])
         output = self.ui_controller.get_captured_output()
 
         assert len(output) == 1
@@ -90,11 +86,7 @@ class TestUIController:
 
     def test_display_challenge_result(self):
         """Test displaying challenge results."""
-        result = ChallengeResult(
-            success=True,
-            message="Well done!",
-            reward=Item("Gold", "Shiny gold", "treasure", 100)
-        )
+        result = ChallengeResult(success=True, message="Well done!", reward=Item("Gold", "Shiny gold", "treasure", 100))
         self.ui_controller.display_challenge_result(result)
         output = self.ui_controller.get_captured_output()
 
@@ -105,10 +97,7 @@ class TestUIController:
 
     def test_display_inventory(self):
         """Test displaying inventory."""
-        items = [
-            Item("Sword", "A sharp blade", "weapon", 50),
-            Item("Potion", "Healing potion", "consumable", 25)
-        ]
+        items = [Item("Sword", "A sharp blade", "weapon", 50), Item("Potion", "Healing potion", "consumable", 25)]
         self.ui_controller.display_inventory(items)
         output = self.ui_controller.get_captured_output()
 
@@ -446,7 +435,7 @@ class TestUIController:
         self.ui_controller.clear_captured_output()
         assert len(self.ui_controller.get_captured_output()) == 0
 
-    @patch('os.system')
+    @patch("os.system")
     def test_clear_screen(self, mock_system):
         """Test clearing screen."""
         ui = UIController()  # Not capturing output
@@ -455,6 +444,6 @@ class TestUIController:
 
     def test_clear_screen_with_capture(self):
         """Test that clear screen doesn't call os.system when capturing output."""
-        with patch('os.system') as mock_system:
+        with patch("os.system") as mock_system:
             self.ui_controller.clear_screen()  # This one is capturing output
             mock_system.assert_not_called()

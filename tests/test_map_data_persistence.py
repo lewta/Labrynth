@@ -21,11 +21,7 @@ class TestMapDataPersistence:
             current_chamber=1,
             player_health=100,
             visited_chambers={1, 2, 3},
-            discovered_connections={
-                1: {"north": 2, "east": 3},
-                2: {"south": 1},
-                3: {"west": 1}
-            }
+            discovered_connections={1: {"north": 2, "east": 3}, 2: {"south": 1}, 3: {"west": 1}},
         )
 
         assert game_state.visited_chambers == {1, 2, 3}
@@ -37,10 +33,7 @@ class TestMapDataPersistence:
         """Test GameState validation with map data."""
         # Valid game state should not raise exception
         valid_state = GameState(
-            current_chamber=1,
-            player_health=100,
-            visited_chambers={1, 2},
-            discovered_connections={1: {"north": 2}}
+            current_chamber=1, player_health=100, visited_chambers={1, 2}, discovered_connections={1: {"north": 2}}
         )
         valid_state.validate()  # Should not raise
 
@@ -50,7 +43,7 @@ class TestMapDataPersistence:
                 current_chamber=1,
                 player_health=100,
                 visited_chambers={0, -1},  # Invalid chamber IDs
-                discovered_connections={}
+                discovered_connections={},
             )
 
         # Invalid discovered connections
@@ -59,7 +52,7 @@ class TestMapDataPersistence:
                 current_chamber=1,
                 player_health=100,
                 visited_chambers={1},
-                discovered_connections={1: {"": 2}}  # Empty direction
+                discovered_connections={1: {"": 2}},  # Empty direction
             )
 
     def test_save_game_includes_map_data(self):
@@ -90,50 +83,39 @@ class TestMapDataPersistence:
 
             # Load and verify the saved data contains map information
             import json
+
             with open(save_path) as f:
                 save_data = json.load(f)
 
-            game_data = save_data['game_state']
-            assert 'visited_chambers' in game_data
-            assert 'discovered_connections' in game_data
-            assert set(game_data['visited_chambers']) == {1, 2}
-            assert game_data['discovered_connections']['1'] == {"north": 2}
-            assert game_data['discovered_connections']['2'] == {"south": 1, "east": 3}
+            game_data = save_data["game_state"]
+            assert "visited_chambers" in game_data
+            assert "discovered_connections" in game_data
+            assert set(game_data["visited_chambers"]) == {1, 2}
+            assert game_data["discovered_connections"]["1"] == {"north": 2}
+            assert game_data["discovered_connections"]["2"] == {"south": 1, "east": 3}
 
     def test_load_game_restores_map_data(self):
         """Test that loading a game restores map data."""
         with tempfile.TemporaryDirectory() as temp_dir:
             # Create a save file with map data
             save_data = {
-                "metadata": {
-                    "version": "1.0",
-                    "timestamp": "2024-01-01T00:00:00",
-                    "chamber_count": 3
-                },
+                "metadata": {"version": "1.0", "timestamp": "2024-01-01T00:00:00", "chamber_count": 3},
                 "game_state": {
                     "current_chamber": 2,
                     "player_health": 80,
                     "inventory_items": [],
                     "completed_chambers": [1],
                     "visited_chambers": [1, 2, 3],
-                    "discovered_connections": {
-                        "1": {"north": 2, "east": 3},
-                        "2": {"south": 1},
-                        "3": {"west": 1}
-                    },
+                    "discovered_connections": {"1": {"north": 2, "east": 3}, "2": {"south": 1}, "3": {"west": 1}},
                     "game_time": 300,
-                    "player_stats": {
-                        "strength": 10,
-                        "intelligence": 10,
-                        "dexterity": 10,
-                        "luck": 10
-                    }
-                }
+                    "player_stats": {"strength": 10, "intelligence": 10, "dexterity": 10, "luck": 10},
+                },
             }
 
             save_path = os.path.join(temp_dir, "test_load.json")
             import json
-            with open(save_path, 'w') as f:
+
+            with open(save_path, "w") as f:
                 json.dump(save_data, f)
 
             # Create engine and load the game
@@ -174,7 +156,7 @@ class TestMapDataPersistence:
         chambers = {
             1: Chamber(1, "Start", "Starting chamber"),
             2: Chamber(2, "North", "Northern chamber"),
-            3: Chamber(3, "East", "Eastern chamber")
+            3: Chamber(3, "East", "Eastern chamber"),
         }
 
         # Set up connections
@@ -340,6 +322,6 @@ class TestMapDataPersistence:
             assert len(output) > 0
 
             # Should contain map content
-            output_text = ''.join(output)
+            output_text = "".join(output)
             assert "LABYRINTH MAP" in output_text
             assert "North Chamber" in output_text  # Current location

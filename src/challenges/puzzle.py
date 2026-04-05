@@ -10,6 +10,7 @@ from src.utils.data_models import ChallengeResult, Item
 
 class PuzzleType(Enum):
     """Types of logic puzzles available."""
+
     SEQUENCE = "sequence"
     LOGIC_GRID = "logic_grid"
     MATH_PUZZLE = "math_puzzle"
@@ -19,8 +20,7 @@ class PuzzleType(Enum):
 class PuzzleChallenge(Challenge):
     """An interactive logic puzzle challenge with step-by-step solving."""
 
-    def __init__(self, difficulty: int = 5, puzzle_type: PuzzleType = None,
-                 reward_item: Item = None, **kwargs):
+    def __init__(self, difficulty: int = 5, puzzle_type: PuzzleType = None, reward_item: Item = None, **kwargs):
         """Initialize a puzzle challenge.
 
         Args:
@@ -29,8 +29,8 @@ class PuzzleChallenge(Challenge):
             reward_item: Item to give as reward for solving the puzzle
             **kwargs: Additional arguments
         """
-        name = kwargs.get('name', 'Logic Puzzle')
-        description = kwargs.get('description', 'A challenging logic puzzle that tests your reasoning')
+        name = kwargs.get("name", "Logic Puzzle")
+        description = kwargs.get("description", "A challenging logic puzzle that tests your reasoning")
 
         super().__init__(name, description, difficulty)
 
@@ -47,7 +47,7 @@ class PuzzleChallenge(Challenge):
         # Initialize puzzle state
         self.puzzle_data = self._generate_puzzle()
         self.current_step = 0
-        self.max_steps = self.puzzle_data.get('max_steps', 3)
+        self.max_steps = self.puzzle_data.get("max_steps", 3)
         self.player_progress = {}
         self.hints_used = 0
         self.max_hints = 2
@@ -75,7 +75,7 @@ class PuzzleChallenge(Challenge):
             PuzzleType.SEQUENCE: self._generate_sequence_puzzle,
             PuzzleType.LOGIC_GRID: self._generate_logic_grid_puzzle,
             PuzzleType.MATH_PUZZLE: self._generate_math_puzzle,
-            PuzzleType.PATTERN: self._generate_pattern_puzzle
+            PuzzleType.PATTERN: self._generate_pattern_puzzle,
         }
 
         return generators[self.puzzle_type]()
@@ -87,46 +87,54 @@ class PuzzleChallenge(Challenge):
 
             if self.puzzle_type == PuzzleType.SEQUENCE:
                 # Try to get a randomized sequence puzzle
-                puzzle_data = content_loader.get_puzzle(self.difficulty, 'sequence')
-                if puzzle_data and puzzle_data.get('type') == 'sequence':
-                    self.puzzle_data.update({
-                        'sequence': puzzle_data.get('sequence', self.puzzle_data['sequence']),
-                        'answer': puzzle_data.get('answer', self.puzzle_data['answer']),
-                        'rule': puzzle_data.get('rule', self.puzzle_data['rule']),
-                        'description': puzzle_data.get('description', self.puzzle_data['description'])
-                    })
+                puzzle_data = content_loader.get_puzzle(self.difficulty, "sequence")
+                if puzzle_data and puzzle_data.get("type") == "sequence":
+                    self.puzzle_data.update(
+                        {
+                            "sequence": puzzle_data.get("sequence", self.puzzle_data["sequence"]),
+                            "answer": puzzle_data.get("answer", self.puzzle_data["answer"]),
+                            "rule": puzzle_data.get("rule", self.puzzle_data["rule"]),
+                            "description": puzzle_data.get("description", self.puzzle_data["description"]),
+                        }
+                    )
 
             elif self.puzzle_type == PuzzleType.LOGIC_GRID:
                 # Try to get a randomized logic grid puzzle
-                puzzle_data = content_loader.get_puzzle(self.difficulty, 'logic_grid')
-                if puzzle_data and puzzle_data.get('type') == 'logic_grid':
-                    self.puzzle_data.update({
-                        'description': puzzle_data.get('description', self.puzzle_data['description']),
-                        'clues': puzzle_data.get('clues', self.puzzle_data['clues']),
-                        'questions': puzzle_data.get('questions', self.puzzle_data['questions']),
-                        'answers': puzzle_data.get('answers', self.puzzle_data['answers'])
-                    })
+                puzzle_data = content_loader.get_puzzle(self.difficulty, "logic_grid")
+                if puzzle_data and puzzle_data.get("type") == "logic_grid":
+                    self.puzzle_data.update(
+                        {
+                            "description": puzzle_data.get("description", self.puzzle_data["description"]),
+                            "clues": puzzle_data.get("clues", self.puzzle_data["clues"]),
+                            "questions": puzzle_data.get("questions", self.puzzle_data["questions"]),
+                            "answers": puzzle_data.get("answers", self.puzzle_data["answers"]),
+                        }
+                    )
 
             elif self.puzzle_type == PuzzleType.MATH_PUZZLE:
                 # Try to get a randomized math puzzle
-                puzzle_data = content_loader.get_puzzle(self.difficulty, 'math_puzzle')
-                if puzzle_data and puzzle_data.get('type') == 'math_puzzle':
-                    self.puzzle_data.update({
-                        'description': puzzle_data.get('description', self.puzzle_data['description']),
-                        'answer': puzzle_data.get('answer', self.puzzle_data['answer']),
-                        'explanation': puzzle_data.get('explanation', self.puzzle_data.get('explanation', ''))
-                    })
+                puzzle_data = content_loader.get_puzzle(self.difficulty, "math_puzzle")
+                if puzzle_data and puzzle_data.get("type") == "math_puzzle":
+                    self.puzzle_data.update(
+                        {
+                            "description": puzzle_data.get("description", self.puzzle_data["description"]),
+                            "answer": puzzle_data.get("answer", self.puzzle_data["answer"]),
+                            "explanation": puzzle_data.get("explanation", self.puzzle_data.get("explanation", "")),
+                        }
+                    )
 
             elif self.puzzle_type == PuzzleType.PATTERN:
                 # Try to get a randomized pattern puzzle
-                puzzle_data = content_loader.get_puzzle(self.difficulty, 'pattern')
-                if puzzle_data and puzzle_data.get('type') == 'pattern':
-                    self.puzzle_data.update({
-                        'description': puzzle_data.get('description', self.puzzle_data['description']),
-                        'pattern': puzzle_data.get('pattern', self.puzzle_data['pattern']),
-                        'answer': puzzle_data.get('answer', self.puzzle_data['answer']),
-                        'rule': puzzle_data.get('rule', self.puzzle_data['rule'])
-                    })
+                puzzle_data = content_loader.get_puzzle(self.difficulty, "pattern")
+                if puzzle_data and puzzle_data.get("type") == "pattern":
+                    self.puzzle_data.update(
+                        {
+                            "description": puzzle_data.get("description", self.puzzle_data["description"]),
+                            "pattern": puzzle_data.get("pattern", self.puzzle_data["pattern"]),
+                            "answer": puzzle_data.get("answer", self.puzzle_data["answer"]),
+                            "rule": puzzle_data.get("rule", self.puzzle_data["rule"]),
+                        }
+                    )
 
         except Exception:
             # If randomization fails, keep the default generated puzzle
@@ -139,7 +147,7 @@ class PuzzleChallenge(Challenge):
             2: {"sequence": [1, 4, 9, 16, "?"], "answer": "25", "rule": "perfect squares"},
             3: {"sequence": [1, 1, 2, 3, 5, "?"], "answer": "8", "rule": "Fibonacci sequence"},
             4: {"sequence": [2, 6, 12, 20, "?"], "answer": "30", "rule": "n(n+1)"},
-            5: {"sequence": [1, 4, 7, 10, "?"], "answer": "13", "rule": "add 3 each time"}
+            5: {"sequence": [1, 4, 7, 10, "?"], "answer": "13", "rule": "add 3 each time"},
         }
 
         difficulty_key = min(max(self.difficulty, 1), 5)
@@ -151,7 +159,7 @@ class PuzzleChallenge(Challenge):
             "answer": base_puzzle["answer"],
             "rule": base_puzzle["rule"],
             "max_steps": 1,
-            "description": f"Complete the sequence: {', '.join(map(str, base_puzzle['sequence']))}"
+            "description": f"Complete the sequence: {', '.join(map(str, base_puzzle['sequence']))}",
         }
 
     def _generate_logic_grid_puzzle(self) -> dict[str, Any]:
@@ -163,16 +171,16 @@ class PuzzleChallenge(Challenge):
                 "Alice doesn't live in the red house",
                 "The person with the cat lives in the blue house",
                 "Bob has the dog",
-                "Carol doesn't live in the green house"
+                "Carol doesn't live in the green house",
             ],
             "questions": [
                 "Who lives in the red house?",
                 "What pet does Alice have?",
-                "What color house does Bob live in?"
+                "What color house does Bob live in?",
             ],
             "answers": ["Carol", "bird", "green"],
             "max_steps": 3,
-            "current_question": 0
+            "current_question": 0,
         }
 
     def _generate_math_puzzle(self) -> dict[str, Any]:
@@ -181,18 +189,18 @@ class PuzzleChallenge(Challenge):
             6: {
                 "description": "If 2 cats catch 2 mice in 2 minutes, how many cats are needed to catch 100 mice in 50 minutes?",
                 "answer": "4",
-                "explanation": "Rate is 1 cat per 1 mouse per 2 minutes. In 50 minutes, 1 cat catches 25 mice. So 4 cats catch 100 mice."
+                "explanation": "Rate is 1 cat per 1 mouse per 2 minutes. In 50 minutes, 1 cat catches 25 mice. So 4 cats catch 100 mice.",
             },
             7: {
                 "description": "A farmer has chickens and rabbits. There are 35 heads and 94 feet total. How many chickens are there?",
                 "answer": "23",
-                "explanation": "Let c=chickens, r=rabbits. c+r=35, 2c+4r=94. Solving: r=12, c=23."
+                "explanation": "Let c=chickens, r=rabbits. c+r=35, 2c+4r=94. Solving: r=12, c=23.",
             },
             8: {
                 "description": "In a race, you overtake the person in 2nd place. What position are you in now?",
                 "answer": "2nd",
-                "explanation": "If you overtake the person in 2nd place, you take their position."
-            }
+                "explanation": "If you overtake the person in 2nd place, you take their position.",
+            },
         }
 
         difficulty_key = min(max(self.difficulty, 6), 8)
@@ -203,7 +211,7 @@ class PuzzleChallenge(Challenge):
             "description": puzzle["description"],
             "answer": puzzle["answer"],
             "explanation": puzzle["explanation"],
-            "max_steps": 1
+            "max_steps": 1,
         }
 
     def _generate_pattern_puzzle(self) -> dict[str, Any]:
@@ -213,28 +221,24 @@ class PuzzleChallenge(Challenge):
             1: {
                 "pattern": ["○", "○", "△", "○", "○", "?"],
                 "answer": "△",
-                "rule": "alternating pattern: two circles, one triangle"
+                "rule": "alternating pattern: two circles, one triangle",
             },
-            2: {
-                "pattern": ["△", "□", "△", "□", "△", "?"],
-                "answer": "□",
-                "rule": "alternating triangle and square"
-            },
+            2: {"pattern": ["△", "□", "△", "□", "△", "?"], "answer": "□", "rule": "alternating triangle and square"},
             3: {
                 "pattern": ["△", "□", "○", "△", "□", "?"],
                 "answer": "○",
-                "rule": "repeating sequence of triangle, square, circle"
+                "rule": "repeating sequence of triangle, square, circle",
             },
             4: {
                 "pattern": ["○", "△", "△", "○", "△", "?"],
                 "answer": "△",
-                "rule": "pattern: circle, two triangles, repeat"
+                "rule": "pattern: circle, two triangles, repeat",
             },
             5: {
                 "pattern": ["□", "○", "△", "□", "○", "?"],
                 "answer": "△",
-                "rule": "repeating sequence of square, circle, triangle"
-            }
+                "rule": "repeating sequence of square, circle, triangle",
+            },
         }
 
         # Select pattern based on difficulty, default to medium if out of range
@@ -250,14 +254,20 @@ class PuzzleChallenge(Challenge):
             "pattern": selected_pattern["pattern"],
             "answer": selected_pattern["answer"],
             "rule": selected_pattern["rule"],
-            "max_steps": 1
+            "max_steps": 1,
         }
 
     def _get_default_reward(self) -> Item:
         """Get a default reward item."""
         reward_names = [
-            "Logic Crystal", "Puzzle Box", "Mind Gem", "Wisdom Stone",
-            "Clever Key", "Brain Teaser", "Smart Token", "Riddle Rune"
+            "Logic Crystal",
+            "Puzzle Box",
+            "Mind Gem",
+            "Wisdom Stone",
+            "Clever Key",
+            "Brain Teaser",
+            "Smart Token",
+            "Riddle Rune",
         ]
 
         reward_name = reward_names[self.difficulty % len(reward_names)]
@@ -266,7 +276,7 @@ class PuzzleChallenge(Challenge):
             name=reward_name,
             description=f"A valuable {reward_name.lower()} earned by solving a challenging puzzle",
             item_type="treasure",
-            value=self.difficulty * 15  # Slightly higher value than riddles
+            value=self.difficulty * 15,  # Slightly higher value than riddles
         )
 
     def present_challenge(self) -> str:
@@ -282,11 +292,11 @@ class PuzzleChallenge(Challenge):
         elif self.puzzle_type == PuzzleType.LOGIC_GRID:
             presentation += f"{self.puzzle_data['description']}\n\n"
             presentation += "Clues:\n"
-            for i, clue in enumerate(self.puzzle_data['clues'], 1):
+            for i, clue in enumerate(self.puzzle_data["clues"], 1):
                 presentation += f"{i}. {clue}\n"
 
-            current_q = self.puzzle_data['current_question']
-            if current_q < len(self.puzzle_data['questions']):
+            current_q = self.puzzle_data["current_question"]
+            if current_q < len(self.puzzle_data["questions"]):
                 presentation += f"\nQuestion {current_q + 1}: {self.puzzle_data['questions'][current_q]}\n"
                 presentation += "Your answer: "
             else:
@@ -297,10 +307,12 @@ class PuzzleChallenge(Challenge):
             presentation += "Your answer: "
 
         elif self.puzzle_type == PuzzleType.PATTERN:
-            pattern_str = " ".join(self.puzzle_data['pattern'])
+            pattern_str = " ".join(self.puzzle_data["pattern"])
             presentation += f"{self.puzzle_data['description']}\n"
             presentation += f"{pattern_str}\n\n"
-            presentation += "What comes next? (You can type the symbol or shape name like 'circle', 'triangle', 'square') "
+            presentation += (
+                "What comes next? (You can type the symbol or shape name like 'circle', 'triangle', 'square') "
+            )
 
         # Add hint information
         if self.hints_used < self.max_hints:
@@ -334,10 +346,7 @@ class PuzzleChallenge(Challenge):
         elif self.puzzle_type == PuzzleType.PATTERN:
             return self._process_pattern_answer(response)
 
-        return ChallengeResult(
-            success=False,
-            message="Unable to process your response. Please try again."
-        )
+        return ChallengeResult(success=False, message="Unable to process your response. Please try again.")
 
     def _provide_hint(self) -> ChallengeResult:
         """Provide a hint for the current puzzle."""
@@ -347,92 +356,79 @@ class PuzzleChallenge(Challenge):
             PuzzleType.SEQUENCE: f"Think about the rule: {self.puzzle_data.get('rule', 'look for a pattern')}",
             PuzzleType.LOGIC_GRID: "Try to eliminate possibilities using the clues systematically.",
             PuzzleType.MATH_PUZZLE: "Break the problem down into smaller parts and think step by step.",
-            PuzzleType.PATTERN: f"The pattern follows: {self.puzzle_data.get('rule', 'a repeating sequence')}"
+            PuzzleType.PATTERN: f"The pattern follows: {self.puzzle_data.get('rule', 'a repeating sequence')}",
         }
 
         hint_message = hints.get(self.puzzle_type, "Look for patterns and relationships.")
 
-        return ChallengeResult(
-            success=False,
-            message=f"Hint: {hint_message}",
-            is_intermediate=True
-        )
+        return ChallengeResult(success=False, message=f"Hint: {hint_message}", is_intermediate=True)
 
     def _process_sequence_answer(self, response: str) -> ChallengeResult:
         """Process answer for sequence puzzle."""
-        correct_answer = self.puzzle_data['answer'].lower()
+        correct_answer = self.puzzle_data["answer"].lower()
 
         if response == correct_answer:
             self.mark_completed()
             return ChallengeResult(
                 success=True,
                 message=f"Correct! The answer is {self.puzzle_data['answer']}. The rule was: {self.puzzle_data['rule']}.",
-                reward=self.reward_item
+                reward=self.reward_item,
             )
         else:
             return ChallengeResult(
-                success=False,
-                message="That's not correct. The sequence follows a specific mathematical rule."
+                success=False, message="That's not correct. The sequence follows a specific mathematical rule."
             )
 
     def _process_logic_grid_answer(self, response: str) -> ChallengeResult:
         """Process answer for logic grid puzzle."""
-        current_q = self.puzzle_data['current_question']
-        correct_answer = self.puzzle_data['answers'][current_q].lower()
+        current_q = self.puzzle_data["current_question"]
+        correct_answer = self.puzzle_data["answers"][current_q].lower()
 
         if response == correct_answer:
-            self.puzzle_data['current_question'] += 1
+            self.puzzle_data["current_question"] += 1
 
-            if self.puzzle_data['current_question'] >= len(self.puzzle_data['questions']):
+            if self.puzzle_data["current_question"] >= len(self.puzzle_data["questions"]):
                 # All questions answered
                 self.mark_completed()
                 return ChallengeResult(
-                    success=True,
-                    message="Excellent! You've solved the entire logic puzzle!",
-                    reward=self.reward_item
+                    success=True, message="Excellent! You've solved the entire logic puzzle!", reward=self.reward_item
                 )
             else:
                 return ChallengeResult(
                     success=False,  # Not fully complete yet
                     message="Correct! Moving to the next question...",
-                    is_intermediate=True
+                    is_intermediate=True,
                 )
         else:
             return ChallengeResult(
-                success=False,
-                message="That's not correct. Use the clues to eliminate possibilities."
+                success=False, message="That's not correct. Use the clues to eliminate possibilities."
             )
 
     def _process_math_answer(self, response: str) -> ChallengeResult:
         """Process answer for math puzzle."""
-        correct_answer = self.puzzle_data['answer'].lower()
+        correct_answer = self.puzzle_data["answer"].lower()
 
         if response == correct_answer:
             self.mark_completed()
             return ChallengeResult(
-                success=True,
-                message=f"Correct! {self.puzzle_data['explanation']}",
-                reward=self.reward_item
+                success=True, message=f"Correct! {self.puzzle_data['explanation']}", reward=self.reward_item
             )
         else:
-            return ChallengeResult(
-                success=False,
-                message="That's not correct. Think about the problem step by step."
-            )
+            return ChallengeResult(success=False, message="That's not correct. Think about the problem step by step.")
 
     def _process_pattern_answer(self, response: str) -> ChallengeResult:
         """Process answer for pattern puzzle."""
-        correct_answer = self.puzzle_data['answer'].lower()
+        correct_answer = self.puzzle_data["answer"].lower()
         response_lower = response.lower().strip()
 
         # Create a mapping of symbols to word names
         symbol_to_word = {
-            '○': 'circle',
-            '△': 'triangle',
-            '□': 'square',
-            '^': 'triangle',  # ASCII alternative
-            'o': 'circle',    # ASCII alternative
-            '#': 'square'     # ASCII alternative
+            "○": "circle",
+            "△": "triangle",
+            "□": "square",
+            "^": "triangle",  # ASCII alternative
+            "o": "circle",  # ASCII alternative
+            "#": "square",  # ASCII alternative
         }
 
         # Create reverse mapping
@@ -442,20 +438,25 @@ class PuzzleChallenge(Challenge):
         is_correct = False
 
         # Direct symbol match
-        if response_lower == correct_answer or response_lower == correct_answer.replace('○', 'o').replace('△', '^').replace('□', '#') or correct_answer in symbol_to_word and response_lower == symbol_to_word[correct_answer] or response_lower in word_to_symbol and word_to_symbol[response_lower] == correct_answer:
+        if (
+            response_lower == correct_answer
+            or response_lower == correct_answer.replace("○", "o").replace("△", "^").replace("□", "#")
+            or correct_answer in symbol_to_word
+            and response_lower == symbol_to_word[correct_answer]
+            or response_lower in word_to_symbol
+            and word_to_symbol[response_lower] == correct_answer
+        ):
             is_correct = True
 
         if is_correct:
             self.mark_completed()
             return ChallengeResult(
-                success=True,
-                message=f"Correct! The pattern was: {self.puzzle_data['rule']}",
-                reward=self.reward_item
+                success=True, message=f"Correct! The pattern was: {self.puzzle_data['rule']}", reward=self.reward_item
             )
         else:
             return ChallengeResult(
                 success=False,
-                message="That's not correct. Look carefully at the repeating pattern. You can type the symbol or the name of the shape."
+                message="That's not correct. Look carefully at the repeating pattern. You can type the symbol or the name of the shape.",
             )
 
     def get_reward(self) -> Item | None:
@@ -475,7 +476,7 @@ class PuzzleChallenge(Challenge):
 
         # Reset puzzle-specific state
         if self.puzzle_type == PuzzleType.LOGIC_GRID:
-            self.puzzle_data['current_question'] = 0
+            self.puzzle_data["current_question"] = 0
 
     def get_progress(self) -> dict[str, Any]:
         """Get current progress information.
@@ -489,11 +490,11 @@ class PuzzleChallenge(Challenge):
             "max_steps": self.max_steps,
             "hints_used": self.hints_used,
             "max_hints": self.max_hints,
-            "completed": self.completed
+            "completed": self.completed,
         }
 
         if self.puzzle_type == PuzzleType.LOGIC_GRID:
-            progress["questions_answered"] = self.puzzle_data['current_question']
-            progress["total_questions"] = len(self.puzzle_data['questions'])
+            progress["questions_answered"] = self.puzzle_data["current_question"]
+            progress["total_questions"] = len(self.puzzle_data["questions"])
 
         return progress

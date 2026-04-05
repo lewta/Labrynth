@@ -1,6 +1,5 @@
 """Tests for labyrinth generation and randomization."""
 
-
 import pytest
 
 from src.utils.exceptions import GameException
@@ -37,7 +36,7 @@ class TestGenerationConfig:
             ensure_solvable=False,
             min_path_length=3,
             max_dead_ends=5,
-            seed=42
+            seed=42,
         )
 
         assert config.chamber_count == 10
@@ -143,13 +142,7 @@ class TestLabyrinthGenerator:
     def test_ensure_solvability(self):
         """Test solvability enforcement."""
         # Create a disconnected layout
-        connections = {
-            1: {"east": 2},
-            2: {"west": 1},
-            3: {"east": 4},
-            4: {"west": 3},
-            5: {}
-        }
+        connections = {1: {"east": 2}, 2: {"west": 1}, 3: {"east": 4}, 4: {"west": 3}, 5: {}}
 
         # Should connect all chambers
         fixed_connections = self.generator._ensure_solvability(connections)
@@ -158,13 +151,7 @@ class TestLabyrinthGenerator:
 
     def test_get_reachable_chambers(self):
         """Test reachable chamber detection."""
-        connections = {
-            1: {"east": 2},
-            2: {"west": 1, "north": 3},
-            3: {"south": 2},
-            4: {"east": 5},
-            5: {"west": 4}
-        }
+        connections = {1: {"east": 2}, 2: {"west": 1, "north": 3}, 3: {"south": 2}, 4: {"east": 5}, 5: {"west": 4}}
 
         reachable = self.generator._get_reachable_chambers(connections, 1)
         assert reachable == {1, 2, 3}
@@ -180,7 +167,7 @@ class TestLabyrinthGenerator:
             2: {"west": 1, "east": 3},
             3: {"west": 2, "east": 4},
             4: {"west": 3, "east": 5},
-            5: {"west": 4}
+            5: {"west": 4},
         }
 
         # Add connectivity
@@ -195,42 +182,27 @@ class TestLabyrinthGenerator:
     def test_validate_generated_labyrinth(self):
         """Test labyrinth validation."""
         # Valid labyrinth
-        valid_connections = {
-            1: {"east": 2},
-            2: {"west": 1, "east": 3},
-            3: {"west": 2}
-        }
+        valid_connections = {1: {"east": 2}, 2: {"west": 1, "east": 3}, 3: {"west": 2}}
 
         # Should not raise exception
         self.config.chamber_count = 3
         self.generator._validate_generated_labyrinth(valid_connections)
 
         # Invalid labyrinth - missing chamber
-        invalid_connections = {
-            1: {"east": 2},
-            2: {"west": 1}
-        }
+        invalid_connections = {1: {"east": 2}, 2: {"west": 1}}
 
         with pytest.raises(GameException, match="missing chambers"):
             self.generator._validate_generated_labyrinth(invalid_connections)
 
         # Invalid labyrinth - unreachable chamber
-        unreachable_connections = {
-            1: {"east": 2},
-            2: {"west": 1},
-            3: {}
-        }
+        unreachable_connections = {1: {"east": 2}, 2: {"west": 1}, 3: {}}
 
         with pytest.raises(GameException, match="unreachable chambers"):
             self.generator._validate_generated_labyrinth(unreachable_connections)
 
     def test_create_chamber_data(self):
         """Test chamber data creation."""
-        connections = {
-            1: {"east": 2},
-            2: {"west": 1, "east": 3},
-            3: {"west": 2}
-        }
+        connections = {1: {"east": 2}, 2: {"west": 1, "east": 3}, 3: {"west": 2}}
 
         chamber_data = self.generator._create_chamber_data(connections)
 
@@ -301,21 +273,20 @@ class TestLabyrinthGenerator:
 class TestLabyrinthLayouts:
     """Test different labyrinth layouts."""
 
-    @pytest.mark.parametrize("layout", [
-        LabyrinthLayout.LINEAR,
-        LabyrinthLayout.CIRCULAR,
-        LabyrinthLayout.TREE,
-        LabyrinthLayout.GRID,
-        LabyrinthLayout.RANDOM,
-        LabyrinthLayout.HYBRID
-    ])
+    @pytest.mark.parametrize(
+        "layout",
+        [
+            LabyrinthLayout.LINEAR,
+            LabyrinthLayout.CIRCULAR,
+            LabyrinthLayout.TREE,
+            LabyrinthLayout.GRID,
+            LabyrinthLayout.RANDOM,
+            LabyrinthLayout.HYBRID,
+        ],
+    )
     def test_all_layouts_generate_solvable_labyrinths(self, layout):
         """Test that all layouts generate solvable labyrinths."""
-        config = GenerationConfig(
-            chamber_count=8,
-            layout=layout,
-            seed=42
-        )
+        config = GenerationConfig(chamber_count=8, layout=layout, seed=42)
 
         generator = LabyrinthGenerator(config)
         labyrinth = generator.generate_labyrinth()
@@ -339,11 +310,7 @@ class TestLabyrinthLayouts:
     def test_different_connectivity_levels(self):
         """Test generation with different connectivity levels."""
         for connectivity in [0.0, 0.2, 0.5, 0.8, 1.0]:
-            config = GenerationConfig(
-                chamber_count=8,
-                connectivity=connectivity,
-                seed=42
-            )
+            config = GenerationConfig(chamber_count=8, connectivity=connectivity, seed=42)
 
             generator = LabyrinthGenerator(config)
             labyrinth = generator.generate_labyrinth()
@@ -356,12 +323,7 @@ class TestUtilityFunctions:
 
     def test_create_randomized_labyrinth(self):
         """Test convenience function for creating randomized labyrinths."""
-        labyrinth = create_randomized_labyrinth(
-            chamber_count=7,
-            layout="linear",
-            connectivity=0.2,
-            seed=42
-        )
+        labyrinth = create_randomized_labyrinth(chamber_count=7, layout="linear", connectivity=0.2, seed=42)
 
         assert len(labyrinth["chambers"]) == 7
         assert labyrinth["generation_info"]["layout"] == "linear"
@@ -374,22 +336,10 @@ class TestUtilityFunctions:
         valid_labyrinth = {
             "starting_chamber": 1,
             "chambers": {
-                "1": {
-                    "name": "Start",
-                    "description": "Starting chamber",
-                    "connections": {"east": 2}
-                },
-                "2": {
-                    "name": "Middle",
-                    "description": "Middle chamber",
-                    "connections": {"west": 1, "east": 3}
-                },
-                "3": {
-                    "name": "End",
-                    "description": "End chamber",
-                    "connections": {"west": 2}
-                }
-            }
+                "1": {"name": "Start", "description": "Starting chamber", "connections": {"east": 2}},
+                "2": {"name": "Middle", "description": "Middle chamber", "connections": {"west": 1, "east": 3}},
+                "3": {"name": "End", "description": "End chamber", "connections": {"west": 2}},
+            },
         }
 
         assert validate_labyrinth_solvability(valid_labyrinth) is True
@@ -400,22 +350,10 @@ class TestUtilityFunctions:
         invalid_labyrinth = {
             "starting_chamber": 1,
             "chambers": {
-                "1": {
-                    "name": "Start",
-                    "description": "Starting chamber",
-                    "connections": {"east": 2}
-                },
-                "2": {
-                    "name": "Middle",
-                    "description": "Middle chamber",
-                    "connections": {"west": 1}
-                },
-                "3": {
-                    "name": "Unreachable",
-                    "description": "Unreachable chamber",
-                    "connections": {}
-                }
-            }
+                "1": {"name": "Start", "description": "Starting chamber", "connections": {"east": 2}},
+                "2": {"name": "Middle", "description": "Middle chamber", "connections": {"west": 1}},
+                "3": {"name": "Unreachable", "description": "Unreachable chamber", "connections": {}},
+            },
         }
 
         assert validate_labyrinth_solvability(invalid_labyrinth) is False
@@ -452,11 +390,7 @@ class TestEdgeCases:
 
     def test_zero_connectivity(self):
         """Test zero connectivity (minimal connections)."""
-        config = GenerationConfig(
-            chamber_count=8,
-            connectivity=0.0,
-            seed=42
-        )
+        config = GenerationConfig(chamber_count=8, connectivity=0.0, seed=42)
 
         generator = LabyrinthGenerator(config)
         labyrinth = generator.generate_labyrinth()
@@ -465,10 +399,7 @@ class TestEdgeCases:
         assert validate_labyrinth_solvability(labyrinth)
 
         # Should have minimal connections
-        total_connections = sum(
-            len(chamber_data["connections"])
-            for chamber_data in labyrinth["chambers"].values()
-        )
+        total_connections = sum(len(chamber_data["connections"]) for chamber_data in labyrinth["chambers"].values())
 
         # Should be close to minimal (2 * (n-1) for tree structure)
         expected_minimal = 2 * (8 - 1)
@@ -476,11 +407,7 @@ class TestEdgeCases:
 
     def test_maximum_connectivity(self):
         """Test maximum connectivity."""
-        config = GenerationConfig(
-            chamber_count=6,
-            connectivity=1.0,
-            seed=42
-        )
+        config = GenerationConfig(chamber_count=6, connectivity=1.0, seed=42)
 
         generator = LabyrinthGenerator(config)
         labyrinth = generator.generate_labyrinth()
@@ -488,10 +415,7 @@ class TestEdgeCases:
         assert validate_labyrinth_solvability(labyrinth)
 
         # Should have many connections
-        total_connections = sum(
-            len(chamber_data["connections"])
-            for chamber_data in labyrinth["chambers"].values()
-        )
+        total_connections = sum(len(chamber_data["connections"]) for chamber_data in labyrinth["chambers"].values())
 
         # Should be significantly more than minimal
         minimal_connections = 2 * (6 - 1)

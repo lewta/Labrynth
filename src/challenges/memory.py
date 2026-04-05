@@ -12,30 +12,29 @@ class MemoryChallenge(Challenge):
 
     # Different types of memory challenges
     MEMORY_TYPES = {
-        'sequence': {
-            'name': 'Sequence Memory',
-            'description': 'Remember and repeat a sequence of symbols',
-            'symbols': ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
+        "sequence": {
+            "name": "Sequence Memory",
+            "description": "Remember and repeat a sequence of symbols",
+            "symbols": ["A", "B", "C", "D", "E", "F", "G", "H"],
         },
-        'pattern': {
-            'name': 'Pattern Memory',
-            'description': 'Remember the positions of symbols in a grid',
-            'symbols': ['*', '#', '@', '%', '&', '+', '=', '~']
+        "pattern": {
+            "name": "Pattern Memory",
+            "description": "Remember the positions of symbols in a grid",
+            "symbols": ["*", "#", "@", "%", "&", "+", "=", "~"],
         },
-        'color': {
-            'name': 'Color Memory',
-            'description': 'Remember a sequence of colors',
-            'symbols': ['Red', 'Blue', 'Green', 'Yellow', 'Purple', 'Orange', 'Pink', 'Cyan']
+        "color": {
+            "name": "Color Memory",
+            "description": "Remember a sequence of colors",
+            "symbols": ["Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Pink", "Cyan"],
         },
-        'number': {
-            'name': 'Number Memory',
-            'description': 'Remember a sequence of numbers',
-            'symbols': ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-        }
+        "number": {
+            "name": "Number Memory",
+            "description": "Remember a sequence of numbers",
+            "symbols": ["1", "2", "3", "4", "5", "6", "7", "8", "9"],
+        },
     }
 
-    def __init__(self, difficulty: int = 5, memory_type: str = None,
-                 reward_item: Item = None, **kwargs):
+    def __init__(self, difficulty: int = 5, memory_type: str = None, reward_item: Item = None, **kwargs):
         """Initialize a memory challenge.
 
         Args:
@@ -54,8 +53,8 @@ class MemoryChallenge(Challenge):
         self.memory_type = memory_type
         memory_info = self.MEMORY_TYPES[memory_type]
 
-        name = kwargs.get('name', memory_info['name'])
-        description = kwargs.get('description', memory_info['description'])
+        name = kwargs.get("name", memory_info["name"])
+        description = kwargs.get("description", memory_info["description"])
 
         super().__init__(name, description, difficulty)
 
@@ -65,7 +64,7 @@ class MemoryChallenge(Challenge):
         self.sequence_length = self._calculate_sequence_length()
         self.current_sequence = []
         self.player_response = []
-        self.phase = 'presentation'  # 'presentation', 'input', 'complete'
+        self.phase = "presentation"  # 'presentation', 'input', 'complete'
         self.show_time = self._calculate_show_time()
 
         # Generate the challenge
@@ -97,9 +96,9 @@ class MemoryChallenge(Challenge):
     def _generate_challenge(self) -> None:
         """Generate the memory challenge sequence or pattern."""
         memory_info = self.MEMORY_TYPES[self.memory_type]
-        symbols = memory_info['symbols']
+        symbols = memory_info["symbols"]
 
-        if self.memory_type == 'pattern':
+        if self.memory_type == "pattern":
             # For pattern memory, create a grid with symbols
             self._generate_pattern_challenge(symbols)
         else:
@@ -145,7 +144,7 @@ class MemoryChallenge(Challenge):
 
         # Create grid
         self.grid_size = grid_size
-        self.pattern_grid = [[' ' for _ in range(grid_size)] for _ in range(grid_size)]
+        self.pattern_grid = [[" " for _ in range(grid_size)] for _ in range(grid_size)]
 
         # Place symbols randomly
         positions = [(r, c) for r in range(grid_size) for c in range(grid_size)]
@@ -160,8 +159,14 @@ class MemoryChallenge(Challenge):
     def _get_default_reward(self) -> Item:
         """Get a default reward item based on memory type and difficulty."""
         reward_names = [
-            "Memory Crystal", "Mind Enhancer", "Recall Potion", "Focus Amulet",
-            "Concentration Ring", "Mental Clarity Gem", "Wisdom Stone", "Thought Amplifier"
+            "Memory Crystal",
+            "Mind Enhancer",
+            "Recall Potion",
+            "Focus Amulet",
+            "Concentration Ring",
+            "Mental Clarity Gem",
+            "Wisdom Stone",
+            "Thought Amplifier",
         ]
 
         reward_name = reward_names[min(self.difficulty - 1, len(reward_names) - 1)]
@@ -170,12 +175,12 @@ class MemoryChallenge(Challenge):
             name=reward_name,
             description=f"A {reward_name.lower()} that sharpens your memory and focus",
             item_type="mental_enhancement",
-            value=self.difficulty * 10
+            value=self.difficulty * 10,
         )
 
     def present_challenge(self) -> str:
         """Present the memory challenge to the player."""
-        if self.phase == 'presentation':
+        if self.phase == "presentation":
             presentation = f"\n=== {self.name} ===\n"
             presentation += f"Difficulty: {self.difficulty}/10\n"
             presentation += f"Sequence Length: {len(self.current_sequence)}\n\n"
@@ -195,13 +200,13 @@ class MemoryChallenge(Challenge):
 
             return presentation
 
-        elif self.phase == 'showing':
+        elif self.phase == "showing":
             return self._show_sequence()
 
-        elif self.phase == 'input':
+        elif self.phase == "input":
             presentation = "\nNow enter what you remember!\n\n"
 
-            if self.memory_type == 'pattern':
+            if self.memory_type == "pattern":
                 presentation += "Enter the positions and symbols you saw.\n"
                 presentation += "Format: row,col,symbol (e.g., '1,2,*' for symbol * at row 1, column 2)\n"
                 presentation += "Enter one per line, or separate multiple with semicolons.\n"
@@ -222,29 +227,29 @@ class MemoryChallenge(Challenge):
         Returns:
             String representation of the sequence
         """
-        if self.memory_type == 'pattern':
-            display = "\n" + "="*20 + "\n"
+        if self.memory_type == "pattern":
+            display = "\n" + "=" * 20 + "\n"
             display += "MEMORIZE THIS PATTERN:\n\n"
 
             # Show grid with row/column numbers
             display += "   "
             for c in range(self.grid_size):
-                display += f" {c+1} "
+                display += f" {c + 1} "
             display += "\n"
 
             for r in range(self.grid_size):
-                display += f"{r+1}: "
+                display += f"{r + 1}: "
                 for c in range(self.grid_size):
                     display += f"[{self.pattern_grid[r][c]}]"
                 display += "\n"
 
-            display += "\n" + "="*20 + "\n"
+            display += "\n" + "=" * 20 + "\n"
             display += f"Study this for {self.show_time:.1f} seconds...\n"
         else:
-            display = "\n" + "="*30 + "\n"
+            display = "\n" + "=" * 30 + "\n"
             display += "MEMORIZE THIS SEQUENCE:\n\n"
             display += " -> ".join(self.current_sequence) + "\n\n"
-            display += "="*30 + "\n"
+            display += "=" * 30 + "\n"
             display += f"Study this for {self.show_time:.1f} seconds...\n"
 
         return display
@@ -260,16 +265,16 @@ class MemoryChallenge(Challenge):
         """
         action = response.lower().strip()
 
-        if self.phase == 'presentation':
-            if action == 'ready':
-                self.phase = 'input'  # Go directly to input phase after showing sequence
+        if self.phase == "presentation":
+            if action == "ready":
+                self.phase = "input"  # Go directly to input phase after showing sequence
                 sequence_display = self._show_sequence()
                 # Add clear instructions
-                instructions = "\n\n" + "="*50 + "\n"
+                instructions = "\n\n" + "=" * 50 + "\n"
                 instructions += "SEQUENCE SHOWN ABOVE - NOW ENTER YOUR ANSWER\n"
-                instructions += "="*50 + "\n\n"
+                instructions += "=" * 50 + "\n\n"
 
-                if self.memory_type == 'pattern':
+                if self.memory_type == "pattern":
                     instructions += "Enter the positions and symbols you saw.\n"
                     instructions += "Format: row,col,symbol (e.g., '1,2,*' for symbol * at row 1, column 2)\n"
                     instructions += "Enter one per line, or separate multiple with semicolons.\n"
@@ -280,42 +285,31 @@ class MemoryChallenge(Challenge):
 
                 instructions += "Your answer: "
 
-                return ChallengeResult(
-                    success=False,
-                    message=f"{sequence_display}{instructions}",
-                    is_intermediate=True
-                )
+                return ChallengeResult(success=False, message=f"{sequence_display}{instructions}", is_intermediate=True)
             else:
                 return ChallengeResult(
                     success=False,
                     message="Type 'ready' when you're prepared to see the sequence.",
-                    is_intermediate=True
+                    is_intermediate=True,
                 )
 
-        elif self.phase == 'showing':
+        elif self.phase == "showing":
             # This phase is now skipped, but keep for compatibility
-            if action == 'continue':
-                self.phase = 'input'
-                return ChallengeResult(
-                    success=False,
-                    message=self.present_challenge(),
-                    is_intermediate=True
-                )
+            if action == "continue":
+                self.phase = "input"
+                return ChallengeResult(success=False, message=self.present_challenge(), is_intermediate=True)
             else:
                 return ChallengeResult(
                     success=False,
                     message="Type 'continue' when you've finished studying the sequence.",
-                    is_intermediate=True
+                    is_intermediate=True,
                 )
 
-        elif self.phase == 'input':
+        elif self.phase == "input":
             return self._process_memory_input(response)
 
         else:
-            return ChallengeResult(
-                success=False,
-                message="Challenge is already complete!"
-            )
+            return ChallengeResult(success=False, message="Challenge is already complete!")
 
     def _process_memory_input(self, response: str) -> ChallengeResult:
         """Process the player's memory input.
@@ -328,7 +322,7 @@ class MemoryChallenge(Challenge):
         """
         self.attempts += 1
 
-        if self.memory_type == 'pattern':
+        if self.memory_type == "pattern":
             return self._check_pattern_answer(response)
         else:
             return self._check_sequence_answer(response)
@@ -346,11 +340,11 @@ class MemoryChallenge(Challenge):
         player_sequence = []
 
         # Try different separators
-        if ' -> ' in response:
+        if " -> " in response:
             # Handle the format shown in the display (A -> B -> C)
-            player_sequence = [item.strip() for item in response.split(' -> ')]
-        elif ',' in response:
-            player_sequence = [item.strip() for item in response.split(',')]
+            player_sequence = [item.strip() for item in response.split(" -> ")]
+        elif "," in response:
+            player_sequence = [item.strip() for item in response.split(",")]
         else:
             player_sequence = response.split()
 
@@ -375,31 +369,31 @@ class MemoryChallenge(Challenge):
         if accuracy >= success_threshold:
             # Success!
             self.mark_completed()
-            self.phase = 'complete'
+            self.phase = "complete"
             return ChallengeResult(
                 success=True,
                 message=f"Excellent memory! You got {correct_count}/{total_items} correct ({accuracy:.1f}%).",
-                reward=self.reward_item
+                reward=self.reward_item,
             )
         else:
             # Failure
             remaining_attempts = self.max_attempts - self.attempts
 
             if remaining_attempts > 0:
-                self.phase = 'presentation'  # Reset to try again
+                self.phase = "presentation"  # Reset to try again
                 return ChallengeResult(
                     success=False,
                     message=f"Not quite right. You got {correct_count}/{total_items} correct ({accuracy:.1f}%). "
-                           f"You need at least {success_threshold:.0f}% accuracy. {remaining_attempts} attempt(s) remaining."
+                    f"You need at least {success_threshold:.0f}% accuracy. {remaining_attempts} attempt(s) remaining.",
                 )
             else:
                 # Past attempt limit — reset to presentation so player can study and retry with HP penalty
-                self.phase = 'presentation'
+                self.phase = "presentation"
                 correct_sequence = " -> ".join(self.current_sequence)
                 return ChallengeResult(
                     success=False,
                     message=f"Not quite. The sequence was: {correct_sequence}. Study it again — but the labyrinth exacts a toll.",
-                    damage=8
+                    damage=8,
                 )
 
     def _check_pattern_answer(self, response: str) -> ChallengeResult:
@@ -415,7 +409,7 @@ class MemoryChallenge(Challenge):
         player_patterns = []
 
         # Split by semicolons or newlines
-        entries = response.replace('\n', ';').split(';')
+        entries = response.replace("\n", ";").split(";")
 
         for entry in entries:
             entry = entry.strip()
@@ -423,7 +417,7 @@ class MemoryChallenge(Challenge):
                 continue
 
             # Parse format: row,col,symbol
-            parts = entry.split(',')
+            parts = entry.split(",")
             if len(parts) == 3:
                 try:
                     row = int(parts[0].strip()) - 1  # Convert to 0-based
@@ -452,34 +446,34 @@ class MemoryChallenge(Challenge):
         if accuracy >= success_threshold:
             # Success!
             self.mark_completed()
-            self.phase = 'complete'
+            self.phase = "complete"
             return ChallengeResult(
                 success=True,
                 message=f"Perfect pattern memory! You got {correct_count}/{total_items} positions correct ({accuracy:.1f}%).",
-                reward=self.reward_item
+                reward=self.reward_item,
             )
         else:
             # Failure
             remaining_attempts = self.max_attempts - self.attempts
 
             if remaining_attempts > 0:
-                self.phase = 'presentation'  # Reset to try again
+                self.phase = "presentation"  # Reset to try again
                 return ChallengeResult(
                     success=False,
                     message=f"Pattern not quite right. You got {correct_count}/{total_items} positions correct ({accuracy:.1f}%). "
-                           f"You need at least {success_threshold:.0f}% accuracy. {remaining_attempts} attempt(s) remaining."
+                    f"You need at least {success_threshold:.0f}% accuracy. {remaining_attempts} attempt(s) remaining.",
                 )
             else:
                 # Past attempt limit — reset to presentation so player can study and retry with HP penalty
-                self.phase = 'presentation'
+                self.phase = "presentation"
                 correct_info = []
                 for row, col, symbol in self.current_sequence:
-                    correct_info.append(f"{row+1},{col+1},{symbol}")
+                    correct_info.append(f"{row + 1},{col + 1},{symbol}")
                 correct_pattern = "; ".join(correct_info)
                 return ChallengeResult(
                     success=False,
                     message=f"Not quite. The correct pattern was: {correct_pattern}. Study it again — but the labyrinth exacts a toll.",
-                    damage=8
+                    damage=8,
                 )
 
     def get_reward(self) -> Item | None:
@@ -494,7 +488,7 @@ class MemoryChallenge(Challenge):
         """Reset the memory challenge for a new attempt."""
         self.attempts = 0
         self.completed = False
-        self.phase = 'presentation'
+        self.phase = "presentation"
         self.player_response = []
 
         # Generate new challenge for variety
@@ -514,7 +508,7 @@ class MemoryChallenge(Challenge):
             "max_attempts": self.max_attempts,
             "phase": self.phase,
             "show_time": self.show_time,
-            "completed": self.completed
+            "completed": self.completed,
         }
 
     def get_current_sequence(self) -> list:
@@ -531,5 +525,5 @@ class MemoryChallenge(Challenge):
         Args:
             phase: Phase to set ('presentation', 'showing', 'input', 'complete')
         """
-        if phase in ['presentation', 'showing', 'input', 'complete']:
+        if phase in ["presentation", "showing", "input", "complete"]:
             self.phase = phase

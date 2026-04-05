@@ -11,14 +11,14 @@ class TestMapBorderAlignment:
         renderer = MapRenderer()
         chambers = {
             1: ChamberInfo(1, "Hall", True, False, {"north": 2}),
-            2: ChamberInfo(2, "Room", True, True, {"south": 1})
+            2: ChamberInfo(2, "Room", True, True, {"south": 1}),
         }
 
         result = renderer.render_map(chambers, 1)
-        lines = result.split('\n')
+        lines = result.split("\n")
 
         # Find all border lines
-        border_lines = [line for line in lines if line.startswith(('╔', '║', '╠', '╚'))]
+        border_lines = [line for line in lines if line.startswith(("╔", "║", "╠", "╚"))]
 
         # All border lines should have the same width
         if border_lines:
@@ -31,14 +31,14 @@ class TestMapBorderAlignment:
         renderer = MapRenderer()
         chambers = {
             1: ChamberInfo(1, "The Grand Hall of Ancient Mysteries and Forgotten Secrets", True, False, {"north": 2}),
-            2: ChamberInfo(2, "Chamber of the Eternal Guardian's Sacred Relics", True, True, {"south": 1})
+            2: ChamberInfo(2, "Chamber of the Eternal Guardian's Sacred Relics", True, True, {"south": 1}),
         }
 
         result = renderer.render_map(chambers, 1)
-        lines = result.split('\n')
+        lines = result.split("\n")
 
         # Find all border lines
-        border_lines = [line for line in lines if line.startswith(('╔', '║', '╠', '╚'))]
+        border_lines = [line for line in lines if line.startswith(("╔", "║", "╠", "╚"))]
 
         # All border lines should have the same width
         if border_lines:
@@ -53,14 +53,14 @@ class TestMapBorderAlignment:
 
         chambers = {
             1: ChamberInfo(1, extremely_long_name, True, False, {"north": 2}),
-            2: ChamberInfo(2, "Normal Chamber", True, True, {"south": 1})
+            2: ChamberInfo(2, "Normal Chamber", True, True, {"south": 1}),
         }
 
         result = renderer.render_map(chambers, 1)
-        lines = result.split('\n')
+        lines = result.split("\n")
 
         # Find all border lines
-        border_lines = [line for line in lines if line.startswith(('╔', '║', '╠', '╚'))]
+        border_lines = [line for line in lines if line.startswith(("╔", "║", "╠", "╚"))]
 
         # All border lines should have the same width
         if border_lines:
@@ -82,10 +82,10 @@ class TestMapBorderAlignment:
             chambers[i] = ChamberInfo(i, f"Chamber {i}", True, i % 3 == 0, {})
 
         result = renderer.render_map(chambers, 5)
-        lines = result.split('\n')
+        lines = result.split("\n")
 
         # Find all border lines
-        border_lines = [line for line in lines if line.startswith(('╔', '║', '╠', '╚'))]
+        border_lines = [line for line in lines if line.startswith(("╔", "║", "╠", "╚"))]
 
         # All border lines should have the same width
         if border_lines:
@@ -98,23 +98,23 @@ class TestMapBorderAlignment:
         renderer = MapRenderer()
         chambers = {
             1: ChamberInfo(1, "Test Chamber", True, False, {"north": 2}),
-            2: ChamberInfo(2, "Another Chamber", True, True, {"south": 1})
+            2: ChamberInfo(2, "Another Chamber", True, True, {"south": 1}),
         }
 
         result = renderer.render_map(chambers, 1)
-        lines = result.split('\n')
+        lines = result.split("\n")
 
         # Find content lines (lines that start with ║)
-        content_lines = [line for line in lines if line.startswith('║') and line.endswith('║')]
+        content_lines = [line for line in lines if line.startswith("║") and line.endswith("║")]
 
         for line in content_lines:
             # Content should not extend beyond the borders
             # The line should start with ║, have content, and end with ║
-            assert line.startswith('║'), f"Content line should start with ║: {line}"
-            assert line.endswith('║'), f"Content line should end with ║: {line}"
+            assert line.startswith("║"), f"Content line should start with ║: {line}"
+            assert line.endswith("║"), f"Content line should end with ║: {line}"
 
             # Check that there are no characters beyond the closing ║
-            assert line.count('║') >= 2, f"Content line should have at least 2 ║ characters: {line}"
+            assert line.count("║") >= 2, f"Content line should have at least 2 ║ characters: {line}"
 
     def test_minimum_width_maintained(self):
         """Test that minimum width is maintained even with short content."""
@@ -124,10 +124,10 @@ class TestMapBorderAlignment:
         }
 
         result = renderer.render_map(chambers, 1)
-        lines = result.split('\n')
+        lines = result.split("\n")
 
         # Find border lines
-        border_lines = [line for line in lines if line.startswith(('╔', '║', '╠', '╚'))]
+        border_lines = [line for line in lines if line.startswith(("╔", "║", "╠", "╚"))]
 
         if border_lines:
             width = len(border_lines[0])
@@ -139,11 +139,11 @@ class TestMapBorderAlignment:
         renderer = MapRenderer()
         chambers = {
             1: ChamberInfo(1, "Test Chamber", True, False, {"north": 2}),
-            2: ChamberInfo(2, "Another Chamber", True, True, {"south": 1})
+            2: ChamberInfo(2, "Another Chamber", True, True, {"south": 1}),
         }
 
         result = renderer.render_map(chambers, 1)
-        lines = result.split('\n')
+        lines = result.split("\n")
 
         # Find header and legend sections
         header_start = -1
@@ -152,13 +152,13 @@ class TestMapBorderAlignment:
         legend_end = -1
 
         for i, line in enumerate(lines):
-            if line.startswith('╔') and header_start == -1:
+            if line.startswith("╔") and header_start == -1:
                 header_start = i
-            elif line.startswith('╚') and header_start != -1 and header_end == -1:
+            elif line.startswith("╚") and header_start != -1 and header_end == -1:
                 header_end = i
-            elif line.startswith('╔') and header_end != -1 and legend_start == -1:
+            elif line.startswith("╔") and header_end != -1 and legend_start == -1:
                 legend_start = i
-            elif line.startswith('╚') and legend_start != -1 and legend_end == -1:
+            elif line.startswith("╚") and legend_start != -1 and legend_end == -1:
                 legend_end = i
 
         # Both header and legend should exist
@@ -166,10 +166,12 @@ class TestMapBorderAlignment:
         assert legend_start != -1 and legend_end != -1, "Legend section not found"
 
         # Header and legend should have the same width
-        header_lines = lines[header_start:header_end+1]
-        legend_lines = lines[legend_start:legend_end+1]
+        header_lines = lines[header_start : header_end + 1]
+        legend_lines = lines[legend_start : legend_end + 1]
 
         header_width = len(header_lines[0]) if header_lines else 0
         legend_width = len(legend_lines[0]) if legend_lines else 0
 
-        assert header_width == legend_width, f"Header and legend widths should match: header={header_width}, legend={legend_width}"
+        assert header_width == legend_width, (
+            f"Header and legend widths should match: header={header_width}, legend={legend_width}"
+        )

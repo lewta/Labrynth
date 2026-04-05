@@ -13,7 +13,7 @@ class TestRiddleHintFix:
             difficulty=3,
             riddle_text="What has keys but no locks?",
             answers=["keyboard", "piano"],
-            reward_item=Item("Test Key", "A test key", "key", 10)
+            reward_item=Item("Test Key", "A test key", "key", 10),
         )
 
         # Test various hint request formats
@@ -40,7 +40,7 @@ class TestRiddleHintFix:
             difficulty=3,
             riddle_text="What has keys but no locks?",
             answers=["keyboard", "piano"],
-            reward_item=Item("Test Key", "A test key", "key", 10)
+            reward_item=Item("Test Key", "A test key", "key", 10),
         )
 
         result = riddle.process_response("wrong answer")
@@ -63,7 +63,7 @@ class TestRiddleHintFix:
             difficulty=3,
             riddle_text="What has keys but no locks?",
             answers=["keyboard", "piano"],
-            reward_item=Item("Test Key", "A test key", "key", 10)
+            reward_item=Item("Test Key", "A test key", "key", 10),
         )
 
         # Ask for hint first
@@ -84,7 +84,7 @@ class TestRiddleHintFix:
             difficulty=3,
             riddle_text="What has keys but no locks?",
             answers=["keyboard", "piano"],
-            reward_item=Item("Test Key", "A test key", "key", 10)
+            reward_item=Item("Test Key", "A test key", "key", 10),
         )
 
         # Give wrong answer first
@@ -105,7 +105,7 @@ class TestRiddleHintFix:
             difficulty=3,
             riddle_text="What has keys but no locks?",
             answers=["keyboard", "piano"],
-            reward_item=Item("Test Key", "A test key", "key", 10)
+            reward_item=Item("Test Key", "A test key", "key", 10),
         )
 
         # Ask for multiple hints
@@ -125,7 +125,7 @@ class TestRiddleHintFix:
             difficulty=1,  # Use difficulty 1 for predictable hint
             riddle_text="What has keys but no locks, space but no room?",
             answers=["keyboard"],
-            reward_item=Item("Test Key", "A test key", "key", 10)
+            reward_item=Item("Test Key", "A test key", "key", 10),
         )
 
         hint_result = riddle.process_response("hint")

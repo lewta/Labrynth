@@ -139,7 +139,7 @@ class GameEngine:
         Args:
             parsed_command: The parsed movement command
         """
-        if parsed_command.action in ['go', 'move']:
+        if parsed_command.action in ["go", "move"]:
             direction = parsed_command.parameters[0]
 
             # Get current chamber before moving
@@ -168,17 +168,17 @@ class GameEngine:
         Args:
             parsed_command: The parsed examination command
         """
-        if parsed_command.action == 'look':
+        if parsed_command.action == "look":
             if parsed_command.parameters:
                 target = parsed_command.parameters[0]
                 self._examine_target(target)
             else:
                 self._display_current_chamber()
-        elif parsed_command.action in ['examine', 'inspect']:
+        elif parsed_command.action in ["examine", "inspect"]:
             target = parsed_command.parameters[0]
             self._examine_target(target)
-        elif parsed_command.action == 'map':
-            if parsed_command.parameters and parsed_command.parameters[0] == 'legend':
+        elif parsed_command.action == "map":
+            if parsed_command.parameters and parsed_command.parameters[0] == "legend":
                 self._display_map_legend()
             else:
                 self._display_map()
@@ -189,17 +189,17 @@ class GameEngine:
         Args:
             parsed_command: The parsed inventory command
         """
-        if parsed_command.action in ['inventory', 'items']:
+        if parsed_command.action in ["inventory", "items"]:
             items = self.player_manager.inventory.get_all_items()
             self.ui_controller.display_inventory(items)
-        elif parsed_command.action == 'use':
+        elif parsed_command.action == "use":
             item_name = parsed_command.parameters[0]
             used_item = self.player_manager.use_item(item_name)
             if used_item:
                 self.ui_controller.display_success(f"You used {used_item.name}.")
             else:
                 self.ui_controller.display_error(f"You don't have '{item_name}' or it cannot be used.")
-        elif parsed_command.action == 'drop':
+        elif parsed_command.action == "drop":
             item_name = parsed_command.parameters[0]
             dropped_item = self.player_manager.remove_item(item_name)
             if dropped_item:
@@ -221,7 +221,7 @@ class GameEngine:
         Args:
             parsed_command: The parsed interaction command
         """
-        if parsed_command.action in ['take', 'get']:
+        if parsed_command.action in ["take", "get"]:
             item_name = parsed_command.parameters[0]
             current_chamber = self.world_manager.get_current_chamber()
 
@@ -237,7 +237,7 @@ class GameEngine:
                     self.ui_controller.display_error(f"Cannot take '{item_name}'.")
             else:
                 self.ui_controller.display_error(f"There is no '{item_name}' here.")
-        elif parsed_command.action == 'talk':
+        elif parsed_command.action == "talk":
             # Basic talk implementation - could be expanded
             self.ui_controller.display_message("There is no one here to talk to.")
 
@@ -247,18 +247,18 @@ class GameEngine:
         Args:
             parsed_command: The parsed system command
         """
-        if parsed_command.action == 'help':
+        if parsed_command.action == "help":
             if parsed_command.parameters:
                 self.ui_controller.display_help(parsed_command.parameters[0])
             else:
                 self.ui_controller.display_help()
-        elif parsed_command.action == 'status':
+        elif parsed_command.action == "status":
             self._display_player_status()
-        elif parsed_command.action == 'save':
+        elif parsed_command.action == "save":
             self._handle_save_command(parsed_command.parameters)
-        elif parsed_command.action == 'load':
+        elif parsed_command.action == "load":
             self._handle_load_command(parsed_command.parameters)
-        elif parsed_command.action in ['quit', 'exit']:
+        elif parsed_command.action in ["quit", "exit"]:
             self._handle_quit_command()
 
     def _handle_challenge_command(self, parsed_command: ParsedCommand) -> None:
@@ -273,7 +273,7 @@ class GameEngine:
             self.ui_controller.display_message("There is no active challenge here.")
             return
 
-        if parsed_command.action in ['answer', 'solve']:
+        if parsed_command.action in ["answer", "solve"]:
             response = parsed_command.parameters[0] if parsed_command.parameters else ""
             result = current_chamber.challenge.process_response(response)
 
@@ -295,14 +295,16 @@ class GameEngine:
                     else:
                         # Inventory full, drop in chamber
                         current_chamber.add_item(result.reward)
-                        self.ui_controller.display_message(f"Your inventory is full. {result.reward.name} was left in the chamber.")
+                        self.ui_controller.display_message(
+                            f"Your inventory is full. {result.reward.name} was left in the chamber."
+                        )
             else:
                 # Apply damage for failed attempts
                 if result.damage > 0:
                     self.player_manager.take_damage(result.damage)
                     self.ui_controller.display_message(f"You took {result.damage} damage!")
 
-        elif parsed_command.action == 'skip':
+        elif parsed_command.action == "skip":
             self.ui_controller.display_message("You decided to skip this challenge for now.")
 
     def _try_challenge_response(self, raw_input: str) -> bool:
@@ -341,7 +343,9 @@ class GameEngine:
                     else:
                         # Inventory full, drop in chamber
                         current_chamber.add_item(result.reward)
-                        self.ui_controller.display_message(f"Your inventory is full. {result.reward.name} was left in the chamber.")
+                        self.ui_controller.display_message(
+                            f"Your inventory is full. {result.reward.name} was left in the chamber."
+                        )
             else:
                 # Apply damage for failed attempts
                 if result.damage > 0:
@@ -359,11 +363,7 @@ class GameEngine:
 
         if current_chamber:
             exits = current_chamber.get_exits()
-            self.ui_controller.display_chamber(
-                current_chamber.name,
-                current_chamber.get_description(),
-                exits
-            )
+            self.ui_controller.display_chamber(current_chamber.name, current_chamber.get_description(), exits)
         else:
             self.ui_controller.display_error("You are in an unknown location!")
 
@@ -395,7 +395,7 @@ class GameEngine:
                     return
 
         # Check if target is a direction
-        if target.lower() in ['exits', 'doors', 'directions']:
+        if target.lower() in ["exits", "doors", "directions"]:
             exits = current_chamber.get_exits()
             if exits:
                 self.ui_controller.display_message(f"Available exits: {', '.join(exits)}")
@@ -420,7 +420,7 @@ class GameEngine:
                     name=chamber.name,
                     visited=True,
                     completed=progress.is_chamber_completed(chamber_id),
-                    connections=progress.discovered_connections.get(chamber_id, {})
+                    connections=progress.discovered_connections.get(chamber_id, {}),
                 )
                 chambers[chamber_id] = chamber_info
 
@@ -452,9 +452,7 @@ class GameEngine:
         completed_chambers = len(self.world_manager.get_completed_chambers())
 
         self.ui_controller.display_player_status(
-            status['health']['current'],
-            self.player_manager.stats,
-            completed_chambers
+            status["health"]["current"], self.player_manager.stats, completed_chambers
         )
 
     def _handle_save_command(self, parameters: list[str] | None = None) -> None:
@@ -510,11 +508,11 @@ class GameEngine:
         """Handle victory condition."""
         game_time = int(time.time() - self.start_time)
         stats = {
-            'chambers_completed': len(self.world_manager.get_completed_chambers()),
-            'total_chambers': self.world_manager.get_chamber_count(),
-            'commands_used': self.commands_processed,
-            'time_played': game_time,
-            'challenges_completed': self.challenges_completed
+            "chambers_completed": len(self.world_manager.get_completed_chambers()),
+            "total_chambers": self.world_manager.get_chamber_count(),
+            "commands_used": self.commands_processed,
+            "time_played": game_time,
+            "challenges_completed": self.challenges_completed,
         }
 
         self.ui_controller.display_game_over(True, stats)
@@ -524,11 +522,11 @@ class GameEngine:
         """Handle defeat condition."""
         game_time = int(time.time() - self.start_time)
         stats = {
-            'chambers_completed': len(self.world_manager.get_completed_chambers()),
-            'total_chambers': self.world_manager.get_chamber_count(),
-            'commands_used': self.commands_processed,
-            'time_played': game_time,
-            'challenges_completed': self.challenges_completed
+            "chambers_completed": len(self.world_manager.get_completed_chambers()),
+            "total_chambers": self.world_manager.get_chamber_count(),
+            "commands_used": self.commands_processed,
+            "time_played": game_time,
+            "challenges_completed": self.challenges_completed,
         }
 
         self.ui_controller.display_game_over(False, stats)
@@ -569,7 +567,7 @@ class GameEngine:
                 visited_chambers=self.player_manager.progress.visited_chambers.copy(),
                 discovered_connections=self.player_manager.progress.get_discovered_connections(),
                 game_time=int(time.time() - self.start_time) if self.start_time else 0,
-                player_stats=self.player_manager.stats
+                player_stats=self.player_manager.stats,
             )
 
             # Save using the save/load manager
@@ -622,16 +620,16 @@ class GameEngine:
         game_time = int(time.time() - self.start_time) if self.start_time else 0
 
         return {
-            'game_started': self.game_started,
-            'running': self.running,
-            'current_chamber': self.world_manager.current_chamber_id,
-            'chambers_completed': len(self.world_manager.get_completed_chambers()),
-            'total_chambers': self.world_manager.get_chamber_count(),
-            'commands_processed': self.commands_processed,
-            'challenges_completed': self.challenges_completed,
-            'game_time': game_time,
-            'player_alive': self.player_manager.is_alive(),
-            'player_health': self.player_manager.current_health
+            "game_started": self.game_started,
+            "running": self.running,
+            "current_chamber": self.world_manager.current_chamber_id,
+            "chambers_completed": len(self.world_manager.get_completed_chambers()),
+            "total_chambers": self.world_manager.get_chamber_count(),
+            "commands_processed": self.commands_processed,
+            "challenges_completed": self.challenges_completed,
+            "game_time": game_time,
+            "player_alive": self.player_manager.is_alive(),
+            "player_health": self.player_manager.current_health,
         }
 
     def reset_game(self) -> None:

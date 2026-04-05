@@ -11,7 +11,7 @@ class TestPatternPuzzleFix:
     def setup_method(self):
         """Set up test fixtures."""
         # Mock content loader to prevent randomized content from interfering
-        self.content_loader_patcher = patch('src.challenges.puzzle.get_content_loader')
+        self.content_loader_patcher = patch("src.challenges.puzzle.get_content_loader")
         mock_loader = self.content_loader_patcher.start()
         mock_loader.side_effect = Exception("No content loader")
 
@@ -24,9 +24,9 @@ class TestPatternPuzzleFix:
         puzzle = PuzzleChallenge(difficulty=3, puzzle_type=PuzzleType.PATTERN)
 
         # Should be triangle, square, circle pattern with circle as answer
-        assert puzzle.puzzle_data['answer'] == '○'
+        assert puzzle.puzzle_data["answer"] == "○"
 
-        result = puzzle.process_response('○')
+        result = puzzle.process_response("○")
         assert result.success is True
         assert "Correct!" in result.message
 
@@ -35,7 +35,7 @@ class TestPatternPuzzleFix:
         puzzle = PuzzleChallenge(difficulty=3, puzzle_type=PuzzleType.PATTERN)
 
         # Should accept 'o' as alternative to '○'
-        result = puzzle.process_response('o')
+        result = puzzle.process_response("o")
         assert result.success is True
         assert "Correct!" in result.message
 
@@ -44,7 +44,7 @@ class TestPatternPuzzleFix:
         puzzle = PuzzleChallenge(difficulty=3, puzzle_type=PuzzleType.PATTERN)
 
         # Should accept 'circle' for '○'
-        result = puzzle.process_response('circle')
+        result = puzzle.process_response("circle")
         assert result.success is True
         assert "Correct!" in result.message
 
@@ -53,7 +53,7 @@ class TestPatternPuzzleFix:
         puzzle = PuzzleChallenge(difficulty=3, puzzle_type=PuzzleType.PATTERN)
 
         # Test various cases
-        test_cases = ['circle', 'Circle', 'CIRCLE', 'CiRcLe']
+        test_cases = ["circle", "Circle", "CIRCLE", "CiRcLe"]
 
         for word in test_cases:
             puzzle.reset()  # Reset for each test
@@ -66,7 +66,7 @@ class TestPatternPuzzleFix:
         puzzle = PuzzleChallenge(difficulty=3, puzzle_type=PuzzleType.PATTERN)
 
         # Wrong answers should be rejected
-        wrong_answers = ['triangle', 'square', '△', '□', 'wrong', 'x']
+        wrong_answers = ["triangle", "square", "△", "□", "wrong", "x"]
 
         for answer in wrong_answers:
             result = puzzle.process_response(answer)
@@ -91,18 +91,18 @@ class TestPatternPuzzleFix:
             puzzle = PuzzleChallenge(difficulty=difficulty, puzzle_type=PuzzleType.PATTERN)
 
             # Each difficulty should have a valid pattern
-            assert 'pattern' in puzzle.puzzle_data
-            assert 'answer' in puzzle.puzzle_data
-            assert 'rule' in puzzle.puzzle_data
+            assert "pattern" in puzzle.puzzle_data
+            assert "answer" in puzzle.puzzle_data
+            assert "rule" in puzzle.puzzle_data
 
             # Pattern should contain geometric shapes
-            pattern = puzzle.puzzle_data['pattern']
+            pattern = puzzle.puzzle_data["pattern"]
             assert len(pattern) > 0
-            assert '?' in pattern  # Should have placeholder
+            assert "?" in pattern  # Should have placeholder
 
             # Answer should be a geometric shape
-            answer = puzzle.puzzle_data['answer']
-            assert answer in ['○', '△', '□']
+            answer = puzzle.puzzle_data["answer"]
+            assert answer in ["○", "△", "□"]
 
             # Should accept the correct answer
             result = puzzle.process_response(answer)
@@ -113,12 +113,12 @@ class TestPatternPuzzleFix:
         puzzle = PuzzleChallenge(difficulty=1, puzzle_type=PuzzleType.PATTERN)
 
         # Difficulty 1 should have triangle as answer
-        assert puzzle.puzzle_data['answer'] == '△'
+        assert puzzle.puzzle_data["answer"] == "△"
 
         # Should accept both symbol and word
         puzzle_copy = PuzzleChallenge(difficulty=1, puzzle_type=PuzzleType.PATTERN)
-        result1 = puzzle.process_response('△')
-        result2 = puzzle_copy.process_response('triangle')
+        result1 = puzzle.process_response("△")
+        result2 = puzzle_copy.process_response("triangle")
 
         assert result1.success is True
         assert result2.success is True
@@ -128,12 +128,12 @@ class TestPatternPuzzleFix:
         puzzle = PuzzleChallenge(difficulty=2, puzzle_type=PuzzleType.PATTERN)
 
         # Difficulty 2 should have square as answer
-        assert puzzle.puzzle_data['answer'] == '□'
+        assert puzzle.puzzle_data["answer"] == "□"
 
         # Should accept both symbol and word
         puzzle_copy = PuzzleChallenge(difficulty=2, puzzle_type=PuzzleType.PATTERN)
-        result1 = puzzle.process_response('□')
-        result2 = puzzle_copy.process_response('square')
+        result1 = puzzle.process_response("□")
+        result2 = puzzle_copy.process_response("square")
 
         assert result1.success is True
         assert result2.success is True
@@ -142,7 +142,7 @@ class TestPatternPuzzleFix:
         """Test that error messages mention shape names."""
         puzzle = PuzzleChallenge(difficulty=3, puzzle_type=PuzzleType.PATTERN)
 
-        result = puzzle.process_response('wrong_answer')
+        result = puzzle.process_response("wrong_answer")
 
         assert result.success is False
         assert "shape" in result.message.lower()
@@ -153,7 +153,7 @@ class TestPatternPuzzleFix:
         puzzle = PuzzleChallenge(difficulty=3, puzzle_type=PuzzleType.PATTERN)
 
         # Should handle whitespace
-        test_cases = [' circle ', '  circle', 'circle  ', '\tcircle\n']
+        test_cases = [" circle ", "  circle", "circle  ", "\tcircle\n"]
 
         for answer in test_cases:
             puzzle.reset()

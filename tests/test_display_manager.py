@@ -1,6 +1,5 @@
 """Tests for the DisplayManager class."""
 
-
 from src.challenges.base import Challenge
 from src.game.display import ColorCode, DisplayManager, MessageType
 from src.utils.data_models import ChallengeResult, Item, PlayerStats
@@ -17,7 +16,7 @@ class MockChallenge(Challenge):
         return ChallengeResult(
             success=success,
             message="Correct!" if success else "Wrong answer.",
-            reward=Item("Test Reward", "A test item", "key", 10) if success else None
+            reward=Item("Test Reward", "A test item", "key", 10) if success else None,
         )
 
     def get_reward(self):
@@ -64,7 +63,7 @@ class TestDisplayManager:
         title = "Test Header"
         header = self.display_manager._format_header(title, 30)
 
-        lines = header.strip().split('\n')
+        lines = header.strip().split("\n")
         assert len(lines) == 3
         assert all(len(line) == 30 for line in lines[:1] + lines[2:])  # Border lines
         assert title in lines[1]
@@ -76,7 +75,7 @@ class TestDisplayManager:
         long_title = "This is a very long title that should be truncated"
         header = self.display_manager._format_header(long_title, 30)
 
-        lines = header.strip().split('\n')
+        lines = header.strip().split("\n")
         assert "..." in lines[1]
         assert len(lines[1]) == 30
 
@@ -149,12 +148,7 @@ class TestDisplayManager:
     def test_display_challenge_result_success(self):
         """Test displaying successful challenge result."""
         reward = Item("Gold Key", "A shiny golden key", "key", 50)
-        result = ChallengeResult(
-            success=True,
-            message="Well done! You solved the puzzle.",
-            reward=reward,
-            damage=0
-        )
+        result = ChallengeResult(success=True, message="Well done! You solved the puzzle.", reward=reward, damage=0)
 
         display_result = self.display_manager.display_challenge_result(result)
 
@@ -165,12 +159,7 @@ class TestDisplayManager:
 
     def test_display_challenge_result_failure(self):
         """Test displaying failed challenge result."""
-        result = ChallengeResult(
-            success=False,
-            message="That's not correct. Try again.",
-            reward=None,
-            damage=10
-        )
+        result = ChallengeResult(success=False, message="That's not correct. Try again.", reward=None, damage=10)
 
         display_result = self.display_manager.display_challenge_result(result)
 
@@ -194,7 +183,7 @@ class TestDisplayManager:
         items = [
             Item("Health Potion", "Restores 50 health", "consumable", 25, True),
             Item("Broken Sword", "A damaged weapon", "weapon", 5, False),
-            Item("Magic Ring", "Increases luck", "accessory", 100, True)
+            Item("Magic Ring", "Increases luck", "accessory", 100, True),
         ]
 
         result = self.display_manager.display_inventory(items)
@@ -242,7 +231,7 @@ class TestDisplayManager:
             "look": "Examine your surroundings",
             "go <direction>": "Move in the specified direction",
             "inventory": "View your items",
-            "help": "Show this help message"
+            "help": "Show this help message",
         }
 
         result = self.display_manager.display_help(commands)
@@ -254,11 +243,7 @@ class TestDisplayManager:
 
     def test_display_game_over_victory(self):
         """Test displaying victory game over screen."""
-        stats = {
-            "Chambers Completed": 13,
-            "Items Found": 8,
-            "Time Played": "45 minutes"
-        }
+        stats = {"Chambers Completed": 13, "Items Found": 8, "Time Played": "45 minutes"}
 
         result = self.display_manager.display_game_over(True, stats)
 
@@ -271,11 +256,7 @@ class TestDisplayManager:
 
     def test_display_game_over_defeat(self):
         """Test displaying defeat game over screen."""
-        stats = {
-            "Chambers Completed": 7,
-            "Items Found": 3,
-            "Time Played": "30 minutes"
-        }
+        stats = {"Chambers Completed": 7, "Items Found": 3, "Time Played": "30 minutes"}
 
         result = self.display_manager.display_game_over(False, stats)
 
@@ -315,11 +296,11 @@ class TestDisplayManager:
 
     def test_color_codes_exist(self):
         """Test that color codes are properly defined."""
-        assert hasattr(ColorCode, 'RESET')
-        assert hasattr(ColorCode, 'BOLD')
-        assert hasattr(ColorCode, 'BRIGHT_GREEN')
-        assert hasattr(ColorCode, 'BRIGHT_RED')
-        assert hasattr(ColorCode, 'BRIGHT_YELLOW')
+        assert hasattr(ColorCode, "RESET")
+        assert hasattr(ColorCode, "BOLD")
+        assert hasattr(ColorCode, "BRIGHT_GREEN")
+        assert hasattr(ColorCode, "BRIGHT_RED")
+        assert hasattr(ColorCode, "BRIGHT_YELLOW")
 
         # Test that color codes are strings
         assert isinstance(ColorCode.RESET, str)

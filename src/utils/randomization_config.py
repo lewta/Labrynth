@@ -16,6 +16,7 @@ from src.utils.randomization import (
 @dataclass
 class GameRandomizationConfig:
     """Complete randomization configuration for the game."""
+
     labyrinth_enabled: bool = False
     labyrinth_chamber_count: int = 13
     labyrinth_layout: str = "hybrid"
@@ -40,7 +41,7 @@ class GameRandomizationConfig:
             ensure_solvable=self.labyrinth_ensure_solvable,
             min_path_length=self.labyrinth_min_path_length,
             max_dead_ends=self.labyrinth_max_dead_ends,
-            seed=self.labyrinth_seed
+            seed=self.labyrinth_seed,
         )
 
     def to_challenge_config(self) -> RandomizationConfig:
@@ -49,7 +50,7 @@ class GameRandomizationConfig:
             level=self.challenge_level,
             seed=self.challenge_seed,
             variety=self.challenge_variety,
-            variance=self.challenge_difficulty_variance
+            variance=self.challenge_difficulty_variance,
         )
 
 
@@ -90,7 +91,7 @@ class RandomizationConfigManager:
             raise GameException(f"Randomization config file not found: {self.config_file}")
 
         try:
-            with open(self.config_file, encoding='utf-8') as f:
+            with open(self.config_file, encoding="utf-8") as f:
                 config_data = json.load(f)
 
             self._config_cache = config_data
@@ -115,12 +116,11 @@ class RandomizationConfigManager:
             labyrinth_min_path_length=labyrinth_config.get("min_path_length", 5),
             labyrinth_max_dead_ends=labyrinth_config.get("max_dead_ends", 3),
             labyrinth_seed=labyrinth_config.get("seed"),
-
             challenge_enabled=challenge_config.get("enabled", True),
             challenge_level=challenge_config.get("level", "moderate"),
             challenge_variety=challenge_config.get("challenge_variety", True),
             challenge_difficulty_variance=challenge_config.get("difficulty_variance", 1),
-            challenge_seed=challenge_config.get("seed")
+            challenge_seed=challenge_config.get("seed"),
         )
 
     def _load_preset_config(self, config_data: dict[str, Any], preset: str) -> GameRandomizationConfig:
@@ -179,7 +179,7 @@ class RandomizationConfigManager:
             "ensure_solvable": config.labyrinth_ensure_solvable,
             "min_path_length": config.labyrinth_min_path_length,
             "max_dead_ends": config.labyrinth_max_dead_ends,
-            "seed": config.labyrinth_seed
+            "seed": config.labyrinth_seed,
         }
 
         config_data["challenge_randomization"] = {
@@ -187,14 +187,14 @@ class RandomizationConfigManager:
             "level": config.challenge_level,
             "challenge_variety": config.challenge_variety,
             "difficulty_variance": config.challenge_difficulty_variance,
-            "seed": config.challenge_seed
+            "seed": config.challenge_seed,
         }
 
         # Save to file
         try:
             os.makedirs(os.path.dirname(self.config_file), exist_ok=True)
 
-            with open(self.config_file, 'w', encoding='utf-8') as f:
+            with open(self.config_file, "w", encoding="utf-8") as f:
                 json.dump(config_data, f, indent=2, ensure_ascii=False)
 
             # Clear cache
@@ -239,12 +239,12 @@ class RandomizationConfigManager:
             "labyrinth": {
                 "chamber_count": labyrinth_info.get("chamber_count", 13),
                 "layout": labyrinth_info.get("layout", "hybrid"),
-                "connectivity": labyrinth_info.get("connectivity", 0.3)
+                "connectivity": labyrinth_info.get("connectivity", 0.3),
             },
             "challenges": {
                 "level": challenge_info.get("level", "moderate"),
-                "difficulty_variance": challenge_info.get("difficulty_variance", 1)
-            }
+                "difficulty_variance": challenge_info.get("difficulty_variance", 1),
+            },
         }
 
     def validate_config(self, config: GameRandomizationConfig) -> None:

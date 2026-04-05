@@ -10,6 +10,7 @@ from src.utils.data_models import ChallengeResult, Item, PlayerStats
 
 class MessageType(Enum):
     """Types of messages that can be displayed."""
+
     INFO = "info"
     SUCCESS = "success"
     WARNING = "warning"
@@ -22,6 +23,7 @@ class MessageType(Enum):
 
 class ColorCode:
     """ANSI color codes for terminal output."""
+
     RESET = "\033[0m"
     BOLD = "\033[1m"
     DIM = "\033[2m"
@@ -95,7 +97,7 @@ class DisplayManager:
             Formatted header string
         """
         if len(title) > width - 4:
-            title = title[:width - 7] + "..."
+            title = title[: width - 7] + "..."
 
         padding = (width - len(title) - 2) // 2
         border = "=" * width
@@ -218,8 +220,9 @@ class DisplayManager:
             item_name = self._colorize(item.name, ColorCode.BRIGHT_WHITE)
             item_type = self._colorize(f"({item.item_type})", ColorCode.DIM)
             usable_status = "✓" if item.usable else "✗"
-            usable_colored = self._colorize(usable_status,
-                                          ColorCode.BRIGHT_GREEN if item.usable else ColorCode.BRIGHT_RED)
+            usable_colored = self._colorize(
+                usable_status, ColorCode.BRIGHT_GREEN if item.usable else ColorCode.BRIGHT_RED
+            )
 
             item_line = f"  {usable_colored} {item_name} {item_type} - {item.description}"
             item_lines.append(item_line)
@@ -260,7 +263,7 @@ class DisplayManager:
             f"Strength: {stats.strength}",
             f"Intelligence: {stats.intelligence}",
             f"Dexterity: {stats.dexterity}",
-            f"Luck: {stats.luck}"
+            f"Luck: {stats.luck}",
         ]
         stats_text = self._colorize("Stats:\n  " + "\n  ".join(stats_lines), ColorCode.BRIGHT_CYAN)
 

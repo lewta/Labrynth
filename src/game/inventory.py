@@ -11,11 +11,11 @@ class Inventory:
 
     # Item type categories for organization
     ITEM_CATEGORIES = {
-        'weapon': ['sword', 'dagger', 'staff', 'bow'],
-        'armor': ['helmet', 'chestplate', 'boots', 'shield'],
-        'consumable': ['potion', 'food', 'scroll', 'key'],
-        'treasure': ['gem', 'coin', 'artifact', 'jewelry'],
-        'tool': ['rope', 'torch', 'lockpick', 'map']
+        "weapon": ["sword", "dagger", "staff", "bow"],
+        "armor": ["helmet", "chestplate", "boots", "shield"],
+        "consumable": ["potion", "food", "scroll", "key"],
+        "treasure": ["gem", "coin", "artifact", "jewelry"],
+        "tool": ["rope", "torch", "lockpick", "map"],
     }
 
     def __init__(self, max_capacity: int = 20):
@@ -193,7 +193,7 @@ class Inventory:
                 uncategorized.append(item)
 
         if uncategorized:
-            categorized_items['other'] = uncategorized
+            categorized_items["other"] = uncategorized
 
         return categorized_items
 
@@ -223,11 +223,7 @@ class Inventory:
             Dict[str, int]: Dictionary with current, max, and available capacity
         """
         current = len(self.items)
-        return {
-            'current': current,
-            'max': self.max_capacity,
-            'available': self.max_capacity - current
-        }
+        return {"current": current, "max": self.max_capacity, "available": self.max_capacity - current}
 
     def get_total_value(self) -> int:
         """

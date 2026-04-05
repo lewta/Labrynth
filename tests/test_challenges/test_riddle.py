@@ -14,12 +14,7 @@ class TestRiddleChallenge:
             difficulty=3,
             riddle_text="What has four legs but cannot walk?",
             answers=["table", "chair", "desk"],
-            reward_item=Item(
-                name="Test Key",
-                description="A test key",
-                item_type="key",
-                value=50
-            )
+            reward_item=Item(name="Test Key", description="A test key", item_type="key", value=50),
         )
 
     def test_riddle_initialization_with_custom_values(self):
@@ -221,10 +216,10 @@ class TestRiddleChallenge:
         """Test that RiddleChallenge works with ChallengeFactory."""
         # Clear and re-register to ensure clean state
         ChallengeFactory.clear_registry()
-        ChallengeFactory.register_challenge_type('riddle', RiddleChallenge)
+        ChallengeFactory.register_challenge_type("riddle", RiddleChallenge)
 
         challenge = ChallengeFactory.create_challenge(
-            'riddle',
+            "riddle",
             difficulty=7,
             riddle_text="Test riddle?",
             answers=["test"],

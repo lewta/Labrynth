@@ -43,7 +43,7 @@ class TestEnemy:
         assert enemy.health == 0
         assert enemy.is_alive() is False
 
-    @patch('random.randint')
+    @patch("random.randint")
     def test_enemy_attack_player(self, mock_random):
         """Test enemy attack calculation."""
         enemy = Enemy("Test Enemy", 30, 10, 2)
@@ -121,7 +121,7 @@ class TestCombatChallenge:
         assert result.success is False
         assert "Invalid action" in result.message
 
-    @patch('random.randint')
+    @patch("random.randint")
     def test_successful_attack(self, mock_random):
         """Test successful player attack."""
         challenge = CombatChallenge(difficulty=1)  # Weak enemy with 20 health
@@ -137,7 +137,7 @@ class TestCombatChallenge:
         assert len(challenge.combat_log) >= 1
         assert "attack" in challenge.combat_log[0].lower()
 
-    @patch('random.randint')
+    @patch("random.randint")
     def test_player_victory(self, mock_random):
         """Test player victory in combat."""
         challenge = CombatChallenge(difficulty=1)  # Weak enemy
@@ -158,7 +158,7 @@ class TestCombatChallenge:
         assert result.reward is not None
         assert challenge.completed is True
 
-    @patch('random.randint')
+    @patch("random.randint")
     def test_defend_action(self, mock_random):
         """Test defend action reduces damage."""
         challenge = CombatChallenge(difficulty=3)
@@ -173,7 +173,7 @@ class TestCombatChallenge:
         assert "defended" in result.message.lower() or "block" in result.message.lower()
         assert len(challenge.combat_log) >= 1
 
-    @patch('random.randint')
+    @patch("random.randint")
     def test_successful_flee(self, mock_random):
         """Test successful flee attempt."""
         challenge = CombatChallenge(difficulty=3)
@@ -188,7 +188,7 @@ class TestCombatChallenge:
         assert "flee" in result.message.lower()
         assert result.damage == 5  # Flee penalty
 
-    @patch('random.randint')
+    @patch("random.randint")
     def test_failed_flee(self, mock_random):
         """Test failed flee attempt."""
         challenge = CombatChallenge(difficulty=3)

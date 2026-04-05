@@ -19,27 +19,27 @@ class GameLogFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord) -> str:
         """Format log record with game-specific information."""
         # Base format
-        timestamp = datetime.fromtimestamp(record.created).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+        timestamp = datetime.fromtimestamp(record.created).strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
         level = record.levelname
-        name = record.name.replace('labrynth.', '')
+        name = record.name.replace("labrynth.", "")
         message = record.getMessage()
 
         # Add context information if available
         context_info = ""
-        if self.include_context and hasattr(record, 'context'):
+        if self.include_context and hasattr(record, "context"):
             context = record.context
             if isinstance(context, dict) and context:
-                context_str = json.dumps(context, separators=(',', ':'))
+                context_str = json.dumps(context, separators=(",", ":"))
                 context_info = f" | Context: {context_str}"
 
         # Add player information if available
         player_info = ""
-        if hasattr(record, 'player_id'):
+        if hasattr(record, "player_id"):
             player_info = f" | Player: {record.player_id}"
 
         # Add session information if available
         session_info = ""
-        if hasattr(record, 'session_id'):
+        if hasattr(record, "session_id"):
             session_info = f" | Session: {record.session_id}"
 
         return f"{timestamp} | {level:8} | {name:15} | {message}{context_info}{player_info}{session_info}"
@@ -50,75 +50,81 @@ class GameStateLogger:
 
     def __init__(self, logger: logging.Logger):
         self.logger = logger
-        self.session_id = datetime.now().strftime('%Y%m%d_%H%M%S')
+        self.session_id = datetime.now().strftime("%Y%m%d_%H%M%S")
 
     def log_player_action(self, action: str, chamber_id: int, context: dict[str, Any] | None = None):
         """Log player actions with context."""
-        log_context = {
-            'action_type': 'player_action',
-            'action': action,
-            'chamber_id': chamber_id,
-            **(context or {})
-        }
-        self.logger.info(f"Player action: {action} in chamber {chamber_id}",
-                        extra={'context': log_context, 'session_id': self.session_id})
+        log_context = {"action_type": "player_action", "action": action, "chamber_id": chamber_id, **(context or {})}
+        self.logger.info(
+            f"Player action: {action} in chamber {chamber_id}",
+            extra={"context": log_context, "session_id": self.session_id},
+        )
 
-    def log_game_state_change(self, component: str, old_state: Any, new_state: Any,
-                             context: dict[str, Any] | None = None):
+    def log_game_state_change(
+        self, component: str, old_state: Any, new_state: Any, context: dict[str, Any] | None = None
+    ):
         """Log game state changes."""
         log_context = {
-            'change_type': 'state_change',
-            'component': component,
-            'old_state': str(old_state),
-            'new_state': str(new_state),
-            **(context or {})
+            "change_type": "state_change",
+            "component": component,
+            "old_state": str(old_state),
+            "new_state": str(new_state),
+            **(context or {}),
         }
-        self.logger.debug(f"State change in {component}: {old_state} -> {new_state}",
-                         extra={'context': log_context, 'session_id': self.session_id})
+        self.logger.debug(
+            f"State change in {component}: {old_state} -> {new_state}",
+            extra={"context": log_context, "session_id": self.session_id},
+        )
 
-    def log_challenge_event(self, challenge_type: str, event: str, success: bool = None,
-                           context: dict[str, Any] | None = None):
+    def log_challenge_event(
+        self, challenge_type: str, event: str, success: bool = None, context: dict[str, Any] | None = None
+    ):
         """Log challenge-related events."""
         log_context = {
-            'event_type': 'challenge_event',
-            'challenge_type': challenge_type,
-            'event': event,
-            'success': success,
-            **(context or {})
+            "event_type": "challenge_event",
+            "challenge_type": challenge_type,
+            "event": event,
+            "success": success,
+            **(context or {}),
         }
         level = logging.INFO if success is not False else logging.WARNING
-        self.logger.log(level, f"Challenge {challenge_type}: {event}",
-                       extra={'context': log_context, 'session_id': self.session_id})
+        self.logger.log(
+            level, f"Challenge {challenge_type}: {event}", extra={"context": log_context, "session_id": self.session_id}
+        )
 
-    def log_error_recovery(self, error_type: str, recovery_action: str, success: bool,
-                          context: dict[str, Any] | None = None):
+    def log_error_recovery(
+        self, error_type: str, recovery_action: str, success: bool, context: dict[str, Any] | None = None
+    ):
         """Log error recovery attempts."""
         log_context = {
-            'event_type': 'error_recovery',
-            'error_type': error_type,
-            'recovery_action': recovery_action,
-            'success': success,
-            **(context or {})
+            "event_type": "error_recovery",
+            "error_type": error_type,
+            "recovery_action": recovery_action,
+            "success": success,
+            **(context or {}),
         }
         level = logging.INFO if success else logging.ERROR
-        self.logger.log(level, f"Error recovery: {recovery_action} for {error_type} - {'Success' if success else 'Failed'}",
-                       extra={'context': log_context, 'session_id': self.session_id})
+        self.logger.log(
+            level,
+            f"Error recovery: {recovery_action} for {error_type} - {'Success' if success else 'Failed'}",
+            extra={"context": log_context, "session_id": self.session_id},
+        )
 
-    def log_performance_metric(self, metric_name: str, value: int | float,
-                              context: dict[str, Any] | None = None):
+    def log_performance_metric(self, metric_name: str, value: int | float, context: dict[str, Any] | None = None):
         """Log performance metrics."""
-        log_context = {
-            'metric_type': 'performance',
-            'metric_name': metric_name,
-            'value': value,
-            **(context or {})
-        }
-        self.logger.debug(f"Performance metric {metric_name}: {value}",
-                         extra={'context': log_context, 'session_id': self.session_id})
+        log_context = {"metric_type": "performance", "metric_name": metric_name, "value": value, **(context or {})}
+        self.logger.debug(
+            f"Performance metric {metric_name}: {value}", extra={"context": log_context, "session_id": self.session_id}
+        )
 
 
-def setup_logging(debug: bool = False, verbose: bool = False, log_file: str | None = None,
-                 max_log_files: int = 10, max_file_size: int = 10 * 1024 * 1024) -> logging.Logger:
+def setup_logging(
+    debug: bool = False,
+    verbose: bool = False,
+    log_file: str | None = None,
+    max_log_files: int = 10,
+    max_file_size: int = 10 * 1024 * 1024,
+) -> logging.Logger:
     """Set up comprehensive logging configuration for the game.
 
     Args:
@@ -140,7 +146,7 @@ def setup_logging(debug: bool = False, verbose: bool = False, log_file: str | No
         log_level = logging.WARNING
 
     # Create main logger
-    logger = logging.getLogger('labrynth')
+    logger = logging.getLogger("labrynth")
     logger.setLevel(logging.DEBUG)  # Always capture all levels, handlers will filter
 
     # Clear any existing handlers
@@ -168,11 +174,7 @@ def setup_logging(debug: bool = False, verbose: bool = False, log_file: str | No
         log_path.parent.mkdir(parents=True, exist_ok=True)
 
         # Use rotating file handler
-        file_handler = logging.handlers.RotatingFileHandler(
-            log_file,
-            maxBytes=max_file_size,
-            backupCount=max_log_files
-        )
+        file_handler = logging.handlers.RotatingFileHandler(log_file, maxBytes=max_file_size, backupCount=max_log_files)
         file_handler.setLevel(logging.DEBUG)  # Always log debug to file
         file_handler.setFormatter(file_formatter)
         logger.addHandler(file_handler)
@@ -180,9 +182,7 @@ def setup_logging(debug: bool = False, verbose: bool = False, log_file: str | No
         # Create separate error log
         error_log_file = log_path.parent / f"error_{log_path.name}"
         error_handler = logging.handlers.RotatingFileHandler(
-            error_log_file,
-            maxBytes=max_file_size,
-            backupCount=max_log_files
+            error_log_file, maxBytes=max_file_size, backupCount=max_log_files
         )
         error_handler.setLevel(logging.ERROR)
         error_handler.setFormatter(file_formatter)
@@ -210,8 +210,8 @@ def get_logger(name: str | None = None) -> logging.Logger:
         Logger instance
     """
     if name:
-        return logging.getLogger(f'labrynth.{name}')
-    return logging.getLogger('labrynth')
+        return logging.getLogger(f"labrynth.{name}")
+    return logging.getLogger("labrynth")
 
 
 def get_game_state_logger(name: str | None = None) -> GameStateLogger:
@@ -236,7 +236,7 @@ def create_log_filename(prefix: str = "game") -> str:
     Returns:
         Log filename with timestamp
     """
-    timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     return f"logs/{prefix}_{timestamp}.log"
 
 
@@ -248,21 +248,18 @@ def log_exception(logger: logging.Logger, exception: Exception, context: dict[st
         exception: Exception to log
         context: Additional context information
     """
-    log_context = {
-        'exception_type': type(exception).__name__,
-        'exception_message': str(exception),
-        **(context or {})
-    }
+    log_context = {"exception_type": type(exception).__name__, "exception_message": str(exception), **(context or {})}
 
-    logger.error(f"Exception occurred: {type(exception).__name__}: {exception}",
-                extra={'context': log_context}, exc_info=True)
+    logger.error(
+        f"Exception occurred: {type(exception).__name__}: {exception}", extra={"context": log_context}, exc_info=True
+    )
 
 
 def configure_third_party_logging():
     """Configure logging for third-party libraries to reduce noise."""
     # Reduce noise from common third-party libraries
-    logging.getLogger('urllib3').setLevel(logging.WARNING)
-    logging.getLogger('requests').setLevel(logging.WARNING)
+    logging.getLogger("urllib3").setLevel(logging.WARNING)
+    logging.getLogger("requests").setLevel(logging.WARNING)
 
     # Add more third-party loggers as needed
 
@@ -273,7 +270,7 @@ class LogContext:
     def __init__(self, logger: logging.Logger, **context):
         self.logger = logger
         self.context = context
-        self.old_context = getattr(logger, '_context', {})
+        self.old_context = getattr(logger, "_context", {})
 
     def __enter__(self):
         # Merge contexts

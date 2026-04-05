@@ -51,7 +51,7 @@ class UIController:
         if self._capture_output:
             self._output_buffer.append(text)
         else:
-            print(text, end='')
+            print(text, end="")
 
     def display_message(self, message: str, message_type: MessageType = MessageType.INFO) -> None:
         """Display a message to the user.
@@ -61,7 +61,7 @@ class UIController:
             message_type: The type of message for styling
         """
         formatted_message = self.display_manager.display_message(message, message_type)
-        self._output(formatted_message + '\n')
+        self._output(formatted_message + "\n")
 
     def display_chamber(self, chamber_name: str, description: str, exits: list[str]) -> None:
         """Display chamber information to the user.
@@ -71,9 +71,7 @@ class UIController:
             description: Chamber description
             exits: List of available exits
         """
-        chamber_display = self.display_manager.display_chamber_description(
-            chamber_name, description, exits
-        )
+        chamber_display = self.display_manager.display_chamber_description(chamber_name, description, exits)
         self._output(chamber_display)
 
     def display_challenge(self, challenge: Challenge) -> None:
@@ -109,7 +107,7 @@ class UIController:
         Args:
             map_content: ASCII art map content to display
         """
-        self._output(map_content + '\n')
+        self._output(map_content + "\n")
 
     def display_player_status(self, health: int, stats: PlayerStats, completed_chambers: int) -> None:
         """Display player status information to the user.
@@ -119,9 +117,7 @@ class UIController:
             stats: Player statistics
             completed_chambers: Number of completed chambers
         """
-        status_display = self.display_manager.display_player_status(
-            health, stats, completed_chambers
-        )
+        status_display = self.display_manager.display_player_status(health, stats, completed_chambers)
         self._output(status_display)
 
     def display_help(self, specific_command: str | None = None) -> None:
@@ -238,7 +234,7 @@ Good luck, adventurer!
         """
         self.display_message(f"{message} (y/n)", MessageType.WARNING)
         response = self.get_user_input("Confirm").lower()
-        return response in ['y', 'yes', 'true', '1']
+        return response in ["y", "yes", "true", "1"]
 
     def display_error(self, error_message: str) -> None:
         """Display an error message to the user.
@@ -284,7 +280,8 @@ Good luck, adventurer!
         """Clear the screen (platform-dependent)."""
         if not self._capture_output:
             import os
-            os.system('cls' if os.name == 'nt' else 'clear')
+
+            os.system("cls" if os.name == "nt" else "clear")
 
     def display_separator(self, char: str = "-", length: int = 60) -> None:
         """Display a separator line.
@@ -311,12 +308,12 @@ Good luck, adventurer!
             Filename string or None if cancelled
         """
         filename = self.get_user_input("Enter save filename (or 'cancel' to abort)")
-        if filename.lower() in ['cancel', 'abort', 'quit', '']:
+        if filename.lower() in ["cancel", "abort", "quit", ""]:
             return None
 
         # Add .json extension if not present
-        if not filename.endswith('.json'):
-            filename += '.json'
+        if not filename.endswith(".json"):
+            filename += ".json"
 
         return filename
 
@@ -350,7 +347,7 @@ Good luck, adventurer!
         self.display_save_files(save_files)
 
         choice = self.get_user_input("Enter filename or number (or 'cancel' to abort)")
-        if choice.lower() in ['cancel', 'abort', 'quit', '']:
+        if choice.lower() in ["cancel", "abort", "quit", ""]:
             return None
 
         # Check if it's a number
@@ -366,8 +363,8 @@ Good luck, adventurer!
             return choice
 
         # Add .json extension and check again
-        if not choice.endswith('.json'):
-            choice += '.json'
+        if not choice.endswith(".json"):
+            choice += ".json"
             if choice in save_files:
                 return choice
 

@@ -15,56 +15,28 @@ def create_argument_parser() -> argparse.ArgumentParser:
         Configured ArgumentParser instance
     """
     parser = argparse.ArgumentParser(
-        prog='labrynth',
-        description='A text-based adventure game where you navigate through a labyrinth of chambers.',
-        epilog='Navigate through 13 unique chambers, solve challenges, and escape the labyrinth!'
+        prog="labrynth",
+        description="A text-based adventure game where you navigate through a labyrinth of chambers.",
+        epilog="Navigate through 13 unique chambers, solve challenges, and escape the labyrinth!",
     )
 
     # Game mode options
     game_group = parser.add_mutually_exclusive_group()
-    game_group.add_argument(
-        '--new-game', '-n',
-        action='store_true',
-        help='Start a new game (default behavior)'
-    )
-    game_group.add_argument(
-        '--load-game', '-l',
-        metavar='FILENAME',
-        help='Load a saved game from the specified file'
-    )
+    game_group.add_argument("--new-game", "-n", action="store_true", help="Start a new game (default behavior)")
+    game_group.add_argument("--load-game", "-l", metavar="FILENAME", help="Load a saved game from the specified file")
 
     # Configuration options
-    parser.add_argument(
-        '--config', '-c',
-        metavar='CONFIG_FILE',
-        help='Use a custom labyrinth configuration file'
-    )
+    parser.add_argument("--config", "-c", metavar="CONFIG_FILE", help="Use a custom labyrinth configuration file")
 
     # Display options
-    parser.add_argument(
-        '--no-colors',
-        action='store_true',
-        help='Disable colored output'
-    )
+    parser.add_argument("--no-colors", action="store_true", help="Disable colored output")
 
     # Debug and logging options
-    parser.add_argument(
-        '--debug', '-d',
-        action='store_true',
-        help='Enable debug mode with verbose output'
-    )
-    parser.add_argument(
-        '--verbose', '-v',
-        action='store_true',
-        help='Enable verbose logging'
-    )
+    parser.add_argument("--debug", "-d", action="store_true", help="Enable debug mode with verbose output")
+    parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose logging")
 
     # Information options
-    parser.add_argument(
-        '--version',
-        action='version',
-        version='Labyrinth Adventure Game 1.0.0'
-    )
+    parser.add_argument("--version", action="version", version="Labyrinth Adventure Game 1.0.0")
 
     return parser
 
@@ -120,24 +92,18 @@ def initialize_game_engine(args: argparse.Namespace) -> GameEngine:
         if args.debug or args.verbose:
             log_file = create_log_filename()
 
-        logger = setup_logging(
-            debug=args.debug,
-            verbose=args.verbose,
-            log_file=log_file
-        )
+        logger = setup_logging(debug=args.debug, verbose=args.verbose, log_file=log_file)
 
         logger.info("Initializing Labyrinth Adventure Game")
-        logger.debug(f"Arguments: debug={args.debug}, verbose={args.verbose}, "
-                    f"config={args.config}, no_colors={args.no_colors}")
+        logger.debug(
+            f"Arguments: debug={args.debug}, verbose={args.verbose}, config={args.config}, no_colors={args.no_colors}"
+        )
 
         # Determine color usage
         use_colors = not args.no_colors
 
         # Initialize game engine
-        engine = GameEngine(
-            config_file=args.config,
-            use_colors=use_colors
-        )
+        engine = GameEngine(config_file=args.config, use_colors=use_colors)
 
         logger.info("Game engine initialized successfully")
 
@@ -162,7 +128,7 @@ def handle_new_game(engine: GameEngine) -> None:
 
     # Ask user if they're ready to start
     response = input("Press Enter to begin your adventure, or 'q' to quit: ").strip().lower()
-    if response == 'q':
+    if response == "q":
         logger.info("User chose to quit before starting")
         print("Maybe next time, adventurer!")
         return

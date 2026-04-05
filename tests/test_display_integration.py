@@ -14,11 +14,11 @@ class TestDisplayIntegration:
     def setup_method(self):
         """Set up test fixtures."""
         self.sample_stats = {
-            'chambers_completed': 13,
-            'total_chambers': 13,
-            'commands_used': 150,
-            'time_played': 1800,
-            'challenges_completed': 13
+            "chambers_completed": 13,
+            "total_chambers": 13,
+            "commands_used": 150,
+            "time_played": 1800,
+            "challenges_completed": 13,
         }
 
     def test_display_with_existing_config_file(self):
@@ -44,15 +44,12 @@ class TestDisplayIntegration:
                 "flag_content": "TEMP_TEST_2024",
                 "flag_prefix": "TEMP{",
                 "flag_suffix": "}",
-                "prize_message": "🎯 Test Prize: {flag}\n\nTemporary test completed!"
+                "prize_message": "🎯 Test Prize: {flag}\n\nTemporary test completed!",
             },
-            "game": {
-                "title": "Test Game",
-                "version": "1.0"
-            }
+            "game": {"title": "Test Game", "version": "1.0"},
         }
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
             json.dump(temp_config, f, indent=2)
             temp_file_path = f.name
 
@@ -114,7 +111,7 @@ class TestDisplayIntegration:
             # Config with custom content
             GameConfig(config_file="nonexistent.json"),
             # Config with custom format
-            GameConfig(config_file="nonexistent.json")
+            GameConfig(config_file="nonexistent.json"),
         ]
 
         # Customize the configs
@@ -127,7 +124,7 @@ class TestDisplayIntegration:
             victory_display = display_manager.display_game_over(True, self.sample_stats)
 
             # All should have consistent structure
-            lines = victory_display.split('\n')
+            lines = victory_display.split("\n")
 
             # Should have header with VICTORY!
             header_lines = [line for line in lines if "VICTORY!" in line]
@@ -141,7 +138,6 @@ class TestDisplayIntegration:
 
             # Should have some form of flag/prize
             has_flag_indicator = any(
-                indicator in victory_display
-                for indicator in ['{', '}', 'FLAG', 'CUSTOM', 'PRIZE', 'prize']
+                indicator in victory_display for indicator in ["{", "}", "FLAG", "CUSTOM", "PRIZE", "prize"]
             )
             assert has_flag_indicator, f"Config {i} missing flag/prize indicator"

@@ -16,11 +16,11 @@ class TestVictoryFlag:
         default_config = GameConfig(config_file="nonexistent_file.json")
         self.display_manager = DisplayManager(use_colors=False, config=default_config)
         self.sample_stats = {
-            'chambers_completed': 13,
-            'total_chambers': 13,
-            'commands_used': 150,
-            'time_played': 1800,
-            'challenges_completed': 13
+            "chambers_completed": 13,
+            "total_chambers": 13,
+            "commands_used": 150,
+            "time_played": 1800,
+            "challenges_completed": 13,
         }
 
     def test_victory_message_contains_flag(self):
@@ -32,7 +32,7 @@ class TestVictoryFlag:
         assert "}" in victory_display
 
         # Extract and verify the flag format
-        flag_match = re.search(r'FLAG\{[^}]+\}', victory_display)
+        flag_match = re.search(r"FLAG\{[^}]+\}", victory_display)
         assert flag_match is not None
 
         flag = flag_match.group(0)
@@ -88,7 +88,7 @@ class TestVictoryFlag:
         victory_display = self.display_manager.display_game_over(True, self.sample_stats)
 
         # Extract the flag
-        flag_match = re.search(r'FLAG\{[^}]+\}', victory_display)
+        flag_match = re.search(r"FLAG\{[^}]+\}", victory_display)
         flag = flag_match.group(0)
 
         # Verify flag format follows CTF conventions
@@ -111,7 +111,7 @@ class TestVictoryFlag:
         assert "Game Statistics:" in victory_display
 
         # Should have multiple lines
-        lines = victory_display.split('\n')
+        lines = victory_display.split("\n")
         assert len(lines) > 5  # Should have header, message, flag, stats, etc.
 
     def test_flag_visibility_in_output(self):
@@ -119,7 +119,7 @@ class TestVictoryFlag:
         victory_display = self.display_manager.display_game_over(True, self.sample_stats)
 
         # Flag should be on its own line or clearly separated
-        lines = victory_display.split('\n')
+        lines = victory_display.split("\n")
         flag_lines = [line for line in lines if "FLAG{" in line]
 
         assert len(flag_lines) == 1  # Should appear exactly once
@@ -144,11 +144,11 @@ class TestConfigurableVictoryFlag:
     def setup_method(self):
         """Set up test fixtures."""
         self.sample_stats = {
-            'chambers_completed': 13,
-            'total_chambers': 13,
-            'commands_used': 150,
-            'time_played': 1800,
-            'challenges_completed': 13
+            "chambers_completed": 13,
+            "total_chambers": 13,
+            "commands_used": 150,
+            "time_played": 1800,
+            "challenges_completed": 13,
         }
 
     def test_custom_flag_content(self):
@@ -225,7 +225,7 @@ class TestConfigurableVictoryFlag:
             # Custom content
             GameConfig(config_file="nonexistent_file.json"),
             # Custom format
-            GameConfig(config_file="nonexistent_file.json")
+            GameConfig(config_file="nonexistent_file.json"),
         ]
 
         # Set different configurations
@@ -244,12 +244,18 @@ class TestConfigurableVictoryFlag:
             assert "Game Statistics:" in victory_display
 
             # Each should have exactly one flag (check for flag patterns more flexibly)
-            lines = victory_display.split('\n')
-            flag_containing_lines = [line for line in lines if (
-                ('{' in line and '}' in line) or  # Standard format
-                ('{' in line and ']' in line) or  # Custom suffix
-                ('FLAG' in line) or               # Any FLAG mention
-                ('CTF' in line) or                # CTF format
-                ('CHALLENGE' in line)             # Challenge format
-            )]
-            assert len(flag_containing_lines) >= 1, f"Config {i} should contain at least one flag, got: {victory_display}"
+            lines = victory_display.split("\n")
+            flag_containing_lines = [
+                line
+                for line in lines
+                if (
+                    ("{" in line and "}" in line)  # Standard format
+                    or ("{" in line and "]" in line)  # Custom suffix
+                    or ("FLAG" in line)  # Any FLAG mention
+                    or ("CTF" in line)  # CTF format
+                    or ("CHALLENGE" in line)  # Challenge format
+                )
+            ]
+            assert len(flag_containing_lines) >= 1, (
+                f"Config {i} should contain at least one flag, got: {victory_display}"
+            )

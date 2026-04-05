@@ -15,9 +15,16 @@ class LabyrinthConfigValidator:
         self.required_chamber_fields = {"name", "description"}
         self.optional_chamber_fields = {"connections", "challenge_type", "items"}
         self.valid_directions = {
-            "north", "south", "east", "west",
-            "northeast", "northwest", "southeast", "southwest",
-            "up", "down"
+            "north",
+            "south",
+            "east",
+            "west",
+            "northeast",
+            "northwest",
+            "southeast",
+            "southwest",
+            "up",
+            "down",
         }
 
     def validate_config(self, config_data: dict[str, Any]) -> None:
@@ -249,7 +256,7 @@ class LabyrinthConfigLoader:
             raise GameException(f"Configuration file not found: {config_file_path}")
 
         try:
-            with open(config_file_path, encoding='utf-8') as file:
+            with open(config_file_path, encoding="utf-8") as file:
                 config_data = json.load(file)
         except json.JSONDecodeError as e:
             raise GameException(f"Invalid JSON in configuration file: {e}")
@@ -278,7 +285,7 @@ class LabyrinthConfigLoader:
             # Create directory if it doesn't exist
             os.makedirs(os.path.dirname(config_file_path), exist_ok=True)
 
-            with open(config_file_path, 'w', encoding='utf-8') as file:
+            with open(config_file_path, "w", encoding="utf-8") as file:
                 json.dump(config_data, file, indent=2, ensure_ascii=False)
         except Exception as e:
             raise GameException(f"Error saving configuration file: {e}")
@@ -296,21 +303,21 @@ class LabyrinthConfigLoader:
                     "name": "Entrance Hall",
                     "description": "A dimly lit stone chamber with ancient carvings on the walls. The air is thick with mystery and the scent of ages past.",
                     "connections": {"north": 2},
-                    "challenge_type": "riddle"
+                    "challenge_type": "riddle",
                 },
                 "2": {
                     "name": "Crystal Cavern",
                     "description": "A sparkling chamber filled with glowing crystals that cast dancing shadows on the walls. The crystals hum with magical energy.",
                     "connections": {"south": 1, "east": 3},
-                    "challenge_type": "puzzle"
+                    "challenge_type": "puzzle",
                 },
                 "3": {
                     "name": "Exit Chamber",
                     "description": "The final chamber with a heavy wooden door leading outside. Sunlight streams through cracks in the door, promising freedom.",
                     "connections": {"west": 2},
-                    "challenge_type": "skill"
-                }
-            }
+                    "challenge_type": "skill",
+                },
+            },
         }
 
     def create_full_labyrinth_config(self) -> dict[str, Any]:
@@ -326,79 +333,79 @@ class LabyrinthConfigLoader:
                     "name": "Entrance Hall",
                     "description": "A grand stone chamber with towering pillars and ancient murals depicting forgotten legends. Torches flicker in iron sconces, casting dancing shadows.",
                     "connections": {"north": 2, "east": 4},
-                    "challenge_type": "riddle"
+                    "challenge_type": "riddle",
                 },
                 "2": {
                     "name": "Hall of Echoes",
                     "description": "A long corridor where every sound reverberates endlessly. The walls are lined with mysterious symbols that seem to shift in the torchlight.",
                     "connections": {"south": 1, "north": 3, "west": 5},
-                    "challenge_type": "memory"
+                    "challenge_type": "memory",
                 },
                 "3": {
                     "name": "Crystal Sanctum",
                     "description": "A breathtaking chamber filled with massive crystals that pulse with inner light. The air shimmers with magical energy.",
                     "connections": {"south": 2, "east": 6},
-                    "challenge_type": "puzzle"
+                    "challenge_type": "puzzle",
                 },
                 "4": {
                     "name": "Guardian's Chamber",
                     "description": "A circular room with weapon racks along the walls and a raised platform in the center. Ancient armor stands sentinel in the corners.",
                     "connections": {"west": 1, "north": 7},
-                    "challenge_type": "combat"
+                    "challenge_type": "combat",
                 },
                 "5": {
                     "name": "Whispering Gallery",
                     "description": "A curved chamber where voices from the past seem to whisper secrets. Strange acoustic properties make every sound carry in unexpected ways.",
                     "connections": {"east": 2, "north": 8},
-                    "challenge_type": "riddle"
+                    "challenge_type": "riddle",
                 },
                 "6": {
                     "name": "Prism Chamber",
                     "description": "Light refracts through countless crystal prisms, creating a dazzling display of colors. The patterns seem to hold hidden meanings.",
                     "connections": {"west": 3, "south": 9},
-                    "challenge_type": "puzzle"
+                    "challenge_type": "puzzle",
                 },
                 "7": {
                     "name": "Trial of Strength",
                     "description": "A training ground with obstacles and challenges designed to test physical prowess. Ancient training equipment lines the walls.",
                     "connections": {"south": 4, "west": 10},
-                    "challenge_type": "skill"
+                    "challenge_type": "skill",
                 },
                 "8": {
                     "name": "Meditation Chamber",
                     "description": "A serene room with smooth stone floors and walls carved with peaceful imagery. The atmosphere promotes deep contemplation.",
                     "connections": {"south": 5, "east": 11},
-                    "challenge_type": "memory"
+                    "challenge_type": "memory",
                 },
                 "9": {
                     "name": "Maze of Mirrors",
                     "description": "A confusing chamber filled with mirrors that reflect not just images, but possibilities. Reality becomes uncertain here.",
                     "connections": {"north": 6, "west": 12},
-                    "challenge_type": "puzzle"
+                    "challenge_type": "puzzle",
                 },
                 "10": {
                     "name": "Arena of Champions",
                     "description": "A grand arena with tiered seating carved into the stone walls. The floor bears the marks of countless battles.",
                     "connections": {"east": 7},
-                    "challenge_type": "combat"
+                    "challenge_type": "combat",
                 },
                 "11": {
                     "name": "Library of Secrets",
                     "description": "Ancient tomes and scrolls line the walls of this scholarly chamber. The knowledge of ages waits to be discovered.",
                     "connections": {"west": 8, "south": 12},
-                    "challenge_type": "riddle"
+                    "challenge_type": "riddle",
                 },
                 "12": {
                     "name": "Chamber of Trials",
                     "description": "A testing ground where multiple challenges await. The room adapts to test the skills of those who enter.",
                     "connections": {"north": 11, "east": 9, "south": 13},
-                    "challenge_type": "skill"
+                    "challenge_type": "skill",
                 },
                 "13": {
                     "name": "Throne of Victory",
                     "description": "The final chamber containing an ancient throne. Those who reach here have proven themselves worthy of the labyrinth's secrets.",
                     "connections": {"north": 12},
-                    "challenge_type": "memory"
-                }
-            }
+                    "challenge_type": "memory",
+                },
+            },
         }

@@ -35,22 +35,19 @@ class GameConfig:
             Dictionary containing default configuration values.
         """
         import copy
-        return copy.deepcopy({
-            "victory": {
-                "flag_content": "LABYRINTH_MASTER_2024",
-                "flag_prefix": "FLAG{",
-                "flag_suffix": "}",
-                "prize_message": "🏆 YOUR PRIZE: {flag}\n\nYou have proven yourself worthy of the ancient secrets!"
-            },
-            "game": {
-                "title": "Labyrinth Adventure Game",
-                "version": "1.0"
-            },
-            "display": {
-                "width": 80,
-                "show_map": True
+
+        return copy.deepcopy(
+            {
+                "victory": {
+                    "flag_content": "LABYRINTH_MASTER_2024",
+                    "flag_prefix": "FLAG{",
+                    "flag_suffix": "}",
+                    "prize_message": "🏆 YOUR PRIZE: {flag}\n\nYou have proven yourself worthy of the ancient secrets!",
+                },
+                "game": {"title": "Labyrinth Adventure Game", "version": "1.0"},
+                "display": {"width": 80, "show_map": True},
             }
-        })
+        )
 
     def _find_config_file(self) -> str | None:
         """Find configuration file using search order.
@@ -63,11 +60,7 @@ class GameConfig:
         Returns:
             Path to first found configuration file, or None if none found.
         """
-        search_paths = [
-            "game_config.json",
-            "config/game_config.json",
-            os.path.expanduser("~/.labrynth_config.json")
-        ]
+        search_paths = ["game_config.json", "config/game_config.json", os.path.expanduser("~/.labrynth_config.json")]
 
         for path in search_paths:
             if os.path.exists(path):
@@ -83,6 +76,7 @@ class GameConfig:
         """
         # Start with default configuration
         import copy
+
         self._config_data = copy.deepcopy(self._default_config)
         self._read_only_mode = False
 
@@ -104,7 +98,7 @@ class GameConfig:
             if not os.access(config_file, os.R_OK):
                 raise PermissionError(f"No read permission for configuration file: {config_file}")
 
-            with open(config_file, encoding='utf-8') as f:
+            with open(config_file, encoding="utf-8") as f:
                 file_content = f.read().strip()
 
                 # Check for empty file
@@ -122,7 +116,9 @@ class GameConfig:
 
                 # Validate that parsed content is a dictionary
                 if not isinstance(file_config, dict):
-                    self._logger.error(f"Configuration file {config_file} must contain a JSON object, got {type(file_config).__name__}")
+                    self._logger.error(
+                        f"Configuration file {config_file} must contain a JSON object, got {type(file_config).__name__}"
+                    )
                     self._logger.info("Using default configuration due to invalid structure")
                     return
 
@@ -204,11 +200,11 @@ class GameConfig:
             # Create a temporary file first to avoid corrupting existing config on write failure
             temp_file = config_file + ".tmp"
             try:
-                with open(temp_file, 'w', encoding='utf-8') as f:
+                with open(temp_file, "w", encoding="utf-8") as f:
                     json.dump(self._config_data, f, indent=2, ensure_ascii=False)
 
                 # Atomic move to replace original file
-                if os.name == 'nt':  # Windows
+                if os.name == "nt":  # Windows
                     if os.path.exists(config_file):
                         os.remove(config_file)
                     os.rename(temp_file, config_file)
@@ -253,7 +249,7 @@ class GameConfig:
         Returns:
             Configuration value or default if not found.
         """
-        keys = key_path.split('.')
+        keys = key_path.split(".")
         current = self._config_data
 
         try:
@@ -270,7 +266,7 @@ class GameConfig:
             key_path: Dot-separated path to configuration value (e.g., "victory.flag_content").
             value: Value to set.
         """
-        keys = key_path.split('.')
+        keys = key_path.split(".")
         current = self._config_data
 
         # Navigate to parent of target key
@@ -305,8 +301,7 @@ class GameConfig:
             Falls back to default template if formatting fails.
         """
         message_template = self.get(
-            "victory.prize_message",
-            "🏆 YOUR PRIZE: {flag}\n\nYou have proven yourself worthy of the ancient secrets!"
+            "victory.prize_message", "🏆 YOUR PRIZE: {flag}\n\nYou have proven yourself worthy of the ancient secrets!"
         )
         flag = self.get_victory_flag()
 
@@ -343,7 +338,7 @@ class GameConfig:
 
         # Validate content doesn't contain problematic characters
         stripped_content = content.strip()
-        if '\n' in stripped_content or '\r' in stripped_content:
+        if "\n" in stripped_content or "\r" in stripped_content:
             self._logger.warning("Flag content contains newline characters, which may cause display issues")
 
         try:
@@ -378,6 +373,7 @@ class GameConfig:
         This can be used for error recovery when configuration becomes corrupted.
         """
         import copy
+
         self._config_data = copy.deepcopy(self._default_config)
         self._read_only_mode = False
         self._logger.info("Configuration reset to default values")
@@ -409,7 +405,4 @@ class GameConfig:
         if not self.get("game"):
             issues.append("Missing 'game' section")
 
-        return {
-            "valid": len(issues) == 0,
-            "issues": issues
-        }
+        return {"valid": len(issues) == 0, "issues": issues}

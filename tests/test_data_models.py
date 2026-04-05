@@ -12,11 +12,7 @@ class TestItem:
     def test_valid_item_creation(self):
         """Test creating a valid item."""
         item = Item(
-            name="Health Potion",
-            description="Restores 50 health points",
-            item_type="consumable",
-            value=25,
-            usable=True
+            name="Health Potion", description="Restores 50 health points", item_type="consumable", value=25, usable=True
         )
         assert item.name == "Health Potion"
         assert item.description == "Restores 50 health points"
@@ -27,85 +23,44 @@ class TestItem:
 
     def test_item_with_defaults(self):
         """Test creating an item with default values."""
-        item = Item(
-            name="Ancient Key",
-            description="Opens mysterious doors",
-            item_type="key",
-            value=0
-        )
+        item = Item(name="Ancient Key", description="Opens mysterious doors", item_type="key", value=0)
         assert item.usable is True  # Default value
         assert item.is_valid() is True
 
     def test_invalid_item_empty_name(self):
         """Test item creation with empty name."""
         with pytest.raises(GameException, match="Item name must be a non-empty string"):
-            Item(
-                name="",
-                description="Test description",
-                item_type="test",
-                value=10
-            )
+            Item(name="", description="Test description", item_type="test", value=10)
 
     def test_invalid_item_none_name(self):
         """Test item creation with None name."""
         with pytest.raises(GameException, match="Item name must be a non-empty string"):
-            Item(
-                name=None,
-                description="Test description",
-                item_type="test",
-                value=10
-            )
+            Item(name=None, description="Test description", item_type="test", value=10)
 
     def test_invalid_item_empty_description(self):
         """Test item creation with empty description."""
         with pytest.raises(GameException, match="Item description must be a non-empty string"):
-            Item(
-                name="Test Item",
-                description="",
-                item_type="test",
-                value=10
-            )
+            Item(name="Test Item", description="", item_type="test", value=10)
 
     def test_invalid_item_empty_type(self):
         """Test item creation with empty type."""
         with pytest.raises(GameException, match="Item type must be a non-empty string"):
-            Item(
-                name="Test Item",
-                description="Test description",
-                item_type="",
-                value=10
-            )
+            Item(name="Test Item", description="Test description", item_type="", value=10)
 
     def test_invalid_item_negative_value(self):
         """Test item creation with negative value."""
         with pytest.raises(GameException, match="Item value must be a non-negative integer"):
-            Item(
-                name="Test Item",
-                description="Test description",
-                item_type="test",
-                value=-5
-            )
+            Item(name="Test Item", description="Test description", item_type="test", value=-5)
 
     def test_invalid_item_non_integer_value(self):
         """Test item creation with non-integer value."""
         with pytest.raises(GameException, match="Item value must be a non-negative integer"):
-            Item(
-                name="Test Item",
-                description="Test description",
-                item_type="test",
-                value="invalid"
-            )
+            Item(name="Test Item", description="Test description", item_type="test", value="invalid")
 
     def test_invalid_item_non_boolean_usable(self):
         """Test item creation with non-boolean usable."""
         with pytest.raises(GameException, match="Item usable must be a boolean"):
-            Item(
-                name="Test Item",
-                description="Test description",
-                item_type="test",
-                value=10,
-                usable="yes"
-            )
+            Item(name="Test Item", description="Test description", item_type="test", value=10, usable="yes")
 
 
 class TestChallengeResult:
@@ -114,12 +69,7 @@ class TestChallengeResult:
     def test_valid_challenge_result_success(self):
         """Test creating a successful challenge result."""
         item = Item("Reward", "Test reward", "treasure", 100)
-        result = ChallengeResult(
-            success=True,
-            message="Challenge completed successfully!",
-            reward=item,
-            damage=0
-        )
+        result = ChallengeResult(success=True, message="Challenge completed successfully!", reward=item, damage=0)
         assert result.success is True
         assert result.message == "Challenge completed successfully!"
         assert result.reward == item
@@ -128,12 +78,7 @@ class TestChallengeResult:
 
     def test_valid_challenge_result_failure(self):
         """Test creating a failed challenge result."""
-        result = ChallengeResult(
-            success=False,
-            message="Challenge failed. Try again.",
-            reward=None,
-            damage=10
-        )
+        result = ChallengeResult(success=False, message="Challenge failed. Try again.", reward=None, damage=10)
         assert result.success is False
         assert result.message == "Challenge failed. Try again."
         assert result.reward is None
@@ -142,10 +87,7 @@ class TestChallengeResult:
 
     def test_challenge_result_with_defaults(self):
         """Test creating a challenge result with default values."""
-        result = ChallengeResult(
-            success=True,
-            message="Success!"
-        )
+        result = ChallengeResult(success=True, message="Success!")
         assert result.reward is None  # Default value
         assert result.damage == 0  # Default value
         assert result.is_valid() is True
@@ -153,53 +95,32 @@ class TestChallengeResult:
     def test_invalid_challenge_result_non_boolean_success(self):
         """Test challenge result with non-boolean success."""
         with pytest.raises(GameException, match="Challenge result success must be a boolean"):
-            ChallengeResult(
-                success="yes",
-                message="Test message"
-            )
+            ChallengeResult(success="yes", message="Test message")
 
     def test_invalid_challenge_result_empty_message(self):
         """Test challenge result with empty message."""
         with pytest.raises(GameException, match="Challenge result message must be a non-empty string"):
-            ChallengeResult(
-                success=True,
-                message=""
-            )
+            ChallengeResult(success=True, message="")
 
     def test_invalid_challenge_result_none_message(self):
         """Test challenge result with None message."""
         with pytest.raises(GameException, match="Challenge result message must be a non-empty string"):
-            ChallengeResult(
-                success=True,
-                message=None
-            )
+            ChallengeResult(success=True, message=None)
 
     def test_invalid_challenge_result_invalid_reward(self):
         """Test challenge result with invalid reward type."""
         with pytest.raises(GameException, match="Challenge result reward must be an Item or None"):
-            ChallengeResult(
-                success=True,
-                message="Test message",
-                reward="invalid_reward"
-            )
+            ChallengeResult(success=True, message="Test message", reward="invalid_reward")
 
     def test_invalid_challenge_result_negative_damage(self):
         """Test challenge result with negative damage."""
         with pytest.raises(GameException, match="Challenge result damage must be a non-negative integer"):
-            ChallengeResult(
-                success=True,
-                message="Test message",
-                damage=-5
-            )
+            ChallengeResult(success=True, message="Test message", damage=-5)
 
     def test_invalid_challenge_result_non_integer_damage(self):
         """Test challenge result with non-integer damage."""
         with pytest.raises(GameException, match="Challenge result damage must be a non-negative integer"):
-            ChallengeResult(
-                success=True,
-                message="Test message",
-                damage="invalid"
-            )
+            ChallengeResult(success=True, message="Test message", damage="invalid")
 
 
 class TestPlayerStats:
@@ -207,12 +128,7 @@ class TestPlayerStats:
 
     def test_valid_player_stats_creation(self):
         """Test creating valid player stats."""
-        stats = PlayerStats(
-            strength=15,
-            intelligence=12,
-            dexterity=8,
-            luck=20
-        )
+        stats = PlayerStats(strength=15, intelligence=12, dexterity=8, luck=20)
         assert stats.strength == 15
         assert stats.intelligence == 12
         assert stats.dexterity == 8
@@ -309,7 +225,7 @@ class TestGameState:
             inventory_items=[item],
             completed_chambers={1, 2, 3},
             game_time=300,
-            player_stats=stats
+            player_stats=stats,
         )
         assert state.current_chamber == 1
         assert state.player_health == 100
@@ -322,10 +238,7 @@ class TestGameState:
 
     def test_game_state_with_defaults(self):
         """Test creating a game state with default values."""
-        state = GameState(
-            current_chamber=1,
-            player_health=100
-        )
+        state = GameState(current_chamber=1, player_health=100)
         assert state.inventory_items == []
         assert state.completed_chambers == set()
         assert state.game_time == 0
@@ -346,11 +259,7 @@ class TestGameState:
 
     def test_is_chamber_completed(self):
         """Test checking if a chamber is completed."""
-        state = GameState(
-            current_chamber=1,
-            player_health=100,
-            completed_chambers={1, 3, 5}
-        )
+        state = GameState(current_chamber=1, player_health=100, completed_chambers={1, 3, 5})
         assert state.is_chamber_completed(1) is True
         assert state.is_chamber_completed(2) is False
         assert state.is_chamber_completed(3) is True
@@ -372,11 +281,7 @@ class TestGameState:
     def test_remove_inventory_item_exists(self):
         """Test removing an existing item from inventory."""
         item = Item("Potion", "Healing potion", "consumable", 25)
-        state = GameState(
-            current_chamber=1,
-            player_health=100,
-            inventory_items=[item]
-        )
+        state = GameState(current_chamber=1, player_health=100, inventory_items=[item])
         removed_item = state.remove_inventory_item("Potion")
         assert removed_item == item
         assert len(state.inventory_items) == 0
@@ -410,53 +315,29 @@ class TestGameState:
     def test_invalid_game_state_non_list_inventory(self):
         """Test game state with non-list inventory."""
         with pytest.raises(GameException, match="Inventory items must be a list"):
-            GameState(
-                current_chamber=1,
-                player_health=100,
-                inventory_items="invalid"
-            )
+            GameState(current_chamber=1, player_health=100, inventory_items="invalid")
 
     def test_invalid_game_state_invalid_inventory_item(self):
         """Test game state with invalid item in inventory."""
         with pytest.raises(GameException, match="All inventory items must be Item instances"):
-            GameState(
-                current_chamber=1,
-                player_health=100,
-                inventory_items=["invalid_item"]
-            )
+            GameState(current_chamber=1, player_health=100, inventory_items=["invalid_item"])
 
     def test_invalid_game_state_non_set_completed_chambers(self):
         """Test game state with non-set completed chambers."""
         with pytest.raises(GameException, match="Completed chambers must be a set"):
-            GameState(
-                current_chamber=1,
-                player_health=100,
-                completed_chambers=["invalid"]
-            )
+            GameState(current_chamber=1, player_health=100, completed_chambers=["invalid"])
 
     def test_invalid_game_state_invalid_completed_chamber_id(self):
         """Test game state with invalid completed chamber ID."""
         with pytest.raises(GameException, match="All completed chamber IDs must be positive integers"):
-            GameState(
-                current_chamber=1,
-                player_health=100,
-                completed_chambers={1, -5, 3}
-            )
+            GameState(current_chamber=1, player_health=100, completed_chambers={1, -5, 3})
 
     def test_invalid_game_state_negative_game_time(self):
         """Test game state with negative game time."""
         with pytest.raises(GameException, match="Game time must be a non-negative integer"):
-            GameState(
-                current_chamber=1,
-                player_health=100,
-                game_time=-100
-            )
+            GameState(current_chamber=1, player_health=100, game_time=-100)
 
     def test_invalid_game_state_invalid_player_stats(self):
         """Test game state with invalid player stats."""
         with pytest.raises(GameException, match="Player stats must be a PlayerStats instance"):
-            GameState(
-                current_chamber=1,
-                player_health=100,
-                player_stats="invalid"
-            )
+            GameState(current_chamber=1, player_health=100, player_stats="invalid")
