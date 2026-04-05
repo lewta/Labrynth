@@ -1,5 +1,6 @@
 {
   "starting_chamber": 1,
+  "exit_chamber": 13,
   "chambers": {
     "1": {
       "name": "Entrance Hall",
