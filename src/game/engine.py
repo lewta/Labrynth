@@ -540,23 +540,19 @@ class GameEngine:
     
     def check_win_condition(self) -> bool:
         """Check if the player has won the game.
-        
+
+        Win condition: the exit chamber's challenge has been completed.
+
         Returns:
             True if win condition is met, False otherwise
         """
-        # Win condition: Complete all chambers (check both world manager and player progress)
-        total_chambers = self.world_manager.get_chamber_count()
-        
-        # Check world manager completion
-        world_completed = len(self.world_manager.get_completed_chambers())
-        
-        # Check player progress completion
-        player_completed = len(self.player_manager.progress.completed_chambers)
-        
-        # Use the higher of the two counts (in case they get out of sync)
-        completed_chambers = max(world_completed, player_completed)
-        
-        return completed_chambers >= total_chambers
+        exit_id = self.world_manager.exit_chamber_id
+        # Check world manager (authoritative during an active session)
+        exit_chamber = self.world_manager.get_chamber(exit_id)
+        if exit_chamber and exit_chamber.completed:
+            return True
+        # Also check player progress (covers loaded/restored game states)
+        return exit_id in self.player_manager.progress.completed_chambers
     
     def save_game(self, filename: str) -> bool:
         """Save the current game state.

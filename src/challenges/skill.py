@@ -157,8 +157,11 @@ class SkillChallenge(Challenge):
         presentation += f"{self.challenge_scenario['scenario']}\n\n"
         
         if self.attempts > 0:
-            remaining = self.max_attempts - self.attempts
-            presentation += f"Attempts remaining: {remaining}\n\n"
+            remaining = max(0, self.max_attempts - self.attempts)
+            if remaining > 0:
+                presentation += f"Attempts remaining: {remaining}\n\n"
+            else:
+                presentation += "Attempts exhausted — each failure now costs HP.\n\n"
         
         presentation += f"This challenge tests your {self.skill_type}. "
         presentation += f"Type '{self.challenge_scenario['action']}' to attempt the challenge, "
@@ -271,7 +274,7 @@ class SkillChallenge(Challenge):
                     message=failure_message
                 )
             else:
-                # No more attempts
+                # Past attempt limit — keep trying but take damage each time
                 final_failure_message = self._get_final_failure_message()
                 return ChallengeResult(
                     success=False,

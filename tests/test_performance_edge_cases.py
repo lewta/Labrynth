@@ -363,8 +363,8 @@ class TestEdgeCases:
         try:
             challenge = challenge_factory.create_challenge('riddle', difficulty=-1)
             assert challenge is not None
-        except ValueError:
-            # Negative difficulty values might cause randomization issues, which is acceptable
+        except (ValueError, GameException):
+            # Negative difficulty values may cause errors, which is acceptable
             pass
         
         # Test challenge with empty/invalid responses

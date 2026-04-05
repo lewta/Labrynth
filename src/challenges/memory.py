@@ -182,8 +182,11 @@ class MemoryChallenge(Challenge):
             presentation += f"{self.description}\n\n"
             
             if self.attempts > 0:
-                remaining = self.max_attempts - self.attempts
-                presentation += f"Attempts remaining: {remaining}\n\n"
+                remaining = max(0, self.max_attempts - self.attempts)
+                if remaining > 0:
+                    presentation += f"Attempts remaining: {remaining}\n\n"
+                else:
+                    presentation += "Attempts exhausted — each wrong answer now costs HP.\n\n"
             
             presentation += "The sequence will be shown for a limited time. Pay close attention!\n"
             presentation += f"You will have {self.show_time:.1f} seconds to memorize it.\n\n"
@@ -390,12 +393,13 @@ class MemoryChallenge(Challenge):
                            f"You need at least {success_threshold:.0f}% accuracy. {remaining_attempts} attempt(s) remaining."
                 )
             else:
-                # No more attempts
+                # Past attempt limit — reset to presentation so player can study and retry with HP penalty
+                self.phase = 'presentation'
                 correct_sequence = " -> ".join(self.current_sequence)
                 return ChallengeResult(
                     success=False,
-                    message=f"Memory challenge failed. The correct sequence was: {correct_sequence}",
-                    damage=8  # Mental strain penalty
+                    message=f"Not quite. The sequence was: {correct_sequence}. Study it again — but the labyrinth exacts a toll.",
+                    damage=8
                 )
     
     def _check_pattern_answer(self, response: str) -> ChallengeResult:
@@ -466,16 +470,16 @@ class MemoryChallenge(Challenge):
                            f"You need at least {success_threshold:.0f}% accuracy. {remaining_attempts} attempt(s) remaining."
                 )
             else:
-                # Show correct pattern
+                # Past attempt limit — reset to presentation so player can study and retry with HP penalty
+                self.phase = 'presentation'
                 correct_info = []
                 for row, col, symbol in self.current_sequence:
                     correct_info.append(f"{row+1},{col+1},{symbol}")
                 correct_pattern = "; ".join(correct_info)
-                
                 return ChallengeResult(
                     success=False,
-                    message=f"Pattern memory failed. The correct pattern was: {correct_pattern}",
-                    damage=8  # Mental strain penalty
+                    message=f"Not quite. The correct pattern was: {correct_pattern}. Study it again — but the labyrinth exacts a toll.",
+                    damage=8
                 )
     
     def get_reward(self) -> Optional[Item]:

@@ -238,6 +238,7 @@ class WorldManager:
         self.connections: Dict[int, Dict[str, int]] = {}
         self.current_chamber_id: int = 1
         self.starting_chamber_id: int = 1
+        self.exit_chamber_id: int = 1
         
     def initialize_labyrinth(self, config_data: Optional[Dict[str, Any]] = None) -> None:
         """Initialize the labyrinth from configuration data.
@@ -289,6 +290,8 @@ class WorldManager:
             except Exception:
                 # If challenge creation fails, chambers will just have no challenges
                 pass
+
+            self.exit_chamber_id = 3
         
         # Create connections
         self.add_connection(1, "north", 2)
@@ -357,6 +360,12 @@ class WorldManager:
             raise GameException(f"Starting chamber {starting_chamber} does not exist")
         self.starting_chamber_id = starting_chamber
         self.current_chamber_id = starting_chamber
+
+        # Set exit chamber (defaults to highest chamber ID if not specified)
+        exit_chamber = config_data.get("exit_chamber", max(self.chambers.keys()))
+        if exit_chamber not in self.chambers:
+            raise GameException(f"Exit chamber {exit_chamber} does not exist")
+        self.exit_chamber_id = exit_chamber
     
     def _validate_labyrinth(self) -> None:
         """Validate that the labyrinth is properly connected and solvable."""

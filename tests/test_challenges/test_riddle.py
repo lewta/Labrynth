@@ -50,7 +50,7 @@ class TestRiddleChallenge:
         assert "Riddle Challenge" in presentation
         assert "Difficulty: 3/10" in presentation
         assert "What has four legs but cannot walk?" in presentation
-        assert "What is your answer?" in presentation
+        assert "Type your answer" in presentation
     
     def test_present_challenge_with_attempts(self):
         """Test challenge presentation after some attempts."""
@@ -110,9 +110,13 @@ class TestRiddleChallenge:
         # Third incorrect answer (final attempt)
         result3 = self.custom_riddle.process_response("wrong3")
         assert result3.success is False
-        assert "run out of attempts" in result3.message
-        assert "table" in result3.message  # Should show correct answer
         assert result3.damage == 5  # Should have damage penalty
+
+        # Fourth attempt — past limit, still accepts answers with damage
+        result4 = self.custom_riddle.process_response("wrong4")
+        assert result4.success is False
+        assert result4.damage == 5
+        assert self.custom_riddle.completed is False
     
     def test_process_response_correct_after_incorrect(self):
         """Test getting correct answer after some incorrect attempts."""
@@ -224,9 +228,10 @@ class TestRiddleChallenge:
             'riddle',
             difficulty=7,
             riddle_text="Test riddle?",
-            answers=["test"]
+            answers=["test"],
+            randomize=False,
         )
-        
+
         assert isinstance(challenge, RiddleChallenge)
         assert challenge.difficulty == 7
         assert challenge.riddle_text == "Test riddle?"

@@ -9,9 +9,10 @@ from src.utils.randomization import get_randomizer
 
 class ChallengeFactory:
     """Factory class for creating different types of challenges."""
-    
-    # Registry of challenge types - will be populated as challenge classes are implemented
+
+    # Registry of challenge types
     _challenge_types: Dict[str, Type[Challenge]] = {}
+    _registered: bool = False
     
     @classmethod
     def register_challenge_type(cls, challenge_type: str, challenge_class: Type[Challenge]) -> None:
@@ -234,5 +235,23 @@ class ChallengeFactory:
         randomizer = get_randomizer()
         if ensure_variety:
             challenges = randomizer.ensure_challenge_variety(challenges)
-        
+
         return challenges
+
+
+def _register_builtin_types() -> None:
+    """Register all built-in challenge types. Called once at module import time."""
+    from src.challenges.riddle import RiddleChallenge
+    from src.challenges.puzzle import PuzzleChallenge
+    from src.challenges.combat import CombatChallenge
+    from src.challenges.skill import SkillChallenge
+    from src.challenges.memory import MemoryChallenge
+
+    ChallengeFactory.register_challenge_type('riddle', RiddleChallenge)
+    ChallengeFactory.register_challenge_type('puzzle', PuzzleChallenge)
+    ChallengeFactory.register_challenge_type('combat', CombatChallenge)
+    ChallengeFactory.register_challenge_type('skill', SkillChallenge)
+    ChallengeFactory.register_challenge_type('memory', MemoryChallenge)
+
+
+_register_builtin_types()

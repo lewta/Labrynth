@@ -194,7 +194,7 @@ class TestMemoryChallenge:
         assert result.success is False
         assert result.damage > 0
         assert challenge.attempts == 3
-        assert "failed" in result.message.lower()
+        assert challenge.phase == 'presentation'  # Reset so player can retry
     
     def test_show_sequence_format_sequence_type(self):
         """Test sequence display format for sequence-based challenges."""

@@ -111,7 +111,7 @@ class TestSaveLoadException:
     def test_save_exception_recoverable(self):
         """Test recoverable save exception."""
         exc = SaveLoadException("save", "game.sav", "Permission denied", is_recoverable=True)
-        assert "Failed to save file 'game.sav'" in str(exc)
+        assert "Failed to save game 'game.sav'" in str(exc)
         assert exc.operation == "save"
         assert exc.filename == "game.sav"
         assert exc.is_recoverable

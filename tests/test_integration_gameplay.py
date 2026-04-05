@@ -42,14 +42,13 @@ class TestCompleteGameplayScenarios:
         inputs = [
             'look',           # Initial look around
             'north',          # Move to chamber with riddle
-            'answer',         # Attempt riddle (will fail first)
-            'sphinx',         # Correct answer for riddle
+            'answer sphinx',  # Attempt riddle with answer in same command
             'inventory',      # Check inventory after success
             'south',          # Return to start
             'east',           # Try different direction
             'help',           # Get help
             'status',         # Check status
-            'save',           # Save game
+            'save mysave',    # Save game with explicit filename
             'quit'            # Exit game
         ]
         mock_input.side_effect = inputs
@@ -113,7 +112,7 @@ class TestCompleteGameplayScenarios:
         engine.start_game()
         
         # Verify puzzle interaction occurred
-        assert engine.world_manager.current_chamber_id in [1, 3]  # Moved or stayed
+        assert engine.world_manager.current_chamber_id in [1, 4]  # Moved east to 4 or stayed
     
     def test_save_load_complete_workflow(self):
         """Test complete save and load workflow with real game state."""
@@ -193,8 +192,8 @@ class TestCompleteGameplayScenarios:
         
         engine = GameEngine()
         
-        # Manually complete all required chambers
-        required_chambers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
+        # Manually complete all required chambers (all 13)
+        required_chambers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13]
         for chamber_id in required_chambers:
             engine.player_manager.progress.complete_chamber(chamber_id)
         

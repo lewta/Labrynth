@@ -203,7 +203,8 @@ class TestRandomizationIntegration:
     
     def setup_method(self):
         """Set up test fixtures."""
-        # Register mock challenge type
+        # Use only MockChallenge so random selection is deterministic
+        ChallengeFactory.clear_registry()
         ChallengeFactory.register_challenge_type('mock', MockChallenge)
         
         # Set up randomization

@@ -467,25 +467,33 @@ class CommandParser:
         Returns:
             List of suggested commands
         """
-        suggestions = []
-        
+        scored: dict = {}
+
         # Check all commands and aliases
         all_commands = set(self._commands.keys()) | set(self._aliases.keys())
-        
+
         for command in all_commands:
-            # Simple fuzzy matching based on:
-            # 1. Commands that start with the same letter
-            # 2. Commands that contain the invalid command
-            # 3. Commands with similar length and characters
-            
-            if self._is_similar_command(invalid_command, command):
-                # Map aliases back to actual commands for suggestions
-                actual_command = self._aliases.get(command, command)
-                if actual_command not in suggestions:
-                    suggestions.append(actual_command)
-        
-        # Limit to top 3 suggestions
-        return suggestions[:3]
+            if not self._is_similar_command(invalid_command, command):
+                continue
+
+            # Map aliases back to actual commands
+            actual_command = self._aliases.get(command, command)
+
+            # Score by match quality: prefix > substring > other
+            if command.startswith(invalid_command):
+                score = 0
+            elif invalid_command in command:
+                score = 1
+            else:
+                score = 2
+
+            # Keep best (lowest) score per actual command
+            if actual_command not in scored or score < scored[actual_command]:
+                scored[actual_command] = score
+
+        # Sort by score (best match first), then alphabetically for stability
+        ranked = sorted(scored.items(), key=lambda kv: (kv[1], kv[0]))
+        return [cmd for cmd, _ in ranked[:3]]
     
     def _is_similar_command(self, invalid: str, valid: str) -> bool:
         """Check if two commands are similar enough to suggest.

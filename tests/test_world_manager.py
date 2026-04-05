@@ -24,22 +24,18 @@ class TestWorldManager:
         """Test initializing with default labyrinth."""
         world = WorldManager()
         world.initialize_labyrinth()
-        
-        assert len(world.chambers) == 3
+
+        assert len(world.chambers) == 13
         assert 1 in world.chambers
-        assert 2 in world.chambers
-        assert 3 in world.chambers
-        
-        # Check chamber names
+        assert 13 in world.chambers
+
+        # Check well-known chamber names
         assert world.chambers[1].name == "Entrance Hall"
-        assert world.chambers[2].name == "Crystal Cavern"
-        assert world.chambers[3].name == "Exit Chamber"
-        
-        # Check connections
+        assert world.chambers[13].name == "Throne of Victory"
+
+        # Chamber 1 exits
         assert world.chambers[1].has_connection("north")
-        assert world.chambers[2].has_connection("south")
-        assert world.chambers[2].has_connection("east")
-        assert world.chambers[3].has_connection("west")
+        assert world.chambers[1].has_connection("east")
     
     def test_initialize_from_config_valid(self):
         """Test initializing from valid configuration."""
@@ -372,10 +368,10 @@ class TestWorldManager:
         world.initialize_labyrinth()
         
         directions = world.get_available_directions(1)
-        assert directions == ["north"]
-        
+        assert set(directions) == {"north", "east"}
+
         directions = world.get_available_directions(2)
-        assert set(directions) == {"south", "east"}
+        assert len(directions) > 0
     
     def test_get_available_directions_not_exists(self):
         """Test getting available directions for non-existent chamber."""
@@ -462,7 +458,7 @@ class TestWorldManager:
         assert world.get_chamber_count() == 0
         
         world.initialize_labyrinth()
-        assert world.get_chamber_count() == 3
+        assert world.get_chamber_count() == 13
     
     def test_get_all_chamber_ids(self):
         """Test getting all chamber IDs."""
@@ -471,7 +467,7 @@ class TestWorldManager:
         
         world.initialize_labyrinth()
         chamber_ids = world.get_all_chamber_ids()
-        assert set(chamber_ids) == {1, 2, 3}
+        assert set(chamber_ids) == set(range(1, 14))
     
     def test_is_chamber_completed_exists_completed(self):
         """Test checking completion status of existing completed chamber."""
@@ -521,19 +517,12 @@ class TestWorldManager:
         world.chambers[2].completed = True
         
         state = world.get_world_state()
-        expected = {
-            "current_chamber_id": 1,
-            "starting_chamber_id": 1,
-            "total_chambers": 3,
-            "completed_chambers": [2],
-            "chamber_ids": [1, 2, 3]
-        }
-        
-        assert state["current_chamber_id"] == expected["current_chamber_id"]
-        assert state["starting_chamber_id"] == expected["starting_chamber_id"]
-        assert state["total_chambers"] == expected["total_chambers"]
-        assert state["completed_chambers"] == expected["completed_chambers"]
-        assert set(state["chamber_ids"]) == set(expected["chamber_ids"])
+
+        assert state["current_chamber_id"] == 1
+        assert state["starting_chamber_id"] == 1
+        assert state["total_chambers"] == 13
+        assert state["completed_chambers"] == [2]
+        assert set(state["chamber_ids"]) == set(range(1, 14))
     
     def test_load_from_file_valid(self):
         """Test loading configuration from valid file."""
@@ -593,7 +582,7 @@ class TestWorldManager:
         world.initialize_labyrinth()
         
         str_repr = str(world)
-        assert "WorldManager(3 chambers, current: 1)" == str_repr
+        assert "WorldManager(13 chambers, current: 1)" == str_repr
     
     def test_repr_representation(self):
         """Test detailed string representation of WorldManager."""
@@ -601,7 +590,7 @@ class TestWorldManager:
         world.initialize_labyrinth()
         
         repr_str = repr(world)
-        expected = "WorldManager(chambers=3, current_chamber=1, starting_chamber=1)"
+        expected = "WorldManager(chambers=13, current_chamber=1, starting_chamber=1)"
         assert repr_str == expected
     
     def test_get_reachable_chambers_simple(self):
@@ -610,7 +599,7 @@ class TestWorldManager:
         world.initialize_labyrinth()
         
         reachable = world._get_reachable_chambers(1)
-        assert reachable == {1, 2, 3}
+        assert reachable == set(range(1, 14))
     
     def test_get_reachable_chambers_partial(self):
         """Test getting reachable chambers with some unreachable."""

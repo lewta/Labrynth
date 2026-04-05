@@ -105,9 +105,8 @@ class SaveLoadManager:
             
             return game_state
             
-        except json.JSONDecodeError:
-            # Return None for corrupted JSON files instead of raising exception
-            return None
+        except json.JSONDecodeError as e:
+            raise SaveLoadException("load", filename, f"Save file is corrupted: {e}")
         except (ValueError, KeyError, TypeError):
             # Return None for corrupted save data instead of raising exception
             return None

@@ -75,7 +75,10 @@ class TestGameEngine:
             self.engine.start_game()
     
     def test_process_command_invalid(self):
-        """Test processing invalid command."""
+        """Test processing invalid command when no active challenge is present."""
+        # Ensure the current chamber has no active challenge so input isn't absorbed
+        self.test_chamber.challenge = None
+
         invalid_command = ParsedCommand(
             command_type=CommandType.SYSTEM,
             action="invalid",
@@ -84,9 +87,9 @@ class TestGameEngine:
             is_valid=False,
             error_message="Invalid command"
         )
-        
+
         self.engine.process_command(invalid_command)
-        
+
         self.engine.ui_controller.handle_invalid_command.assert_called_once_with(invalid_command)
         assert self.engine.commands_processed == 0
     
@@ -325,6 +328,8 @@ class TestGameEngine:
     
     def test_handle_challenge_command_no_challenge(self):
         """Test challenge command when no challenge is present."""
+        self.test_chamber.challenge = None
+
         answer_command = ParsedCommand(
             command_type=CommandType.CHALLENGE,
             action="answer",
@@ -332,9 +337,9 @@ class TestGameEngine:
             raw_input="answer test answer",
             is_valid=True
         )
-        
+
         self.engine._handle_challenge_command(answer_command)
-        
+
         self.engine.ui_controller.display_message.assert_called_with("There is no active challenge here.")
     
     def test_check_win_condition_not_won(self):
@@ -477,10 +482,12 @@ class TestGameEngine:
     
     def test_examine_target_exits(self):
         """Test examining exits."""
-        # Chamber 1 has a north exit in the default labyrinth
+        # Chamber 1 has north and east exits in the default labyrinth
         self.engine._examine_target("exits")
-        
-        self.engine.ui_controller.display_message.assert_called_with("Available exits: north")
+
+        call_args = self.engine.ui_controller.display_message.call_args[0][0]
+        assert "north" in call_args
+        assert "east" in call_args
     
     def test_examine_target_unknown(self):
         """Test examining unknown target."""

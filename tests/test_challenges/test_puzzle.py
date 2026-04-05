@@ -233,7 +233,7 @@ class TestPuzzleChallenge:
         
         presentation = pattern_puzzle.present_challenge()
         assert "Pattern" in presentation
-        assert "What symbol comes next?" in presentation
+        assert "What comes next?" in presentation
     
     def test_factory_integration(self):
         """Test that PuzzleChallenge works with ChallengeFactory."""

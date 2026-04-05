@@ -354,9 +354,10 @@ class TestErrorHandlingIntegration:
             
             save_manager = SaveLoadManager()
             
-            # Should handle corrupted save gracefully
-            loaded_state = save_manager.load_game(corrupted_save)
-            assert loaded_state is None  # Should return None for corrupted saves
+            # Should raise SaveLoadException for corrupted saves
+            from src.utils.exceptions import SaveLoadException
+            with pytest.raises(SaveLoadException, match="Save file is corrupted"):
+                save_manager.load_game(corrupted_save)
             
         finally:
             # Clean up
@@ -382,7 +383,7 @@ class TestErrorHandlingIntegration:
         assert engine.world_manager.current_chamber_id == 1
         
         # Test that valid commands still work
-        valid_commands = engine.command_parser.get_valid_commands()
+        valid_commands = engine.command_parser.get_available_commands()
         assert len(valid_commands) > 0
 
 

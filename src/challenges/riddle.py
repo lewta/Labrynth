@@ -129,10 +129,13 @@ class RiddleChallenge(Challenge):
         presentation += f"{self.riddle_text}\n\n"
         
         if self.attempts > 0:
-            remaining = self.max_attempts - self.attempts
-            presentation += f"Attempts remaining: {remaining}\n\n"
+            remaining = max(0, self.max_attempts - self.attempts)
+            if remaining > 0:
+                presentation += f"Attempts remaining: {remaining}\n\n"
+            else:
+                presentation += "Attempts exhausted — each wrong answer now costs HP.\n\n"
         
-        presentation += "What is your answer? "
+        presentation += "Type your answer (or 'hint' for a clue): "
         return presentation
     
     def process_response(self, response: str) -> ChallengeResult:
@@ -170,20 +173,19 @@ class RiddleChallenge(Challenge):
             )
         else:
             remaining_attempts = self.max_attempts - self.attempts
-            
+            hint_message = self._get_hint_message()
+
             if remaining_attempts > 0:
-                hint_message = self._get_hint_message()
                 return ChallengeResult(
                     success=False,
                     message=f"That's not correct. {hint_message} You have {remaining_attempts} attempt(s) remaining."
                 )
             else:
-                # No more attempts
-                correct_answers = ", ".join(self.answers[:3])  # Show first 3 answers
+                # Past attempt limit — keep accepting answers but exact a toll each time
                 return ChallengeResult(
                     success=False,
-                    message=f"Sorry, you've run out of attempts. The answer was: {correct_answers}",
-                    damage=5  # Small penalty for failing
+                    message=f"That's not correct. The labyrinth exacts a toll for your stubbornness. {hint_message}",
+                    damage=5
                 )
     
     def _get_success_message(self) -> str:
