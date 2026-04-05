@@ -1,6 +1,7 @@
 """Shared pytest fixtures and configuration."""
 
 import pytest
+
 from src.challenges.factory import ChallengeFactory
 
 

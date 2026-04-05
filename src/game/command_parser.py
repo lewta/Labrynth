@@ -1,9 +1,8 @@
 """Command parser for processing user input in the game."""
 
-import re
-from typing import Dict, List, Optional, Tuple, Any
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any
 
 
 class CommandType(Enum):
@@ -21,15 +20,15 @@ class ParsedCommand:
     """Represents a parsed user command."""
     command_type: CommandType
     action: str
-    parameters: List[str]
+    parameters: list[str]
     raw_input: str
     is_valid: bool = True
-    error_message: Optional[str] = None
+    error_message: str | None = None
 
 
 class CommandParser:
     """Parses and validates user input commands."""
-    
+
     def __init__(self):
         """Initialize the command parser with available commands."""
         self._commands = self._initialize_commands()
@@ -46,8 +45,8 @@ class CommandParser:
             'up': 'up', 'u': 'up',
             'down': 'down', 'd': 'down'
         }
-    
-    def _initialize_commands(self) -> Dict[str, Dict[str, Any]]:
+
+    def _initialize_commands(self) -> dict[str, dict[str, Any]]:
         """Initialize the available commands and their metadata."""
         return {
             # Movement commands
@@ -67,7 +66,7 @@ class CommandParser:
                 'min_params': 1,
                 'max_params': 1
             },
-            
+
             # Examination commands
             'look': {
                 'type': CommandType.EXAMINATION,
@@ -101,7 +100,7 @@ class CommandParser:
                 'min_params': 0,
                 'max_params': 1
             },
-            
+
             # Inventory commands
             'inventory': {
                 'type': CommandType.INVENTORY,
@@ -135,7 +134,7 @@ class CommandParser:
                 'min_params': 1,
                 'max_params': 1
             },
-            
+
             # Interaction commands
             'take': {
                 'type': CommandType.INTERACTION,
@@ -161,7 +160,7 @@ class CommandParser:
                 'min_params': 0,
                 'max_params': 1
             },
-            
+
             # System commands
             'help': {
                 'type': CommandType.SYSTEM,
@@ -211,7 +210,7 @@ class CommandParser:
                 'min_params': 0,
                 'max_params': 0
             },
-            
+
             # Challenge commands
             'answer': {
                 'type': CommandType.CHALLENGE,
@@ -238,8 +237,8 @@ class CommandParser:
                 'max_params': 0
             }
         }
-    
-    def _initialize_aliases(self) -> Dict[str, str]:
+
+    def _initialize_aliases(self) -> dict[str, str]:
         """Initialize command aliases."""
         return {
             # Movement aliases
@@ -253,35 +252,35 @@ class CommandParser:
             'southwest': 'go', 'sw': 'go',
             'up': 'go', 'u': 'go',
             'down': 'go', 'd': 'go',
-            
+
             # Examination aliases
             'l': 'look',
             'ex': 'examine',
             'check': 'examine',
             'm': 'map',
-            
+
             # Inventory aliases
             'inv': 'inventory',
             'i': 'inventory',
-            
+
             # Interaction aliases
             'pick': 'take',
             'pickup': 'take',
             'grab': 'take',
-            
+
             # System aliases
             'h': 'help',
             '?': 'help',
             'stat': 'status',
             'q': 'quit'
         }
-    
+
     def parse_command(self, user_input: str) -> ParsedCommand:
         """Parse user input into a structured command.
-        
+
         Args:
             user_input: Raw user input string
-            
+
         Returns:
             ParsedCommand object with parsed information
         """
@@ -294,11 +293,11 @@ class CommandParser:
                 is_valid=False,
                 error_message="Please enter a command."
             )
-        
+
         # Clean and split input
         cleaned_input = user_input.strip().lower()
         parts = self._split_input(cleaned_input)
-        
+
         if not parts:
             return ParsedCommand(
                 command_type=CommandType.SYSTEM,
@@ -308,10 +307,10 @@ class CommandParser:
                 is_valid=False,
                 error_message="Please enter a command."
             )
-        
+
         command_word = parts[0]
         parameters = parts[1:] if len(parts) > 1 else []
-        
+
         # Handle direction shortcuts (single direction words)
         if command_word in self._direction_aliases and command_word not in self._commands:
             direction = self._direction_aliases[command_word]
@@ -322,17 +321,17 @@ class CommandParser:
                 raw_input=user_input,
                 is_valid=True
             )
-        
+
         # Resolve aliases
         actual_command = self._aliases.get(command_word, command_word)
-        
+
         # Check if command exists
         if actual_command not in self._commands:
             suggestions = self._get_command_suggestions(command_word)
             error_msg = f"Unknown command: '{command_word}'"
             if suggestions:
                 error_msg += f". Did you mean: {', '.join(suggestions)}?"
-            
+
             return ParsedCommand(
                 command_type=CommandType.SYSTEM,
                 action=command_word,
@@ -341,11 +340,11 @@ class CommandParser:
                 is_valid=False,
                 error_message=error_msg
             )
-        
+
         # Validate parameters
         command_info = self._commands[actual_command]
         validation_result = self._validate_parameters(actual_command, parameters)
-        
+
         if not validation_result[0]:
             return ParsedCommand(
                 command_type=command_info['type'],
@@ -355,10 +354,10 @@ class CommandParser:
                 is_valid=False,
                 error_message=validation_result[1]
             )
-        
+
         # Handle special parameter processing
         processed_params = self._process_parameters(actual_command, parameters)
-        
+
         return ParsedCommand(
             command_type=command_info['type'],
             action=actual_command,
@@ -366,13 +365,13 @@ class CommandParser:
             raw_input=user_input,
             is_valid=True
         )
-    
-    def _split_input(self, input_text: str) -> List[str]:
+
+    def _split_input(self, input_text: str) -> list[str]:
         """Split input text into command and parameters, handling quoted strings.
-        
+
         Args:
             input_text: The input text to split
-            
+
         Returns:
             List of command parts
         """
@@ -381,11 +380,11 @@ class CommandParser:
         current_part = ""
         in_quotes = False
         quote_char = None
-        
+
         i = 0
         while i < len(input_text):
             char = input_text[i]
-            
+
             if char in ['"', "'"] and not in_quotes:
                 in_quotes = True
                 quote_char = char
@@ -398,51 +397,51 @@ class CommandParser:
                     current_part = ""
             else:
                 current_part += char
-            
+
             i += 1
-        
+
         if current_part:
             parts.append(current_part)
-        
+
         return parts
-    
-    def _validate_parameters(self, command: str, parameters: List[str]) -> Tuple[bool, Optional[str]]:
+
+    def _validate_parameters(self, command: str, parameters: list[str]) -> tuple[bool, str | None]:
         """Validate command parameters.
-        
+
         Args:
             command: The command to validate
             parameters: List of parameters
-            
+
         Returns:
             Tuple of (is_valid, error_message)
         """
         command_info = self._commands[command]
         min_params = command_info['min_params']
         max_params = command_info['max_params']
-        
+
         param_count = len(parameters)
-        
+
         if param_count < min_params:
             if min_params == 1:
                 return False, f"Command '{command}' requires a parameter. Usage: {command_info['usage']}"
             else:
                 return False, f"Command '{command}' requires at least {min_params} parameters. Usage: {command_info['usage']}"
-        
+
         if max_params != -1 and param_count > max_params:
             if max_params == 0:
                 return False, f"Command '{command}' doesn't take any parameters. Usage: {command_info['usage']}"
             else:
                 return False, f"Command '{command}' takes at most {max_params} parameters. Usage: {command_info['usage']}"
-        
+
         return True, None
-    
-    def _process_parameters(self, command: str, parameters: List[str]) -> List[str]:
+
+    def _process_parameters(self, command: str, parameters: list[str]) -> list[str]:
         """Process and normalize parameters for specific commands.
-        
+
         Args:
             command: The command being processed
             parameters: List of raw parameters
-            
+
         Returns:
             List of processed parameters
         """
@@ -451,19 +450,19 @@ class CommandParser:
             direction = parameters[0].lower()
             normalized_direction = self._direction_aliases.get(direction, direction)
             return [normalized_direction]
-        
+
         # For answer and solve commands, join multi-word responses
         if command in ['answer', 'solve'] and len(parameters) > 1:
             return [' '.join(parameters)]
-        
+
         return parameters
-    
-    def _get_command_suggestions(self, invalid_command: str) -> List[str]:
+
+    def _get_command_suggestions(self, invalid_command: str) -> list[str]:
         """Get command suggestions for invalid input using fuzzy matching.
-        
+
         Args:
             invalid_command: The invalid command entered
-            
+
         Returns:
             List of suggested commands
         """
@@ -494,34 +493,33 @@ class CommandParser:
         # Sort by score (best match first), then alphabetically for stability
         ranked = sorted(scored.items(), key=lambda kv: (kv[1], kv[0]))
         return [cmd for cmd, _ in ranked[:3]]
-    
+
     def _is_similar_command(self, invalid: str, valid: str) -> bool:
         """Check if two commands are similar enough to suggest.
-        
+
         Args:
             invalid: The invalid command
             valid: A valid command to compare against
-            
+
         Returns:
             True if commands are similar enough
         """
         # Exact match (shouldn't happen, but just in case)
         if invalid == valid:
             return True
-        
+
         # One contains the other (substring matching)
         if invalid in valid or valid in invalid:
             return True
-        
+
         # Same starting letter and similar length
         if invalid[0] == valid[0] and abs(len(invalid) - len(valid)) <= 3:
             return True
-        
+
         # Check for common prefix of at least 2 characters
-        if len(invalid) >= 2 and len(valid) >= 2:
-            if invalid[:2] == valid[:2]:
-                return True
-        
+        if len(invalid) >= 2 and len(valid) >= 2 and invalid[:2] == valid[:2]:
+            return True
+
         # Levenshtein-like distance check for very similar commands
         if abs(len(invalid) - len(valid)) <= 1:
             differences = 0
@@ -533,57 +531,57 @@ class CommandParser:
                     break
             if differences <= 1:
                 return True
-        
+
         return False
-    
-    def get_available_commands(self) -> Dict[str, str]:
+
+    def get_available_commands(self) -> dict[str, str]:
         """Get all available commands and their descriptions.
-        
+
         Returns:
             Dictionary mapping command names to descriptions
         """
         return {cmd: info['description'] for cmd, info in self._commands.items()}
-    
-    def get_command_usage(self, command: str) -> Optional[str]:
+
+    def get_command_usage(self, command: str) -> str | None:
         """Get usage information for a specific command.
-        
+
         Args:
             command: The command to get usage for
-            
+
         Returns:
             Usage string or None if command doesn't exist
         """
         if command in self._commands:
             return self._commands[command]['usage']
-        
+
         # Check if it's an alias
         actual_command = self._aliases.get(command)
         if actual_command and actual_command in self._commands:
             return self._commands[actual_command]['usage']
-        
+
         return None
-    
-    def get_commands_by_type(self, command_type: CommandType) -> Dict[str, str]:
+
+    def get_commands_by_type(self, command_type: CommandType) -> dict[str, str]:
         """Get commands of a specific type.
-        
+
         Args:
             command_type: The type of commands to retrieve
-            
+
         Returns:
             Dictionary of commands of the specified type
         """
         return {
-            cmd: info['description'] 
-            for cmd, info in self._commands.items() 
+            cmd: info['description']
+            for cmd, info in self._commands.items()
             if info['type'] == command_type
         }
-    
+
     def is_valid_direction(self, direction: str) -> bool:
         """Check if a string is a valid direction.
-        
+
         Args:
             direction: The direction to validate
-            
+
         Returns:
             True if it's a valid direction
         """

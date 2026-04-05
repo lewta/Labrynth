@@ -1,12 +1,12 @@
 """Challenge system package."""
 
 from .base import Challenge
-from .factory import ChallengeFactory
-from .riddle import RiddleChallenge
-from .puzzle import PuzzleChallenge
 from .combat import CombatChallenge
-from .skill import SkillChallenge
+from .factory import ChallengeFactory
 from .memory import MemoryChallenge
+from .puzzle import PuzzleChallenge
+from .riddle import RiddleChallenge
+from .skill import SkillChallenge
 
 # Register challenge types with the factory
 ChallengeFactory.register_challenge_type('riddle', RiddleChallenge)

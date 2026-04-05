@@ -1,18 +1,18 @@
 """Riddle challenge implementation."""
 
-from typing import List, Optional
+
 from src.challenges.base import Challenge
-from src.utils.data_models import Item, ChallengeResult
 from src.utils.challenge_content import get_content_loader
+from src.utils.data_models import ChallengeResult, Item
 
 
 class RiddleChallenge(Challenge):
     """A text-based riddle challenge with multiple acceptable answers."""
-    
-    def __init__(self, difficulty: int = 5, riddle_text: str = None, 
-                 answers: List[str] = None, reward_item: Item = None, **kwargs):
+
+    def __init__(self, difficulty: int = 5, riddle_text: str = None,
+                 answers: list[str] = None, reward_item: Item = None, **kwargs):
         """Initialize a riddle challenge.
-        
+
         Args:
             difficulty: Difficulty level (1-10)
             riddle_text: The riddle question text
@@ -22,9 +22,9 @@ class RiddleChallenge(Challenge):
         """
         name = kwargs.get('name', 'Riddle Challenge')
         description = kwargs.get('description', 'A mysterious riddle that tests your wit')
-        
+
         super().__init__(name, description, difficulty)
-        
+
         # Get riddle content (randomized or default)
         if riddle_text is None or answers is None:
             riddle_data = self._get_riddle_content()
@@ -37,17 +37,17 @@ class RiddleChallenge(Challenge):
             self.answers = [answer.lower().strip() for answer in answers]
             self.hint_text = None
             self.category = 'custom'
-        
+
         # Default reward if none provided
         self.reward_item = reward_item or self._get_default_reward()
-        
+
         # Track attempts for difficulty scaling
         self.attempts = 0
         self.max_attempts = 3
-    
+
     def _get_riddle_content(self) -> dict:
         """Get riddle content from content loader or fallback to defaults.
-        
+
         Returns:
             Dictionary with riddle_text, answers, hint, and category
         """
@@ -68,7 +68,7 @@ class RiddleChallenge(Challenge):
                 'hint': self._get_default_hint(),
                 'category': 'default'
             }
-    
+
     def _get_default_riddle(self) -> str:
         """Get a default riddle based on difficulty level."""
         default_riddles = {
@@ -83,12 +83,12 @@ class RiddleChallenge(Challenge):
             9: "The person who makes it, sells it. The person who buys it, never uses it. The person who uses it, never knows it. What is it?",
             10: "I am the beginning of the end, and the end of time and space. I am essential to creation, and I surround every place. What am I?"
         }
-        
+
         # Use difficulty level, default to medium if out of range
         difficulty_key = min(max(self.difficulty, 1), 10)
         return default_riddles.get(difficulty_key, default_riddles[5])
-    
-    def _get_default_answers(self) -> List[str]:
+
+    def _get_default_answers(self) -> list[str]:
         """Get default answers based on the default riddle."""
         default_answer_sets = {
             1: ["keyboard", "computer keyboard"],
@@ -102,54 +102,54 @@ class RiddleChallenge(Challenge):
             9: ["coffin", "a coffin", "casket"],
             10: ["the letter e", "letter e", "e"]
         }
-        
+
         difficulty_key = min(max(self.difficulty, 1), 10)
         return default_answer_sets.get(difficulty_key, ["unknown"])
-    
+
     def _get_default_reward(self) -> Item:
         """Get a default reward item."""
         reward_names = [
             "Ancient Key", "Wisdom Scroll", "Crystal Shard", "Golden Coin",
             "Magic Rune", "Silver Token", "Mystic Gem", "Sacred Amulet"
         ]
-        
+
         reward_name = reward_names[self.difficulty % len(reward_names)]
-        
+
         return Item(
             name=reward_name,
             description=f"A valuable {reward_name.lower()} earned by solving a riddle",
             item_type="treasure",
             value=self.difficulty * 10
         )
-    
+
     def present_challenge(self) -> str:
         """Present the riddle to the player."""
         presentation = f"\n=== {self.name} ===\n"
         presentation += f"Difficulty: {self.difficulty}/10\n\n"
         presentation += f"{self.riddle_text}\n\n"
-        
+
         if self.attempts > 0:
             remaining = max(0, self.max_attempts - self.attempts)
             if remaining > 0:
                 presentation += f"Attempts remaining: {remaining}\n\n"
             else:
                 presentation += "Attempts exhausted — each wrong answer now costs HP.\n\n"
-        
+
         presentation += "Type your answer (or 'hint' for a clue): "
         return presentation
-    
+
     def process_response(self, response: str) -> ChallengeResult:
         """Process the player's answer to the riddle.
-        
+
         Args:
             response: The player's answer
-            
+
         Returns:
             ChallengeResult indicating success/failure and any rewards
         """
         # Clean and normalize the response
         cleaned_response = response.lower().strip()
-        
+
         # Check if this is a hint request
         if cleaned_response in ['hint', 'help', 'clue', 'tip']:
             hint_message = self._get_hint_message()
@@ -158,12 +158,12 @@ class RiddleChallenge(Challenge):
                 message=f"Hint: {hint_message}",
                 is_intermediate=True  # This prevents "FAILED!" from being displayed
             )
-        
+
         self.attempts += 1
-        
+
         # Check if the answer is correct
         is_correct = any(cleaned_response == answer for answer in self.answers)
-        
+
         if is_correct:
             self.mark_completed()
             return ChallengeResult(
@@ -187,7 +187,7 @@ class RiddleChallenge(Challenge):
                     message=f"That's not correct. The labyrinth exacts a toll for your stubbornness. {hint_message}",
                     damage=5
                 )
-    
+
     def _get_success_message(self) -> str:
         """Get a success message based on number of attempts."""
         if self.attempts == 1:
@@ -196,16 +196,16 @@ class RiddleChallenge(Challenge):
             return "Good thinking! You got it on the second attempt."
         else:
             return "You persevered and found the answer!"
-    
+
     def _get_hint_message(self) -> str:
         """Get a hint message based on the current riddle."""
         # Use hint from content if available
         if hasattr(self, 'hint_text') and self.hint_text:
             return self.hint_text
-        
+
         # Fallback to default hints
         return self._get_default_hint()
-    
+
     def _get_default_hint(self) -> str:
         """Get default hint based on difficulty."""
         hints = {
@@ -220,36 +220,36 @@ class RiddleChallenge(Challenge):
             9: "Think about something used in funerals.",
             10: "It's a letter that appears in many important words."
         }
-        
+
         difficulty_key = min(max(self.difficulty, 1), 10)
         return hints.get(difficulty_key, "Think carefully about the clues in the riddle.")
-    
-    def get_reward(self) -> Optional[Item]:
+
+    def get_reward(self) -> Item | None:
         """Get the reward for completing this riddle.
-        
+
         Returns:
             The reward item if the riddle is completed, None otherwise
         """
         return self.reward_item if self.completed else None
-    
+
     def reset(self) -> None:
         """Reset the riddle challenge for a new attempt."""
         self.attempts = 0
         self.completed = False
-    
+
     def add_acceptable_answer(self, answer: str) -> None:
         """Add a new acceptable answer to the riddle.
-        
+
         Args:
             answer: New acceptable answer (will be converted to lowercase)
         """
         cleaned_answer = answer.lower().strip()
         if cleaned_answer not in self.answers:
             self.answers.append(cleaned_answer)
-    
-    def get_acceptable_answers(self) -> List[str]:
+
+    def get_acceptable_answers(self) -> list[str]:
         """Get all acceptable answers for this riddle.
-        
+
         Returns:
             List of acceptable answers
         """

@@ -2,12 +2,15 @@
 
 import json
 import os
-from typing import Dict, Any, Optional
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
+from typing import Any
 
 from src.utils.exceptions import GameException
-from src.utils.randomization import RandomizationConfig, RandomizationLevel, create_randomization_config
 from src.utils.labyrinth_generator import GenerationConfig, LabyrinthLayout
+from src.utils.randomization import (
+    RandomizationConfig,
+    create_randomization_config,
+)
 
 
 @dataclass
@@ -20,14 +23,14 @@ class GameRandomizationConfig:
     labyrinth_ensure_solvable: bool = True
     labyrinth_min_path_length: int = 5
     labyrinth_max_dead_ends: int = 3
-    labyrinth_seed: Optional[int] = None
-    
+    labyrinth_seed: int | None = None
+
     challenge_enabled: bool = True
     challenge_level: str = "moderate"
     challenge_variety: bool = True
     challenge_difficulty_variance: int = 1
-    challenge_seed: Optional[int] = None
-    
+    challenge_seed: int | None = None
+
     def to_labyrinth_config(self) -> GenerationConfig:
         """Convert to labyrinth generation configuration."""
         return GenerationConfig(
@@ -39,7 +42,7 @@ class GameRandomizationConfig:
             max_dead_ends=self.labyrinth_max_dead_ends,
             seed=self.labyrinth_seed
         )
-    
+
     def to_challenge_config(self) -> RandomizationConfig:
         """Convert to challenge randomization configuration."""
         return create_randomization_config(
@@ -52,57 +55,57 @@ class GameRandomizationConfig:
 
 class RandomizationConfigManager:
     """Manages randomization configuration loading and saving."""
-    
+
     def __init__(self, config_file: str = "config/randomization_settings.json"):
         """Initialize the configuration manager.
-        
+
         Args:
             config_file: Path to the randomization settings file
         """
         self.config_file = config_file
         self._config_cache = None
-    
+
     def load_config(self, preset: str = None) -> GameRandomizationConfig:
         """Load randomization configuration.
-        
+
         Args:
             preset: Optional preset name to load ('easy', 'normal', 'hard', 'nightmare')
-            
+
         Returns:
             GameRandomizationConfig instance
         """
         config_data = self._load_config_file()
-        
+
         if preset:
             return self._load_preset_config(config_data, preset)
         else:
             return self._load_default_config(config_data)
-    
-    def _load_config_file(self) -> Dict[str, Any]:
+
+    def _load_config_file(self) -> dict[str, Any]:
         """Load the configuration file."""
         if self._config_cache is not None:
             return self._config_cache
-        
+
         if not os.path.exists(self.config_file):
             raise GameException(f"Randomization config file not found: {self.config_file}")
-        
+
         try:
-            with open(self.config_file, 'r', encoding='utf-8') as f:
+            with open(self.config_file, encoding='utf-8') as f:
                 config_data = json.load(f)
-            
+
             self._config_cache = config_data
             return config_data
-            
+
         except json.JSONDecodeError as e:
             raise GameException(f"Invalid JSON in randomization config: {e}")
         except Exception as e:
             raise GameException(f"Error loading randomization config: {e}")
-    
-    def _load_default_config(self, config_data: Dict[str, Any]) -> GameRandomizationConfig:
+
+    def _load_default_config(self, config_data: dict[str, Any]) -> GameRandomizationConfig:
         """Load default configuration."""
         labyrinth_config = config_data.get("labyrinth_randomization", {})
         challenge_config = config_data.get("challenge_randomization", {})
-        
+
         return GameRandomizationConfig(
             labyrinth_enabled=labyrinth_config.get("enabled", False),
             labyrinth_chamber_count=labyrinth_config.get("chamber_count", 13),
@@ -112,31 +115,31 @@ class RandomizationConfigManager:
             labyrinth_min_path_length=labyrinth_config.get("min_path_length", 5),
             labyrinth_max_dead_ends=labyrinth_config.get("max_dead_ends", 3),
             labyrinth_seed=labyrinth_config.get("seed"),
-            
+
             challenge_enabled=challenge_config.get("enabled", True),
             challenge_level=challenge_config.get("level", "moderate"),
             challenge_variety=challenge_config.get("challenge_variety", True),
             challenge_difficulty_variance=challenge_config.get("difficulty_variance", 1),
             challenge_seed=challenge_config.get("seed")
         )
-    
-    def _load_preset_config(self, config_data: Dict[str, Any], preset: str) -> GameRandomizationConfig:
+
+    def _load_preset_config(self, config_data: dict[str, Any], preset: str) -> GameRandomizationConfig:
         """Load a preset configuration."""
         presets = config_data.get("presets", {})
-        
+
         if preset not in presets:
             available_presets = list(presets.keys())
             raise GameException(f"Unknown preset '{preset}'. Available presets: {available_presets}")
-        
+
         preset_data = presets[preset]
-        
+
         # Start with default config
         base_config = self._load_default_config(config_data)
-        
+
         # Override with preset values
         labyrinth_preset = preset_data.get("labyrinth_randomization", {})
         challenge_preset = preset_data.get("challenge_randomization", {})
-        
+
         # Update labyrinth settings
         if "enabled" in labyrinth_preset:
             base_config.labyrinth_enabled = labyrinth_preset["enabled"]
@@ -148,7 +151,7 @@ class RandomizationConfigManager:
             base_config.labyrinth_connectivity = labyrinth_preset["connectivity"]
         if "min_path_length" in labyrinth_preset:
             base_config.labyrinth_min_path_length = labyrinth_preset["min_path_length"]
-        
+
         # Update challenge settings
         if "enabled" in challenge_preset:
             base_config.challenge_enabled = challenge_preset["enabled"]
@@ -156,17 +159,17 @@ class RandomizationConfigManager:
             base_config.challenge_level = challenge_preset["level"]
         if "difficulty_variance" in challenge_preset:
             base_config.challenge_difficulty_variance = challenge_preset["difficulty_variance"]
-        
+
         return base_config
-    
+
     def save_config(self, config: GameRandomizationConfig) -> None:
         """Save randomization configuration.
-        
+
         Args:
             config: Configuration to save
         """
         config_data = self._load_config_file()
-        
+
         # Update the configuration data
         config_data["labyrinth_randomization"] = {
             "enabled": config.labyrinth_enabled,
@@ -178,7 +181,7 @@ class RandomizationConfigManager:
             "max_dead_ends": config.labyrinth_max_dead_ends,
             "seed": config.labyrinth_seed
         }
-        
+
         config_data["challenge_randomization"] = {
             "enabled": config.challenge_enabled,
             "level": config.challenge_level,
@@ -186,51 +189,51 @@ class RandomizationConfigManager:
             "difficulty_variance": config.challenge_difficulty_variance,
             "seed": config.challenge_seed
         }
-        
+
         # Save to file
         try:
             os.makedirs(os.path.dirname(self.config_file), exist_ok=True)
-            
+
             with open(self.config_file, 'w', encoding='utf-8') as f:
                 json.dump(config_data, f, indent=2, ensure_ascii=False)
-            
+
             # Clear cache
             self._config_cache = None
-            
+
         except Exception as e:
             raise GameException(f"Error saving randomization config: {e}")
-    
+
     def get_available_presets(self) -> list[str]:
         """Get list of available presets.
-        
+
         Returns:
             List of preset names
         """
         config_data = self._load_config_file()
         presets = config_data.get("presets", {})
         return list(presets.keys())
-    
-    def get_preset_info(self, preset: str) -> Dict[str, Any]:
+
+    def get_preset_info(self, preset: str) -> dict[str, Any]:
         """Get information about a specific preset.
-        
+
         Args:
             preset: Preset name
-            
+
         Returns:
             Dictionary with preset information
         """
         config_data = self._load_config_file()
         presets = config_data.get("presets", {})
-        
+
         if preset not in presets:
             raise GameException(f"Unknown preset: {preset}")
-        
+
         preset_data = presets[preset]
-        
+
         # Extract key information
         labyrinth_info = preset_data.get("labyrinth_randomization", {})
         challenge_info = preset_data.get("challenge_randomization", {})
-        
+
         return {
             "name": preset,
             "labyrinth": {
@@ -243,44 +246,44 @@ class RandomizationConfigManager:
                 "difficulty_variance": challenge_info.get("difficulty_variance", 1)
             }
         }
-    
+
     def validate_config(self, config: GameRandomizationConfig) -> None:
         """Validate a randomization configuration.
-        
+
         Args:
             config: Configuration to validate
-            
+
         Raises:
             GameException: If configuration is invalid
         """
         # Validate labyrinth settings
         if config.labyrinth_chamber_count < 3:
             raise GameException("Labyrinth chamber count must be at least 3")
-        
+
         if config.labyrinth_chamber_count > 50:
             raise GameException("Labyrinth chamber count cannot exceed 50")
-        
+
         if not 0.0 <= config.labyrinth_connectivity <= 1.0:
             raise GameException("Labyrinth connectivity must be between 0.0 and 1.0")
-        
+
         valid_layouts = ["linear", "circular", "tree", "grid", "random", "hybrid"]
         if config.labyrinth_layout not in valid_layouts:
             raise GameException(f"Invalid labyrinth layout. Must be one of: {valid_layouts}")
-        
+
         if config.labyrinth_min_path_length < 2:
             raise GameException("Minimum path length must be at least 2")
-        
+
         if config.labyrinth_min_path_length >= config.labyrinth_chamber_count:
             raise GameException("Minimum path length must be less than chamber count")
-        
+
         # Validate challenge settings
         valid_levels = ["none", "light", "moderate", "heavy"]
         if config.challenge_level not in valid_levels:
             raise GameException(f"Invalid challenge level. Must be one of: {valid_levels}")
-        
+
         if config.challenge_difficulty_variance < 0:
             raise GameException("Challenge difficulty variance cannot be negative")
-        
+
         if config.challenge_difficulty_variance > 5:
             raise GameException("Challenge difficulty variance cannot exceed 5")
 
@@ -291,7 +294,7 @@ _config_manager = None
 
 def get_randomization_config_manager() -> RandomizationConfigManager:
     """Get the global randomization configuration manager.
-    
+
     Returns:
         RandomizationConfigManager instance
     """
@@ -303,10 +306,10 @@ def get_randomization_config_manager() -> RandomizationConfigManager:
 
 def load_randomization_config(preset: str = None) -> GameRandomizationConfig:
     """Load randomization configuration.
-    
+
     Args:
         preset: Optional preset name
-        
+
     Returns:
         GameRandomizationConfig instance
     """
@@ -316,7 +319,7 @@ def load_randomization_config(preset: str = None) -> GameRandomizationConfig:
 
 def save_randomization_config(config: GameRandomizationConfig) -> None:
     """Save randomization configuration.
-    
+
     Args:
         config: Configuration to save
     """
@@ -326,7 +329,7 @@ def save_randomization_config(config: GameRandomizationConfig) -> None:
 
 def get_available_randomization_presets() -> list[str]:
     """Get available randomization presets.
-    
+
     Returns:
         List of preset names
     """
