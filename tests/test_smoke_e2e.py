@@ -4,11 +4,12 @@ This test exercises the full game engine without mocking the core logic.
 It is the authoritative check that the game is actually playable.
 """
 
-import pytest
 from unittest.mock import Mock
 
-from src.game.engine import GameEngine
+import pytest
+
 from src.game.command_parser import CommandType, ParsedCommand
+from src.game.engine import GameEngine
 from src.game.ui_controller import UIController
 
 
@@ -48,9 +49,7 @@ def _solve_memory(engine: GameEngine, chamber_id: int) -> None:
     # Phase 2: submit the correct answer from the challenge's own sequence data
     if challenge.memory_type == "pattern":
         # Format: "row,col,symbol; row,col,symbol; ..."
-        answer = "; ".join(
-            f"{r + 1},{c + 1},{s}" for r, c, s in challenge.current_sequence
-        )
+        answer = "; ".join(f"{r + 1},{c + 1},{s}" for r, c, s in challenge.current_sequence)
     else:
         # sequence / color / number — space-separated items
         answer = " ".join(str(item) for item in challenge.current_sequence)
